@@ -17,6 +17,7 @@ import java.util.Date;
 public class CompanyNotification {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "notification_id")
   private Long notificationId;
   @Column(length = 255)
   private String title;

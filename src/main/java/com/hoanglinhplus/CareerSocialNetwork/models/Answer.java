@@ -16,8 +16,10 @@ import java.util.*;
 @Table(name = "answers")
 public class Answer {
    @Id
+   @Column(name = "job_que_id", insertable = false, updatable = false)
    private Long jobQueId;
    @Id
+   @Column(name = "user_id", insertable = false, updatable = false)
    private Long userId;
    @Column(nullable = false, length = 1000)
    public String answer;

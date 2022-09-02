@@ -12,7 +12,9 @@ import javax.persistence.*;
 @Table(name = "user_company_roles")
 public class UserCompanyRole {
   @Id
+  @Column(name = "user_id", insertable = false, updatable = false)
   private Long userId;
+  @Column(name = "company_id", insertable = false, updatable = false)
   @Id
   private Long companyId;
   public String name;

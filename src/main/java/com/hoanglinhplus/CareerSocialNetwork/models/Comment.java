@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import java.util.Collection;
@@ -15,21 +16,24 @@ import java.util.Date;
 @Table(name = "comments")
 public class Comment {
   @Id
-  public int commentId;
-  public String content;
-  public Date createdAt;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "comment_id")
+  private Long commentId;
+  private String content;
+  @CreatedDate
+  private Date createdAt;
 
   @OneToOne
   @JoinColumn(name = "parent_id", referencedColumnName = "comment_id")
-  public Comment parentComment;
+  private Comment parentComment;
   @OneToMany(mappedBy = "comments")
-  public Collection<CommentLike> commentLikes;
+  private Collection<CommentLike> commentLikes;
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-  public User user;
+  private User user;
   @ManyToOne
   @JoinColumn(name = "job_id", referencedColumnName = "JOB_ID")
-  public Job job;
+  private Job job;
 
 
   public User getUsers() {

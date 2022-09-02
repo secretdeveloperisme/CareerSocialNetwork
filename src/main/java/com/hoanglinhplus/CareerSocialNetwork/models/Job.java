@@ -19,6 +19,7 @@ import java.util.Iterator;
 public class Job {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "job_id")
   private Long jobId;
   @Column(nullable = false, length = 255)
   private String title;
@@ -41,34 +42,37 @@ public class Job {
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "job_tags", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"))
-  public List<Tag> tags;
+  private List<Tag> tags;
   @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  public List<Comment> comments;
+  private List<Comment> comments;
   @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  public List<JobQuestion> jobQuestion;
+  private List<JobQuestion> jobQuestion;
   @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  public List<Application> applications;
+  private List<Application> applications;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "skill_id"))
-  public List<Skill> job_skills;
+  private List<Skill> job_skills;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-  public List<User> likes;
+  private List<User> likes;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "bookmarks", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-  public List<User> bookmarks;
+  private List<User> bookmarks;
   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "employment_type_id", referencedColumnName = "employment_type_id")
-  public EmploymentType employmentType;
+  private EmploymentType employmentType;
   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "company_id", referencedColumnName = "company_id")
-  public Company company;
+  private Company company;
   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "position_id", referencedColumnName = "position_id")
-  public Position position;
+  private Position position;
+  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinColumn(name = "work_place_id", referencedColumnName = "work_place_id")
+  private WorkPlace workPlace;
   public List<Tag> getTags() {
     if (tags == null)
       tags = new ArrayList<>();

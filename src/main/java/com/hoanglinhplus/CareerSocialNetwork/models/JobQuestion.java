@@ -13,55 +13,56 @@ import java.util.List;
 @Entity
 @Table(name = "job_question")
 public class JobQuestion {
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   public Long jobQueId;
-   @OneToMany(mappedBy = "jobQuestion")
-   public List<Answer> answers;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-   @JoinColumn(name = "job_id", referencedColumnName = "job_id")
-   public Job job;
-   @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-   @JoinColumn(name = "question_id", referencedColumnName = "question_id")
-   public Question question;
-   public Job getJobs() {
-      return job;
-   }
-   public void setJobs(Job newJob) {
-      if (this.job == null || !this.job.equals(newJob))
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "job_que_id")
+  private Long jobQueId;
+  @OneToMany(mappedBy = "jobQuestion")
+  private List<Answer> answers;
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinColumn(name = "job_id", referencedColumnName = "job_id")
+  private Job job;
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinColumn(name = "question_id", referencedColumnName = "question_id")
+  private Question question;
+  public Job getJobs() {
+    return job;
+  }
+  public void setJobs(Job newJob) {
+    if (this.job == null || !this.job.equals(newJob))
+    {
+      if (this.job != null)
       {
-         if (this.job != null)
-         {
-            Job oldJob = this.job;
-            this.job = null;
-            oldJob.removeJobQuestion(this);
-         }
-         if (newJob != null)
-         {
-            this.job = newJob;
-            this.job.addJobQuestion(this);
-         }
+        Job oldJob = this.job;
+        this.job = null;
+        oldJob.removeJobQuestion(this);
       }
-   }
-   public Question getQuestions() {
-      return question;
-   }
-   
-   
-   public void setQuestions(Question newQuestion) {
-      if (this.question == null || !this.question.equals(newQuestion))
+      if (newJob != null)
       {
-         if (this.question != null)
-         {
-            Question oldQuestion = this.question;
-            this.question = null;
-            oldQuestion.removeJobQuestion(this);
-         }
-         if (newQuestion != null)
-         {
-            this.question = newQuestion;
-            this.question.addJobQuestion(this);
-         }
+        this.job = newJob;
+        this.job.addJobQuestion(this);
       }
-   }
+    }
+  }
+  public Question getQuestions() {
+    return question;
+  }
+
+
+  public void setQuestions(Question newQuestion) {
+    if (this.question == null || !this.question.equals(newQuestion))
+    {
+      if (this.question != null)
+      {
+        Question oldQuestion = this.question;
+        this.question = null;
+        oldQuestion.removeJobQuestion(this);
+      }
+      if (newQuestion != null)
+      {
+        this.question = newQuestion;
+        this.question.addJobQuestion(this);
+      }
+    }
+  }
 }

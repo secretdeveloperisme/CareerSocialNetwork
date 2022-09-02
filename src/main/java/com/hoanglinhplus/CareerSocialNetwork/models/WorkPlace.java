@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -18,4 +19,6 @@ public class WorkPlace {
   private Long workPlaceId;
   @Column(name = "place", nullable = false)
   private String place;
+  @OneToMany(mappedBy = "workPlace")
+  List<Job> jobs;
 }

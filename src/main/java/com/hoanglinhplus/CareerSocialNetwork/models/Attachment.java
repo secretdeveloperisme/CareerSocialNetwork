@@ -14,6 +14,7 @@ import javax.persistence.*;
 public class Attachment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "attachment_id")
   private Long attachmentId;
   @Column(nullable = false, length = 1000)
   private String attachmentUrl;

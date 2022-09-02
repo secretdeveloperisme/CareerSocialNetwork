@@ -15,7 +15,9 @@ import javax.persistence.*;
 @IdClass(ApplicationId.class)
 public class Application {
   @Id
+  @Column(name = "user_id",insertable = false, updatable = false)
   private Long userId;
+  @Column(name = "job_id", insertable = false, updatable = false)
   @Id
   private Long jobId;
   public short status;

@@ -17,6 +17,7 @@ import java.util.List;
 public class OrganizationSize {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "organization_size_id")
   private Long organizationId;
   @Column(length = 50)
   private String name;

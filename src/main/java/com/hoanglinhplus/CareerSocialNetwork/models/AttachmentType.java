@@ -18,6 +18,7 @@ import java.util.List;
 public class AttachmentType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "attachment_type_id")
   private Long attachmentTypeId;
   @Column(unique = true, length = 255)
   private String type;

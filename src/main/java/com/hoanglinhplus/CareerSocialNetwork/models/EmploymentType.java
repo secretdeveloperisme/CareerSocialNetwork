@@ -17,7 +17,8 @@ import java.util.Iterator;
 public class EmploymentType {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long employmentType;
+  @Column(name = "employment_type_id")
+  private Long employmentTypeId;
   private String name;
   @OneToMany(mappedBy = "employmentType",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Job> jobs;

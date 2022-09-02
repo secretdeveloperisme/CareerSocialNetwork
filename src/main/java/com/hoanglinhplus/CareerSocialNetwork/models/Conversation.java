@@ -18,6 +18,7 @@ import java.util.*;
 public class Conversation {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "conversation_id")
   private Long conversationId;
   @CreatedDate
   private Date createAt;

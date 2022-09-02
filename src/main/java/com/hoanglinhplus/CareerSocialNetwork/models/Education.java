@@ -16,6 +16,7 @@ import java.util.Date;
 public class Education {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "education_id")
   private Long educationId;
   @Column(nullable = false)
   private String schoolName;

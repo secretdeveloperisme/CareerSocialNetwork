@@ -17,6 +17,7 @@ import java.util.Iterator;
 public class Industry {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
+  @Column(name = "industry_id")
   private Long industryId;
   private String name;
   @OneToMany(mappedBy = "industry")

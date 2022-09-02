@@ -13,8 +13,10 @@ import javax.persistence.*;
 @IdClass(CommentLikeId.class)
 public class CommentLike {
   @Id
+  @Column(name = "user_id", insertable = false, updatable = false)
   private Long userId;
   @Id
+  @Column(name = "comment_id",insertable = false, updatable = false)
   private Long commentId;
   @Column(nullable = false, length = 30)
   @Enumerated(EnumType.STRING)
