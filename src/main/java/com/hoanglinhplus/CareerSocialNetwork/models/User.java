@@ -1,11 +1,15 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.ExternalLoginType;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.Pattern;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
+import java.util.List;
 
 @Builder
 @AllArgsConstructor
@@ -13,6 +17,7 @@ import java.util.*;
 @Getter @Setter
 @Entity
 @Table(name = "users")
+@DynamicUpdate
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +26,6 @@ public class User {
   @Column(name = "username")
   private String username;
   @Column(name = "password_hash")
-  @Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]{8,}$")
   private String passwordHash;
   @Email
   private String email;
@@ -33,13 +37,14 @@ public class User {
   @Column(name = "cv_url")
   private String cvUrl;
   private Date dob;
-  private String externalLoginType;
+  @Enumerated(EnumType.STRING)
+  private ExternalLoginType externalLoginType;
   private boolean isEnabled;
   private String externalLoginId;
   private Date createdAt;
   private Date updatedAt;
   private Date deletedAt;
-  @OneToMany(mappedBy = "comments", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
+  @OneToMany(mappedBy = "comments",orphanRemoval = true)
   private List<CommentLike> commentLikes;
   @OneToMany(mappedBy = "user")
   private List<Application> applications;
@@ -47,59 +52,47 @@ public class User {
   private List<UserCompanyRole> userCompanyRoles;
   @OneToMany(mappedBy = "createdUser")
   private List<Company> followCompanies;
-  @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE })
+  @ManyToMany(cascade = {CascadeType.MERGE})
   @JoinTable(name = "user_skills", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     ,inverseJoinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "skill_id"))
   private List<Skill> userSkills;
-  @ManyToMany(cascade ={CascadeType.PERSIST, CascadeType.MERGE} )
+  @ManyToMany
   @JoinTable(name = "user_notification_relationship",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "notification_id", referencedColumnName = "notification_id"))
   private List<UserNotification> userNotification;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToMany
   @JoinTable(name = "follow_tags",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"))
   private List<Tag> tags;
-  @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE })
+  @ManyToMany
   @JoinTable(name = "likes",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "job_id"))
   private List<Job> likeJobs;
-  @ManyToMany(cascade = {CascadeType.PERSIST,CascadeType.MERGE })
+  @ManyToMany
   @JoinTable(name = "bookmarks",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "job_id"))
   private List<Job> bookmarks;
   @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Comment> comments;
-  @OneToMany(mappedBy = "createdUser", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "createdUser")
   private List<Company> createdCompanies;
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Conversation> conversations;
   @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Message> messages;
-  @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(cascade = CascadeType.PERSIST,orphanRemoval = true)
+  @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private List<Education> educations;
   @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Answer> answers;
-  @ManyToMany(cascade = CascadeType.PERSIST)
+  @ManyToMany(fetch = FetchType.EAGER)
   @JoinTable(name = "user_roles",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "role_id", referencedColumnName = "role_id"))
   private List<Role> roles;
-  @ManyToMany(cascade = CascadeType.PERSIST)
+  @ManyToMany
   @JoinTable(name = "participants",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "conversation_id"))
   private List<Conversation> participants;
-
-
-  public List<Company> getFollowCompanies() {
-    if (followCompanies == null)
-      followCompanies = new ArrayList<>();
-    return followCompanies;
-  }
-
-
-  public void setFollowCompanies(List<Company> newFollow_companies) {
-    removeAllFollow_companies();
-    for (Company newFollow_company : newFollow_companies) addFollow_companies(newFollow_company);
-  }
 
 
   public void addFollow_companies(Company newCompany) {
@@ -138,11 +131,6 @@ public class User {
       }
     }
   }
-  public List<Skill> getUserSkills() {
-    if (userSkills == null)
-      userSkills = new ArrayList<>();
-    return userSkills;
-  }
 
   public Iterator<Skill> getIteratorUser_skills() {
     if (userSkills == null)
@@ -150,13 +138,7 @@ public class User {
     return userSkills.iterator();
   }
 
-
-  public void setUserSkills(List<Skill> newUser_skills) {
-    removeAllUser_skills();
-    for (Skill newUser_skill : newUser_skills) addUser_skills(newUser_skill);
-  }
-
-
+  
   public void addUser_skills(Skill newSkill) {
     if (newSkill == null)
       return;
@@ -181,7 +163,7 @@ public class User {
       }
   }
 
-  public void removeAllUser_skills() {
+  public void removeAllUserSkills() {
     if (userSkills != null)
     {
       Skill oldSkill;
@@ -641,13 +623,6 @@ public class User {
     return educations.iterator();
   }
 
-
-  public void setEducations(List<Education> newEducations) {
-    removeAllEducations();
-    for (Education newEducation : newEducations) addEducations(newEducation);
-  }
-
-
   public void addEducations(Education newEducation) {
     if (newEducation == null)
       return;
@@ -672,7 +647,7 @@ public class User {
       }
   }
 
-  public void removeAllEducations() {
+  public void  removeAllEducations() {
     if (educations != null)
     {
       Education oldEducation;
@@ -684,22 +659,10 @@ public class User {
       }
     }
   }
-  public List<Role> getRoles() {
-    if (roles == null)
-      roles = new ArrayList<>();
-    return roles;
-  }
-
   public Iterator<Role> getIteratorUser_roles() {
     if (roles == null)
       roles = new ArrayList<>();
     return roles.iterator();
-  }
-
-
-  public void setRoles(List<Role> newUser_roles) {
-    removeAllUser_roles();
-    for (Role newUser_role : newUser_roles) addUserRoles(newUser_role);
   }
 
 
@@ -727,7 +690,7 @@ public class User {
       }
   }
 
-  public void removeAllUser_roles() {
+  public void removeAllUserRoles() {
     if (roles != null)
     {
       Role oldRole;
@@ -793,5 +756,11 @@ public class User {
         oldConversation.removeParticipants(this);
       }
     }
+  }
+  public void removeAllRelationShip(){
+    removeAllUserRoles();
+    removeAllUserSkills();
+    removeAllBookmarks();
+    removeAllLikes();
   }
 }

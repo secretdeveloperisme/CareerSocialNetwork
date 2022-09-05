@@ -70,7 +70,7 @@ public class Job {
   @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "position_id", referencedColumnName = "position_id")
   private Position position;
-  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "work_place_id", referencedColumnName = "work_place_id")
   private WorkPlace workPlace;
   public List<Tag> getTags() {

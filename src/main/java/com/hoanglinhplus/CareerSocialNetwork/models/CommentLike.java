@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.TypeLike;
 import lombok.*;
 
 import javax.persistence.*;

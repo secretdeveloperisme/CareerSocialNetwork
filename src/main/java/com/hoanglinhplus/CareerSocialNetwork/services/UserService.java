@@ -11,11 +11,11 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.UserNameExistedException
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseUserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.UserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.SkillRepository;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.UserSpecification;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.RoleRepository;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
 import com.hoanglinhplus.CareerSocialNetwork.utils.PasswordUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -25,19 +25,22 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
-import java.util.stream.Collectors;
 
 
 @Service
 public class UserService {
   private final UserRepository userRepository;
-  private final RoleRepository roleRepository;
+  private final SkillRepository skillRepository;
+  private final EducationService educationService;
 
   @Autowired
-  public UserService(UserRepository userRepository, RoleRepository roleRepository){
+  public UserService(UserRepository userRepository, SkillRepository skillRepository
+    , EducationService educationService){
     this.userRepository = userRepository;
-    this.roleRepository = roleRepository;
+    this.skillRepository = skillRepository;
+    this.educationService = educationService;
   }
   public ResponseEntity<ResponseObjectDTO> getUser(String username){
     Optional<User> userOptional = userRepository.findByUsername(username);
@@ -49,10 +52,14 @@ public class UserService {
     }
     throw new MyUsernameNotFoundException("username is not found", username);
   }
-  public ResponseEntity<ResponseObjectDTO> getAllUsers(String gender, String address, PageableDTO pageableDTO){
+  public ResponseEntity<ResponseObjectDTO> getAllUsers(String gender, String address
+    , String username, PageableDTO pageableDTO){
     UserSpecification userSpecification = new UserSpecification();
     if(gender != null && !gender.isEmpty()){
       userSpecification.getConditions().add(new SearchCriteria("gender", gender, SearchOperator.LIKE));
+    }
+    if(username != null && !username.isEmpty()){
+      userSpecification.getConditions().add(new SearchCriteria("username", gender, SearchOperator.LIKE));
     }
     if(address != null && !address.isEmpty()){
       userSpecification.getConditions().add(new SearchCriteria("address", address, SearchOperator.LIKE));
@@ -105,7 +112,7 @@ public class UserService {
     if(userOptional.isPresent()){
       User targetUser = userOptional.get();
       if(user.getPasswordHash() != null){
-        targetUser.setPasswordHash(PasswordUtil.getInstance().hashPassword(user.getPasswordHash()));
+        targetUser.setPasswordHash(PasswordUtil.getInstance().hashPassword(userUpdateDTO.getPassword()));
       }
       if(user.getDob() != null){
         targetUser.setDob(user.getDob());
@@ -116,13 +123,25 @@ public class UserService {
       if(user.getAddress() != null){
         targetUser.setAddress(user.getAddress());
       }
-      if(user.getRoles() != null && user.getRoles().size() > 0){
-        targetUser.setRoles(user.getRoles().stream().map(role ->
-          roleRepository.findByName(role.getName()).get()).collect(Collectors.toList()));
+      if(user.getEmail() != null){
+        targetUser.setEmail(user.getEmail());
+      }
+      if(user.getCvUrl() != null){
+        targetUser.setCvUrl(user.getCvUrl());
+      }
+      if(user.getFullname() != null){
+        targetUser.setCvUrl(user.getFullname());
+      }
+      if(user.getUserSkills() != null ){
+        targetUser.setUserSkills(skillRepository.findAllById(userUpdateDTO.getUserSkillIds()));
+      }
+      if(user.getEducations() != null ){
+        educationService.updateEducation(user.getEducations());
       }
       User updatedUser =  userRepository.save(targetUser);
       Map<String, Object> responseData = new HashMap<>();
-      responseData.put("updatedUser", updatedUser);
+      UserDTO updatedUserDTO = UserMapper.toUserDTO(updatedUser);
+      responseData.put("updatedUser", updatedUserDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "update user successfully"
         ,responseData);
@@ -132,6 +151,7 @@ public class UserService {
       throw new MyUsernameNotFoundException("username is not found", user.getUsername());
     }
   }
+  @Transactional
   public ResponseEntity<ResponseObjectDTO> deleteUsers(List<Long> ids) {
     List<Long> notExistIds = new ArrayList<>();
     List<Long> existedIds = userRepository.findExistedIds(ids);
@@ -140,7 +160,7 @@ public class UserService {
         notExistIds.add(id);
     });
     if(notExistIds.size() == 0){
-      userRepository.deleteUsersByIds(ids);
+      ids.forEach(this::deleteUserById);
       Map<String, Object> responseData = new HashMap<>();
       responseData.put("deletedIds", ids);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
@@ -154,5 +174,32 @@ public class UserService {
       throw inputNotValidException;
     }
   }
-
+  @Transactional
+  public ResponseEntity<ResponseObjectDTO> deleteUser(Long id) {
+    Map<String, Object> responseData = new HashMap<>();
+    User user;
+    if((user = deleteUserById(id)) != null ){
+      UserDTO deletedUserDTO = UserMapper.toUserDTO(user);
+      responseData.put("deletedUser", deletedUserDTO);
+      ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
+        "delete user successfully "
+        ,responseData);
+      return ResponseEntity.ok(responseObjectDTO);
+    }
+    else{
+      InputNotValidException inputNotValidException = new InputNotValidException("UserID is not found");
+      inputNotValidException.getCauses().put("invalidId", id);
+      throw inputNotValidException;
+    }
+  }
+  public User deleteUserById(Long id) {
+    Optional<User> userOptional = userRepository.findById(id);
+    if (userOptional.isPresent()) {
+      User user = userOptional.get();
+      user.removeAllRelationShip();
+      userRepository.delete(user);
+      return user;
+    }
+    return null;
+  }
 }

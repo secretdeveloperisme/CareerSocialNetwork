@@ -32,9 +32,10 @@ public class UserMapper {
     List<EducationDTO> educationDTOS = userCreationDTO.getEducations();
     if(educationDTOS != null){
       user.setEducations(educationDTOS.stream().map(
-        educationDTO -> Education.builder().schoolName(educationDTO.getSchoolName())
+        educationDTO -> Education.builder().educationId(educationDTO.getEducationId()).schoolName(educationDTO.getSchoolName())
           .startDate(educationDTO.getStartDate())
-          .endDate(educationDTO.getEndDate()).build()
+          .endDate(educationDTO.getEndDate())
+          .grade(educationDTO.getGrade()).build()
       ).toList());
     }
     return user;

@@ -23,11 +23,11 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
   @Modifying
   @Query("DELETE FROM User u WHERE u.userId in :ids")
   void deleteUsersByIds(@Param(value = "ids") List<Long> ids);
-
   @Query("SELECT u FROM User u WHERE u.userId in :ids")
   List<User> findUsersByIds(@Param(value = "ids") List<Long> ids);
 
   @Query("SELECT u.userId FROM User u WHERE u.userId in :ids")
   List<Long> findExistedIds(List<Long> ids);
-
+  @Query("SELECT u.userId FROM User u WHERE u.username = :username")
+  Long findIdByUsername(String username);
 }

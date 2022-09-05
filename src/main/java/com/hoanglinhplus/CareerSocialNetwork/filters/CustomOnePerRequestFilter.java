@@ -4,7 +4,6 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseErrorDTO;
 import com.hoanglinhplus.CareerSocialNetwork.utils.JWTUtil;
-import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -21,7 +20,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 
-@Slf4j
 public class CustomOnePerRequestFilter extends OncePerRequestFilter {
   @Override
   protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
