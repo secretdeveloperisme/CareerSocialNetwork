@@ -24,6 +24,18 @@ public class ExceptionController {
     return ResponseEntity.status(HttpStatus.NOT_FOUND)
       .body(new ResponseErrorDTO(e.getMessage(), causes));
   }
+  @ExceptionHandler({NotFoundException.class})
+  public ResponseEntity<ResponseErrorDTO> handleNotFound(NotFoundException e){
+    Map<String, Object> causes = new HashMap<>();
+    causes.put(e.getNameTarget()+" Not Found", e.getTarget());
+    return ResponseEntity.status(HttpStatus.NOT_FOUND)
+      .body(new ResponseErrorDTO(e.getMessage(), causes));
+  }
+  @ExceptionHandler({PermissionDeniedException.class})
+  public ResponseEntity<ResponseErrorDTO> handlePermissionDenied(PermissionDeniedException e){
+    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+      .body(new ResponseErrorDTO(e.getMessage(), null));
+  }
   @ExceptionHandler({UserNameExistedException.class})
   public ResponseEntity<ResponseErrorDTO> handleUsernameExisted(UserNameExistedException e){
     Map<String, Object> causes = new HashMap<>();
@@ -58,6 +70,7 @@ public class ExceptionController {
   }
   @ExceptionHandler({IllegalArgumentException.class})
   public ResponseEntity<ResponseErrorDTO> handleInvalidInput(IllegalArgumentException e){
+    e.printStackTrace();
     Map<String, Object> causes = new HashMap<>();
     causes.put("cause", e.getMessage());
     return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY)
