@@ -1,21 +1,21 @@
 package com.hoanglinhplus.CareerSocialNetwork.securities;
 
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service @Slf4j
+@Service
 public class MyUserDetailsService implements UserDetailsService {
   final
   UserRepository userRepository;
@@ -28,7 +28,7 @@ public class MyUserDetailsService implements UserDetailsService {
   @Transactional
   public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
     System.out.println(username);
-    UserDetails userDetails = null;
+    MyUser myUser = null;
     com.hoanglinhplus.CareerSocialNetwork.models.User user = null;
     Optional<com.hoanglinhplus.CareerSocialNetwork.models.User> userOptional = userRepository.findByUsername(username);
     if (userOptional.isPresent()) {
@@ -36,12 +36,16 @@ public class MyUserDetailsService implements UserDetailsService {
       List<GrantedAuthority> roles = user.getRoles().stream()
         .map(role -> new SimpleGrantedAuthority(role.getName()))
         .collect(Collectors.toList());
-      userDetails = new User(user.getUsername(), user.getPasswordHash(), roles);
-      return userDetails;
+      myUser = new MyUser(user.getUserId(),user.getUsername(), user.getPasswordHash(), roles);
+      return myUser;
     } else {
       throw new UsernameNotFoundException("username is not found");
     }
-
-
+  }
+  public Long getCurrentUserId(){
+    return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+  }
+  public Collection<SimpleGrantedAuthority> getCurrentRoles(){
+    return (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
   }
 }
