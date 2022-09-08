@@ -5,6 +5,7 @@ import lombok.*;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -19,5 +20,5 @@ public class PageableDTO{
   private Integer size = PageConstant.DEFAULT_MAX_ELEMENT;
   private List<
     @Pattern(regexp = "(?=.{3,255})(\\w+(-_\\.)?\\w+)"
-      ,message = "the pattern of sort must be username_asc or username_desc and have length 5-255 characters") String> sort = List.of("username_asc");
+      ,message = "the pattern of sort must be username_asc or username_desc and have length 5-255 characters") String> sort = new ArrayList<>();
 }

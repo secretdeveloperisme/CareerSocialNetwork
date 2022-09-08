@@ -11,6 +11,7 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.UserNameExistedException
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseUserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.UserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
+import com.hoanglinhplus.CareerSocialNetwork.models.User_;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.SkillRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -45,7 +46,7 @@ public class UserService {
   public ResponseEntity<ResponseObjectDTO> getUser(String username){
     Optional<User> userOptional = userRepository.findByUsername(username);
     if(userOptional.isPresent()){
-      UserDTO userDTO = UserMapper.toUserDTO(userOptional.get());
+      UserDTO userDTO = UserMapper.toDTO(userOptional.get());
       Map<String, Object> responseData = new HashMap<>();
       responseData.put("user", userDTO);
       return ResponseEntity.ok(new ResponseObjectDTO("get user successfully ",responseData));
@@ -56,13 +57,16 @@ public class UserService {
     , String username, PageableDTO pageableDTO){
     UserSpecification userSpecification = new UserSpecification();
     if(gender != null && !gender.isEmpty()){
-      userSpecification.getConditions().add(new SearchCriteria("gender", gender, SearchOperator.LIKE));
+      SearchCriteria<User, String> criteria = new SearchCriteria<>(User_.gender, gender, SearchOperator.LIKE);
+      userSpecification.getConditions().add(criteria);
     }
     if(username != null && !username.isEmpty()){
-      userSpecification.getConditions().add(new SearchCriteria("username", gender, SearchOperator.LIKE));
+      SearchCriteria<User,String> criteria = new SearchCriteria<>(User_.username, username, SearchOperator.LIKE);
+      userSpecification.getConditions().add(criteria);
     }
     if(address != null && !address.isEmpty()){
-      userSpecification.getConditions().add(new SearchCriteria("address", address, SearchOperator.LIKE));
+      SearchCriteria<User,String>criteria = new SearchCriteria<>(User_.address, address, SearchOperator.LIKE);
+      userSpecification.getConditions().add(criteria);
     }
     List<Sort.Order> orders = new ArrayList<>();
     if(pageableDTO.getSort() != null){
@@ -90,12 +94,12 @@ public class UserService {
     return ResponseEntity.ok(ResponseUserMapper.toDTO(userPage));
   }
   public ResponseEntity<ResponseObjectDTO> createUser(UserCreationDTO userCreationDTO){
-    User user = UserMapper.toUser(userCreationDTO);
+    User user = UserMapper.toEntity(userCreationDTO);
     Optional<User> userOptional = userRepository.findByUsername(user.getUsername());
     if(userOptional.isEmpty()){
       User savedUser = userRepository.save(user);
       Map<String, Object> responseData = new HashMap<>();
-      UserDTO userDTO = UserMapper.toUserDTO(savedUser);
+      UserDTO userDTO = UserMapper.toDTO(savedUser);
       responseData.put("createdUser", userDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "create user successfully"
@@ -107,7 +111,7 @@ public class UserService {
     }
   }
   public ResponseEntity<ResponseObjectDTO> updateUser(UserCreationDTO userUpdateDTO){
-    User user = UserMapper.toUser(userUpdateDTO);
+    User user = UserMapper.toEntity(userUpdateDTO);
     Optional<User> userOptional = userRepository.findByUsername(user.getUsername());
     if(userOptional.isPresent()){
       User targetUser = userOptional.get();
@@ -130,7 +134,7 @@ public class UserService {
         targetUser.setCvUrl(user.getCvUrl());
       }
       if(user.getFullname() != null){
-        targetUser.setCvUrl(user.getFullname());
+        targetUser.setFullname(user.getFullname());
       }
       if(user.getUserSkills() != null ){
         targetUser.setUserSkills(skillRepository.findAllById(userUpdateDTO.getUserSkillIds()));
@@ -140,7 +144,7 @@ public class UserService {
       }
       User updatedUser =  userRepository.save(targetUser);
       Map<String, Object> responseData = new HashMap<>();
-      UserDTO updatedUserDTO = UserMapper.toUserDTO(updatedUser);
+      UserDTO updatedUserDTO = UserMapper.toDTO(updatedUser);
       responseData.put("updatedUser", updatedUserDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "update user successfully"
@@ -179,7 +183,7 @@ public class UserService {
     Map<String, Object> responseData = new HashMap<>();
     User user;
     if((user = deleteUserById(id)) != null ){
-      UserDTO deletedUserDTO = UserMapper.toUserDTO(user);
+      UserDTO deletedUserDTO = UserMapper.toDTO(user);
       responseData.put("deletedUser", deletedUserDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "delete user successfully "

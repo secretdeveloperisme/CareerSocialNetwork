@@ -19,17 +19,10 @@ public class OrganizationSize {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "organization_size_id")
   private Long organizationId;
-  @Column(length = 50)
+  @Column( name = "name")
   private String name;
   @OneToMany(mappedBy = "organizationSize",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Company> companies;
-
-  public Collection<Company> getCompanies() {
-    if (companies == null)
-      companies = new ArrayList<>();
-    return companies;
-  }
-
   public Iterator<Company> getIteratorCompanies() {
     if (companies == null)
       companies = new ArrayList<>();

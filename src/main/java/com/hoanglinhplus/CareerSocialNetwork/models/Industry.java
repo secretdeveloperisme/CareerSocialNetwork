@@ -19,6 +19,7 @@ public class Industry {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "industry_id")
   private Long industryId;
+  @Column(name = "name")
   private String name;
   @OneToMany(mappedBy = "industry")
   private List<Company> companies;

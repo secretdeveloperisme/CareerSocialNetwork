@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.*;
@@ -12,6 +13,7 @@ import java.util.*;
 @Getter @Setter
 @Entity
 @Table(name = "companies")
+@EntityListeners(AuditingEntityListener.class)
 public class Company {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,10 +42,10 @@ public class Company {
   @JoinTable(name = "follow_companies", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "company_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
   private List<User> follow_companies;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "organization_size_id", referencedColumnName = "organization_size_id")
   private OrganizationSize organizationSize;
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "industry_id", referencedColumnName = "industry_id")
   private Industry industry;
   @ManyToOne
@@ -212,9 +214,6 @@ public class Company {
     }
   }
 
-  public OrganizationSize getOrganizationSizes() {
-    return organizationSize;
-  }
 
   public void setOrganizationSizes(OrganizationSize newOrganizationSize) {
     if (this.organizationSize == null || !this.organizationSize.equals(newOrganizationSize))
@@ -233,9 +232,6 @@ public class Company {
     }
   }
 
-  public Industry getIndustries() {
-    return industry;
-  }
   public void setIndustries(Industry newIndustry) {
     if (this.industry == null || !this.industry.equals(newIndustry))
     {
@@ -251,9 +247,6 @@ public class Company {
         this.industry.addCompanies(this);
       }
     }
-  }
-  public User getUsers() {
-    return createdUser;
   }
 
   public void setUsers(User newUser) {
@@ -272,5 +265,9 @@ public class Company {
       }
     }
   }
-
+  public void removeAllRelationShip(){
+    removeAllJobs();
+    removeAllFollow_companies();
+    removeAllCompanyNotifications();
+  }
 }
