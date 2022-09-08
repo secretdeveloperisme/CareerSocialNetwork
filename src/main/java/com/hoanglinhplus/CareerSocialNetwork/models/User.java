@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 import com.hoanglinhplus.CareerSocialNetwork.constants.ExternalLoginType;
 import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
@@ -18,6 +19,7 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 @DynamicUpdate
+@EntityListeners(AuditingEntityListener.class)
 public class User {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

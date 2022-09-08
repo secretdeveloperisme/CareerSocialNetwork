@@ -31,7 +31,7 @@ class CareerSocialNetworkApplicationTests {
       .userSkills(skillIds)
       .educations(educationDTOS)
       .build();
-    User user = UserMapper.toUser(userCreationDTO);
+    User user = UserMapper.toEntity(userCreationDTO);
     System.out.println();
   }
 

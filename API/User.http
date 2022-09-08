@@ -1,0 +1,18 @@
+### get all users with filter and pagable
+GET http://localhost:7777/user/get-all-users
+
+### get user with username
+GET http://localhost:7777/user/get-user?username=hoanglinh
+
+### create user
+POST http://localhost:7777/user/
+Content-Type: application/json
+
+{
+  "username" : "hoanglinh"
+}
+### update user
+PUT http://localhost:7777/user/
+
+### delete user
+DELETE http://localhost:7777/user?username=?&user_id=?

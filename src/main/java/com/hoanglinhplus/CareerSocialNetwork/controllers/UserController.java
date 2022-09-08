@@ -43,7 +43,6 @@ public class UserController {
     @RequestParam @Size(min = 5, max = 255, message = "username's length must be from 5 to 255") String username){
     return userService.getUser(username);
   }
-  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> createUser(@RequestBody @Valid UserCreationDTO userCreationDTO){
     return userService.createUser(userCreationDTO);
@@ -53,7 +52,7 @@ public class UserController {
   public ResponseEntity<ResponseObjectDTO> updateUser(@RequestBody @Valid UserCreationDTO userUpdateDTO){
     return userService.updateUser(userUpdateDTO);
   }
-  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER') ")
+  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @DeleteMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> deleteUser(@RequestBody Map<String, Long> params){
     return userService.deleteUser(params.get("userId"));
