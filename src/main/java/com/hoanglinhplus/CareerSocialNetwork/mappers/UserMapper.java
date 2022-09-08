@@ -15,7 +15,7 @@ import java.util.List;
 
 @Component
 public class UserMapper {
-  static public User toUser(UserCreationDTO userCreationDTO) {
+  static public User toEntity(UserCreationDTO userCreationDTO) {
     ModelMapper modelMapper = new ModelMapper();
     modelMapper.getConfiguration()
       .setMatchingStrategy(MatchingStrategies.STRICT)
@@ -40,7 +40,7 @@ public class UserMapper {
     }
     return user;
   }
-  static public UserDTO toUserDTO(User user) {
+  static public UserDTO toDTO(User user) {
     ModelMapper modelMapper = new ModelMapper();
     modelMapper.getConfiguration()
       .setMatchingStrategy(MatchingStrategies.STRICT)

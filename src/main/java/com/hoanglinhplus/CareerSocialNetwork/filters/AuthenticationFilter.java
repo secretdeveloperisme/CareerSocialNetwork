@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.filters;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hoanglinhplus.CareerSocialNetwork.securities.MyUser;
 import com.hoanglinhplus.CareerSocialNetwork.utils.JWTUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.MediaType;
@@ -40,8 +41,8 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
   @Override
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
-    String accessToken = jwtUtil.generateToken((UserDetails) authResult.getPrincipal(), 0);
-    String refreshToken = jwtUtil.generateToken((UserDetails) authResult.getPrincipal(), 1);
+    String accessToken = jwtUtil.generateToken((MyUser) authResult.getPrincipal(), 0);
+    String refreshToken = jwtUtil.generateToken((MyUser) authResult.getPrincipal(), 1);
     Map<String, String> responseMap = new HashMap<>();
     responseMap.put("accessToken", accessToken);
     responseMap.put("refreshToken", refreshToken);
