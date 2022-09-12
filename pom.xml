@@ -27,7 +27,7 @@
 		<security-test.version>5.7.3</security-test.version>
 		<modelmapper.version>3.1.0</modelmapper.version>
 		<java-jwt.version>4.0.0</java-jwt.version>
-		<jpamodelgen.version>6.1.2.Final</jpamodelgen.version>
+		<jpamodelgen.version>5.6.10.Final</jpamodelgen.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -100,6 +100,11 @@
 			<scope>test</scope>
 			<version>${security-test.version}</version>
 		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
+			<version>${jpamodelgen.version}</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -107,14 +112,6 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-				<configuration>
-					<excludes>
-						<exclude>
-							<groupId>org.projectlombok</groupId>
-							<artifactId>lombok</artifactId>
-						</exclude>
-					</excludes>
-				</configuration>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -131,11 +128,8 @@
 						<path>
 							<groupId>org.projectlombok</groupId>
 							<artifactId>lombok</artifactId>
-							<optional>true</optional>
 							<version>${lombok.version}</version>
 						</path>
-
-
 					</annotationProcessorPaths>
 					<compilerArguments>
 						<processor>
@@ -143,9 +137,6 @@
 						</processor>
 					</compilerArguments>
 				</configuration>
-				<dependencies>
-
-				</dependencies>
 			</plugin>
 		</plugins>
 	</build>
