@@ -19,8 +19,7 @@ public class Skill {
    @GeneratedValue(strategy = GenerationType.IDENTITY)
    @Column(name = "skill_id")
    private long skillId;
-   @NotNull
-   @Column(nullable = false)
+   @Column
    private String name;
    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
    @JoinTable(name = "job_skills", joinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "skill_id")

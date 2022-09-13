@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.Iterator;
 @Getter @Setter
 @Entity
 @Table(name = "jobs")
+@EntityListeners(AuditingEntityListener.class)
 public class Job {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -38,39 +40,39 @@ public class Job {
   @LastModifiedDate
   private Date updatedAt;
   private Date deletedAt;
-  private int experience;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private float experience;
+  @ManyToMany
   @JoinTable(name = "job_tags", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"))
   private List<Tag> tags;
-  @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany
   private List<Comment> comments;
-  @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "job")
   private List<JobQuestion> jobQuestion;
-  @OneToMany(mappedBy = "job", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "job")
   private List<Application> applications;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToMany
   @JoinTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "skill_id"))
-  private List<Skill> job_skills;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  private List<Skill> jobSkills;
+  @ManyToMany
   @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
   private List<User> likes;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToMany
   @JoinTable(name = "bookmarks", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
   private List<User> bookmarks;
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne
   @JoinColumn(name = "employment_type_id", referencedColumnName = "employment_type_id")
   private EmploymentType employmentType;
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne
   @JoinColumn(name = "company_id", referencedColumnName = "company_id")
   private Company company;
-  @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne
   @JoinColumn(name = "position_id", referencedColumnName = "position_id")
   private Position position;
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne
   @JoinColumn(name = "work_place_id", referencedColumnName = "work_place_id")
   private WorkPlace workPlace;
   public List<Tag> getTags() {
@@ -216,28 +218,19 @@ public class Job {
       }
     }
   }
-  public List<Skill> getJob_skills() {
-    if (job_skills == null)
-      job_skills = new ArrayList<>();
-    return job_skills;
-  }
   public Iterator<Skill> getIteratorJob_skills() {
-    if (job_skills == null)
-      job_skills = new ArrayList<>();
-    return job_skills.iterator();
-  }
-  public void setJob_skills(List<Skill> newJob_skills) {
-    removeAllJob_skills();
-    for (Skill newJob_skill : newJob_skills) addJob_skills(newJob_skill);
+    if (jobSkills == null)
+      jobSkills = new ArrayList<>();
+    return jobSkills.iterator();
   }
   public void addJob_skills(Skill newSkill) {
     if (newSkill == null)
       return;
-    if (this.job_skills == null)
-      this.job_skills = new ArrayList<>();
-    if (!this.job_skills.contains(newSkill))
+    if (this.jobSkills == null)
+      this.jobSkills = new ArrayList<>();
+    if (!this.jobSkills.contains(newSkill))
     {
-      this.job_skills.add(newSkill);
+      this.jobSkills.add(newSkill);
       newSkill.addJobSkills(this);
     }
   }
@@ -246,16 +239,16 @@ public class Job {
   public void removeJob_skills(Skill oldSkill) {
     if (oldSkill == null)
       return;
-    if (this.job_skills != null)
-      if (this.job_skills.contains(oldSkill))
+    if (this.jobSkills != null)
+      if (this.jobSkills.contains(oldSkill))
       {
-        this.job_skills.remove(oldSkill);
+        this.jobSkills.remove(oldSkill);
         oldSkill.removeJobSkills(this);
       }
   }
 
-  public void removeAllJob_skills() {
-    if (job_skills != null)
+  public void removeAllJobSkills() {
+    if (jobSkills != null)
     {
       Skill oldSkill;
       for (Iterator<Skill> iter = getIteratorJob_skills(); iter.hasNext();)
@@ -265,11 +258,6 @@ public class Job {
         oldSkill.removeJobSkills(this);
       }
     }
-  }
-  public List<User> getLikes() {
-    if (likes == null)
-      likes = new ArrayList<>();
-    return likes;
   }
 
   public Iterator<User> getIteratorLikes() {
@@ -417,5 +405,13 @@ public class Job {
         this.company.addJobs(this);
       }
     }
+  }
+  public void removeAllRelationShip(){
+    removeAllBookmarks();
+    removeAllComments();
+    removeAllLikes();
+    removeAllJobSkills();
+    removeAllJobQuestion();
+    removeAllJobTags();
   }
 }

@@ -38,7 +38,7 @@ public class CompanyController {
 
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @GetMapping("/get-company")
-  public ResponseEntity<ResponseObjectDTO> getUser(
+  public ResponseEntity<ResponseObjectDTO> getCompany(
     @RequestParam @NotNull Long id){
     return companyService.getCompany(id);
   }
