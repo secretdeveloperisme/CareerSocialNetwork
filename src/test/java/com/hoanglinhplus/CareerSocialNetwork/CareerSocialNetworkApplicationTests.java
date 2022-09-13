@@ -4,15 +4,22 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.EducationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.UserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.TagRepository;
+import com.hoanglinhplus.CareerSocialNetwork.services.TagService;
 import com.hoanglinhplus.CareerSocialNetwork.utils.DateUtil;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
 class CareerSocialNetworkApplicationTests {
+  @Autowired
+  private TagService tagService;
   @Test
   void contextLoads() {
 
@@ -26,13 +33,18 @@ class CareerSocialNetworkApplicationTests {
         .endDate(DateUtil.toDateFromString("2022/11/12")).build()
     );
     UserCreationDTO userCreationDTO = UserCreationDTO.builder().userId(1L)
-      .username("hoanglinh").passwordHash("abcxyz")
+      .username("hoanglinh").password("abcxyz")
       .roleIds(roleIds)
-      .userSkills(skillIds)
+      .userSkillIds(skillIds)
       .educations(educationDTOS)
       .build();
     User user = UserMapper.toEntity(userCreationDTO);
     System.out.println();
+  }
+  @Test
+  public void testTag(){
+    List<String> tags = Arrays.asList("tag1", "tag2", "tag3", "tag4");
+    tagService.createTags(tags);
   }
 
 }

@@ -23,7 +23,7 @@ public class JWTUtil {
 
   public String generateToken (MyUser myUserDetails, int type){
     long expiredAccessToken =1000*60*60*24*3;
-    long expiredRefreshToken = 1000*60*60*24*15;
+    long expiredRefreshToken = 1000*60*60*24*30L;
     Date expiredDate = type == 0 ?new Date(System.currentTimeMillis() + expiredAccessToken)
       :new Date(System.currentTimeMillis() + expiredRefreshToken);
     HashMap<String, Object> principal = new HashMap<>();
