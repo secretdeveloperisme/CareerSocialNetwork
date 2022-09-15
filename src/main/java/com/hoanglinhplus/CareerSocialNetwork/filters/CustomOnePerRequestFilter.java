@@ -28,7 +28,8 @@ public class CustomOnePerRequestFilter extends OncePerRequestFilter {
   protected void doFilterInternal(HttpServletRequest request, @NotNull HttpServletResponse response, @NotNull FilterChain filterChain) throws ServletException, IOException {
     if(request.getServletPath().equalsIgnoreCase("/auth/login")
       || request.getServletPath().equalsIgnoreCase("/auth/refresh-token")
-      || (request.getMethod().equalsIgnoreCase("POST") && request.getServletPath().equalsIgnoreCase("/user"))){
+      || (request.getMethod().equalsIgnoreCase("POST") && request.getServletPath().equalsIgnoreCase("/user"))
+      || (request.getMethod().equalsIgnoreCase("GET") && request.getServletPath().startsWith("/file"))){
       filterChain.doFilter(request, response);
     }else {
       String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
