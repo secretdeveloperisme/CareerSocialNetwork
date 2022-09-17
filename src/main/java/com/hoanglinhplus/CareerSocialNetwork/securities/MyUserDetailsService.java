@@ -45,7 +45,4 @@ public class MyUserDetailsService implements UserDetailsService {
   public Long getCurrentUserId(){
     return (Long) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
   }
-  public Collection<SimpleGrantedAuthority> getCurrentRoles(){
-    return (Collection<SimpleGrantedAuthority>) SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-  }
 }
