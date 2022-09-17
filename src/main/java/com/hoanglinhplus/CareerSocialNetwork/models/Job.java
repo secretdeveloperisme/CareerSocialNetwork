@@ -47,9 +47,9 @@ public class Job {
   private List<Tag> tags;
   @OneToMany
   private List<Comment> comments;
-  @OneToMany(mappedBy = "job")
+  @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
   private List<JobQuestion> jobQuestion;
-  @OneToMany(mappedBy = "job")
+  @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
   private List<Application> applications;
   @ManyToMany
   @JoinTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
@@ -180,43 +180,6 @@ public class Job {
     if (jobQuestion == null)
       jobQuestion = new ArrayList<>();
     return jobQuestion.iterator();
-  }
-  public void setJobQuestion(List<JobQuestion> newJobQuestion) {
-    removeAllJobQuestion();
-    for (JobQuestion question : newJobQuestion) addJobQuestion(question);
-  }
-  public void addJobQuestion(JobQuestion newJobQuestion) {
-    if (newJobQuestion == null)
-      return;
-    if (this.jobQuestion == null)
-      this.jobQuestion = new ArrayList<>();
-    if (!this.jobQuestion.contains(newJobQuestion))
-    {
-      this.jobQuestion.add(newJobQuestion);
-      newJobQuestion.setJobs(this);
-    }
-  }
-  public void removeJobQuestion(JobQuestion oldJobQuestion) {
-    if (oldJobQuestion == null)
-      return;
-    if (this.jobQuestion != null)
-      if (this.jobQuestion.contains(oldJobQuestion))
-      {
-        this.jobQuestion.remove(oldJobQuestion);
-        oldJobQuestion.setJobs(null);
-      }
-  }
-  public void removeAllJobQuestion() {
-    if (jobQuestion != null)
-    {
-      JobQuestion oldJobQuestion;
-      for (Iterator<JobQuestion> iter = getIteratorJobQuestion(); iter.hasNext();)
-      {
-        oldJobQuestion = iter.next();
-        iter.remove();
-        oldJobQuestion.setJobs(null);
-      }
-    }
   }
   public Iterator<Skill> getIteratorJob_skills() {
     if (jobSkills == null)
@@ -411,7 +374,6 @@ public class Job {
     removeAllComments();
     removeAllLikes();
     removeAllJobSkills();
-    removeAllJobQuestion();
     removeAllJobTags();
   }
 }

@@ -20,7 +20,7 @@ public class Question {
   private Long questionId;
   @Column(nullable = false, length = 1000)
   private String content;
-  @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
   public List<JobQuestion> jobQuestion;
 
   public List<JobQuestion> getJobQuestion() {

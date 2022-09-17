@@ -40,7 +40,7 @@ public class CompanyController {
   @GetMapping("/get-company")
   public ResponseEntity<ResponseObjectDTO> getCompany(
     @RequestParam @NotNull Long id){
-    return companyService.getCompany(id);
+    return companyService.responseGetCompany(id);
   }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

@@ -54,13 +54,17 @@ public class JobService {
     this.authService = authService;
     this.tagService = tagService;
   }
-  public ResponseEntity<ResponseObjectDTO> getJob(Long jobId){
+  public ResponseEntity<ResponseObjectDTO> responseGetJob(Long jobId){
+    Job job = getJob(jobId);
+    JobCreationDTO jobCreationDTO = JobMapper.toDTO(job);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("company", jobCreationDTO);
+    return ResponseEntity.ok(new ResponseObjectDTO("get job successfully ",responseData));
+  }
+  public Job getJob(Long jobId){
     Optional<Job> jobOptional = jobRepository.findById(jobId);
     if(jobOptional.isPresent()){
-      JobCreationDTO jobCreationDTO = JobMapper.toDTO(jobOptional.get());
-      Map<String, Object> responseData = new HashMap<>();
-      responseData.put("company", jobCreationDTO);
-      return ResponseEntity.ok(new ResponseObjectDTO("get job successfully ",responseData));
+      return jobOptional.get();
     }
     throw new NotFoundException("Job not found", "id", jobId.toString());
   }

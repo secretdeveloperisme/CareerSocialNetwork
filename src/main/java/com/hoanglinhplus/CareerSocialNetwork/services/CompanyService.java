@@ -44,13 +44,17 @@ public class CompanyService {
     this.myUserDetailsService = myUserDetailsService;
     this.authService = authService;
   }
-  public ResponseEntity<ResponseObjectDTO> getCompany(Long companyId){
+  public ResponseEntity<ResponseObjectDTO> responseGetCompany(Long companyId) {
+    Company company = getCompany(companyId);
+    CompanyCreationDTO companyCreationDTO = CompanyMapper.toDTO(company);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("company", companyCreationDTO);
+    return ResponseEntity.ok(new ResponseObjectDTO("get company successfully ",responseData));
+  }
+  public Company getCompany(Long companyId){
     Optional<Company> companyOptional = companyRepository.findById(companyId);
     if(companyOptional.isPresent()){
-      CompanyCreationDTO companyCreationDTO = CompanyMapper.toDTO(companyOptional.get());
-      Map<String, Object> responseData = new HashMap<>();
-      responseData.put("company", companyCreationDTO);
-      return ResponseEntity.ok(new ResponseObjectDTO("get company successfully ",responseData));
+      return companyOptional.get();
     }
     throw new NotFoundException("companyId not found", "id", companyId.toString());
   }

@@ -4,6 +4,7 @@ import com.hoanglinhplus.CareerSocialNetwork.constants.NumberConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.SkillDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.job_question.JobQuestionDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import lombok.*;
 
@@ -31,7 +32,7 @@ public class JobCreationDTO {
   private Date deletedAt;
   private int experience = NumberConstant.NO_SET;
   private List<TagDTO> tags;
-  private List<JobQuestion> jobQuestion;
+  private List<JobQuestionDTO> jobQuestion;
   private List<SkillDTO> jobSkills;
   private EmploymentTypeDTO employmentType;
   private CompanyCreationDTO company;
