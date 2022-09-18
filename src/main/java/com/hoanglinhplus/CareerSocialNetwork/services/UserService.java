@@ -7,6 +7,7 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.UserDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.MyUsernameNotFoundException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.UserNameExistedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseUserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.UserMapper;
@@ -52,6 +53,13 @@ public class UserService {
       return ResponseEntity.ok(new ResponseObjectDTO("get user successfully ",responseData));
     }
     throw new MyUsernameNotFoundException("username is not found", username);
+  }
+  public User getUser(Long userId) {
+    Optional<User> userOptional = userRepository.findById(userId);
+    if (userOptional.isPresent()) {
+      return userOptional.get();
+    }
+    throw new NotFoundException("User not found", userId.toString(), "UserID");
   }
   public ResponseEntity<ResponseObjectDTO> getAllUsers(String gender, String address
     , String username, PageableDTO pageableDTO){

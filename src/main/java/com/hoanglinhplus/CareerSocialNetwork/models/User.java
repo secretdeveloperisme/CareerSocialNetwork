@@ -66,10 +66,8 @@ public class User {
   @JoinTable(name = "follow_tags",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"))
   private List<Tag> tags;
-  @ManyToMany
-  @JoinTable(name = "likes",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
-      , inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "job_id"))
-  private List<Job> likeJobs;
+  @OneToMany(mappedBy = "user",orphanRemoval = true)
+  private List<Like> likes;
   @ManyToMany
   @JoinTable(name = "bookmarks",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "job_id"))
@@ -283,61 +281,7 @@ public class User {
       }
     }
   }
-  public List<Job> getLikeJobs() {
-    if (likeJobs == null)
-      likeJobs = new ArrayList<>();
-    return likeJobs;
-  }
 
-  public Iterator<Job> getIteratorLikes() {
-    if (likeJobs == null)
-      likeJobs = new ArrayList<>();
-    return likeJobs.iterator();
-  }
-
-
-  public void setLikeJobs(List<Job> newLikes) {
-    removeAllLikes();
-    for (Job newLike : newLikes) addLikes(newLike);
-  }
-
-
-  public void addLikes(Job newJob) {
-    if (newJob == null)
-      return;
-    if (this.likeJobs == null)
-      this.likeJobs = new ArrayList<>();
-    if (!this.likeJobs.contains(newJob))
-    {
-      this.likeJobs.add(newJob);
-      newJob.addLikes(this);
-    }
-  }
-
-
-  public void removeLikes(Job oldJob) {
-    if (oldJob == null)
-      return;
-    if (this.likeJobs != null)
-      if (this.likeJobs.contains(oldJob))
-      {
-        this.likeJobs.remove(oldJob);
-        oldJob.removeLikes(this);
-      }
-  }
-
-  public void removeAllLikes() {
-    if (likeJobs != null)
-    {
-      Job oldJob;
-      for (Iterator<Job> iter = getIteratorLikes(); iter.hasNext();)
-      {
-        oldJob = (Job)iter.next();
-        iter.remove();
-        oldJob.removeLikes(this);
-      }
-    }
-  }
   public List<Job> getBookmarks() {
     if (bookmarks == null)
       bookmarks = new ArrayList<>();
@@ -349,13 +293,6 @@ public class User {
       bookmarks = new ArrayList<>();
     return bookmarks.iterator();
   }
-
-
-  public void setBookmarks(List<Job> newBookmarks) {
-    removeAllBookmarks();
-    for (Job newBookmark : newBookmarks) addBookmarks(newBookmark);
-  }
-
 
   public void addBookmarks(Job newJob) {
     if (newJob == null)
@@ -763,6 +700,5 @@ public class User {
     removeAllUserRoles();
     removeAllUserSkills();
     removeAllBookmarks();
-    removeAllLikes();
   }
 }

@@ -21,7 +21,7 @@ import java.util.Iterator;
 public class Job {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "job_id")
+  @Column(name = "job_id", columnDefinition = "bigint default null")
   private Long jobId;
   @Column(nullable = false, length = 255)
   private String title;
@@ -55,10 +55,8 @@ public class Job {
   @JoinTable(name = "job_skills", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "skill_id", referencedColumnName = "skill_id"))
   private List<Skill> jobSkills;
-  @ManyToMany
-  @JoinTable(name = "likes", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
-      , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
-  private List<User> likes;
+  @OneToMany(mappedBy = "job",orphanRemoval = true)
+  private List<Like> likes;
   @ManyToMany
   @JoinTable(name = "bookmarks", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
@@ -223,55 +221,6 @@ public class Job {
     }
   }
 
-  public Iterator<User> getIteratorLikes() {
-    if (likes == null)
-      likes = new ArrayList<>();
-    return likes.iterator();
-  }
-
-
-  public void setLikes(List<User> newLikes) {
-    removeAllLikes();
-    for (User newLike : newLikes) addLikes(newLike);
-  }
-
-
-  public void addLikes(User newUser) {
-    if (newUser == null)
-      return;
-    if (this.likes == null)
-      this.likes = new ArrayList<>();
-    if (!this.likes.contains(newUser))
-    {
-      this.likes.add(newUser);
-      newUser.addLikes(this);
-    }
-  }
-
-
-  public void removeLikes(User oldUser) {
-    if (oldUser == null)
-      return;
-    if (this.likes != null)
-      if (this.likes.contains(oldUser))
-      {
-        this.likes.remove(oldUser);
-        oldUser.removeLikes(this);
-      }
-  }
-
-  public void removeAllLikes() {
-    if (likes != null)
-    {
-      User oldUser;
-      for (Iterator<User> iter = getIteratorLikes(); iter.hasNext();)
-      {
-        oldUser = iter.next();
-        iter.remove();
-        oldUser.removeLikes(this);
-      }
-    }
-  }
   public List<User> getBookmarks() {
     if (bookmarks == null)
       bookmarks = new ArrayList<>();
@@ -372,7 +321,6 @@ public class Job {
   public void removeAllRelationShip(){
     removeAllBookmarks();
     removeAllComments();
-    removeAllLikes();
     removeAllJobSkills();
     removeAllJobTags();
   }
