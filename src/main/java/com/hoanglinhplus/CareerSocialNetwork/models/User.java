@@ -52,7 +52,9 @@ public class User {
   private List<Application> applications;
   @OneToMany(mappedBy = "user")
   private List<UserCompanyRole> userCompanyRoles;
-  @OneToMany(mappedBy = "createdUser")
+  @ManyToMany
+  @JoinTable(name = "follow_companies", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    , inverseJoinColumns = @JoinColumn(name = "company_id", referencedColumnName = "company_id"))
   private List<Company> followCompanies;
   @ManyToMany(cascade = {CascadeType.MERGE})
   @JoinTable(name = "user_skills", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
