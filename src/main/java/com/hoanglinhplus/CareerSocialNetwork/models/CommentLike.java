@@ -14,19 +14,19 @@ import javax.persistence.*;
 @IdClass(CommentLikeId.class)
 public class CommentLike {
   @Id
-  @Column(name = "user_id", insertable = false, updatable = false)
+  @Column(name = "user_id")
   private Long userId;
   @Id
-  @Column(name = "comment_id",insertable = false, updatable = false)
+  @Column(name = "comment_id")
   private Long commentId;
   @Column(nullable = false, length = 30)
   @Enumerated(EnumType.STRING)
   private TypeLike typeLike;
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+  @ManyToOne
+  @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
   private User users;
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  @JoinColumn(name = "comment_id", referencedColumnName = "comment_id")
+  @ManyToOne
+  @JoinColumn(name = "comment_id", referencedColumnName = "comment_id",insertable = false, updatable = false)
   private Comment comments;
 
 }

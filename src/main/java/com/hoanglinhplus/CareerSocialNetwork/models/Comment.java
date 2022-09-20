@@ -1,11 +1,14 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -22,20 +25,23 @@ public class Comment {
   private String content;
   @CreatedDate
   private Date createdAt;
-
+  @JsonIgnore
   @OneToOne
   @JoinColumn(name = "parent_id", referencedColumnName = "comment_id")
   private Comment parentComment;
   @OneToMany(mappedBy = "comments")
   private Collection<CommentLike> commentLikes;
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User user;
+  @JsonIgnore
   @ManyToOne
   @JoinColumn(name = "job_id", referencedColumnName = "JOB_ID")
   private Job job;
 
-
+  @Transient
+  List<Comment> children = new ArrayList<>();
   public User getUsers() {
     return user;
   }
