@@ -1,13 +1,12 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
+import lombok.*;
 
 import java.io.Serializable;
 
+@NoArgsConstructor
 @AllArgsConstructor
-@Getter
+@Getter @Setter
 @EqualsAndHashCode
 public class ApplicationId implements Serializable {
   private Long userId;
