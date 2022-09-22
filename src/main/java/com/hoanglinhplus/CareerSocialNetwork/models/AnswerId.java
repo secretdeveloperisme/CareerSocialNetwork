@@ -1,12 +1,10 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
-import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.io.Serializable;
 
+@NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
 @EqualsAndHashCode

@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.securities;
 
+import com.hoanglinhplus.CareerSocialNetwork.models.Answer;
 import com.hoanglinhplus.CareerSocialNetwork.models.Comment;
 import com.hoanglinhplus.CareerSocialNetwork.models.Company;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job;
@@ -44,5 +45,10 @@ public class PermissionService {
   public boolean isOwnerComment (Comment comment){
     Long userId = myUserDetailsService.getCurrentUserId();
     return comment.getUser().getUserId().equals(userId);
+  }
+
+  public boolean isOwnerAnswer (Answer answer){
+    Long userId = myUserDetailsService.getCurrentUserId();
+    return answer.getUserId().equals(userId);
   }
 }

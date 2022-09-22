@@ -1,18 +1,15 @@
 package com.hoanglinhplus.CareerSocialNetwork.dto.responses;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Map;
 
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter @Setter
 public class ResponseObjectDTO {
   private String message;
   private Map<String, Object> data;
-
 }
