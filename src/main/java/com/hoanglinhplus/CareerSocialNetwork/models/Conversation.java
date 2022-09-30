@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,6 +15,7 @@ import java.util.*;
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "Conversations")
 public class Conversation {
   @Id
@@ -25,13 +27,13 @@ public class Conversation {
   @LastModifiedDate
   private Date updateAt;
   private Date deleteAt;
-  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE })
+  @ManyToMany
   @JoinTable(name = "participants",joinColumns = @JoinColumn(name = "conversation_id", referencedColumnName = "conversation_id", nullable = false)
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
   private List<User> participants;
   @OneToMany(mappedBy = "conversation", orphanRemoval = true)
   private List<Message> messages;
-  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
   private User user;
   public Collection<User> getParticipants() {
@@ -88,13 +90,6 @@ public class Conversation {
       }
     }
   }
-
-  public Collection<Message> getMessages() {
-    if (messages == null)
-      messages = new ArrayList<>();
-    return messages;
-  }
-
 
   public Iterator<Message> getIteratorMessages() {
     if (messages == null)

@@ -224,7 +224,7 @@ INSERT INTO `organization_sizes` VALUES (1,'0-1 employees'),(2,'2-10 employees')
 UNLOCK TABLES;
 
 --
--- Dumping data for table `participants`
+-- Dumping data for table `usernameParticipants`
 --
 
 LOCK TABLES `participants` WRITE;

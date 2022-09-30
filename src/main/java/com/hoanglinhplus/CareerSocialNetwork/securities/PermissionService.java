@@ -1,12 +1,10 @@
 package com.hoanglinhplus.CareerSocialNetwork.securities;
 
-import com.hoanglinhplus.CareerSocialNetwork.models.Answer;
-import com.hoanglinhplus.CareerSocialNetwork.models.Comment;
-import com.hoanglinhplus.CareerSocialNetwork.models.Company;
-import com.hoanglinhplus.CareerSocialNetwork.models.Job;
+import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.services.CompanyService;
 import com.hoanglinhplus.CareerSocialNetwork.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -50,5 +48,13 @@ public class PermissionService {
   public boolean isOwnerAnswer (Answer answer){
     Long userId = myUserDetailsService.getCurrentUserId();
     return answer.getUserId().equals(userId);
+  }
+  public boolean isOwnerConversation(Conversation conversation) {
+    Long userId = myUserDetailsService.getCurrentUserId();
+    return conversation.getUser().getUserId().equals(userId);
+  }
+  public boolean isOwnerMessage(Message message) {
+    Long userId = myUserDetailsService.getCurrentUserId();
+    return message.getUser().getUserId().equals(userId);
   }
 }

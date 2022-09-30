@@ -1,6 +1,8 @@
 package com.hoanglinhplus.CareerSocialNetwork.mappers;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.*;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Education;
 import com.hoanglinhplus.CareerSocialNetwork.models.Role;
 import com.hoanglinhplus.CareerSocialNetwork.models.Skill;

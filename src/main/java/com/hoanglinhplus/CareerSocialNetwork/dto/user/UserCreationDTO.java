@@ -1,5 +1,6 @@
-package com.hoanglinhplus.CareerSocialNetwork.dto;
+package com.hoanglinhplus.CareerSocialNetwork.dto.user;
 
+import com.hoanglinhplus.CareerSocialNetwork.dto.EducationDTO;
 import lombok.*;
 
 import javax.validation.constraints.Email;

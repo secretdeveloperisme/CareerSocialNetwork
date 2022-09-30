@@ -2,8 +2,8 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.UserCreationDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.UserDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.MyUsernameNotFoundException;

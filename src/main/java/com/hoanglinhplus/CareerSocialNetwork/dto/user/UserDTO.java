@@ -1,5 +1,8 @@
-package com.hoanglinhplus.CareerSocialNetwork.dto;
+package com.hoanglinhplus.CareerSocialNetwork.dto.user;
 
+import com.hoanglinhplus.CareerSocialNetwork.dto.EducationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.RoleDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.SkillDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Skill;
 import lombok.*;
 

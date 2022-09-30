@@ -2,9 +2,8 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
+import com.hoanglinhplus.CareerSocialNetwork.models.FileInfo;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -15,8 +14,7 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class FileService {
@@ -27,26 +25,40 @@ public class FileService {
   public FileService(MyUserDetailsService myUserDetailsService) {
     this.myUserDetailsService = myUserDetailsService;
   }
-  public ResponseEntity<ResponseObjectDTO> uploadFile(MultipartFile file){
+
+  public List<FileInfo> processUploadFile(List<MultipartFile> files){
     Long userId = myUserDetailsService.getCurrentUserId();
     String currentDirectory = new File("").getAbsolutePath();
+    List<FileInfo> uploadedFiles = new ArrayList<>();
+    FileOutputStream fileOutputStream;
     try {
       Path createdDirPath = createDirectory(currentDirectory, userId.toString());
-      String fileName = generateUniqueFileName(generateUniqueFileName(file.getOriginalFilename()));
-      Path filePath = Paths.get(createdDirPath.toString(), fileName);
-      String filepathString = "/file" + "/" + uploadFolder + "/" + userId + "/" + fileName;
-      FileOutputStream fileOutputStream = new FileOutputStream(filePath.toFile());
-      fileOutputStream.write(file.getBytes());
-      fileOutputStream.flush();
-      Map<String, Object> responseData = new HashMap<>();
-      responseData.put("filePath", filepathString );
-      return ResponseEntity.ok(new ResponseObjectDTO("upload file successfully ",responseData));
+      for (MultipartFile file : files) {
+        String fileName = generateUniqueFileName(generateUniqueFileName(file.getOriginalFilename()));
+        Path filePath = Paths.get(createdDirPath.toString(), fileName);
+        String filepathString = "/file" + "/" + uploadFolder + "/" + userId + "/" + fileName;
+        FileInfo fileInfo = new FileInfo(fileName, filepathString, file.getContentType());
+        fileOutputStream = new FileOutputStream(filePath.toFile());
+        fileOutputStream.write(file.getBytes());
+        fileOutputStream.flush();
+        fileOutputStream.close();
+        uploadedFiles.add(fileInfo);
+      }
     }
     catch (FileNotFoundException e) {
-      throw new NotFoundException("File not found", file.getOriginalFilename(), "name");
+      throw new NotFoundException("File not found", null, "FILE");
     }
     catch (IOException e) {
-      e.printStackTrace();
+      return uploadedFiles;
+    }
+    return uploadedFiles;
+  }
+  public ResponseEntity<ResponseObjectDTO> uploadFiles(List<MultipartFile> files)  {
+    List<FileInfo> uploadedFiles = processUploadFile(files);
+    if(uploadedFiles.size() > 0){
+      Map<String, Object> responseData = new HashMap<>();
+      responseData.put("fileInfo", uploadedFiles );
+      return ResponseEntity.ok(new ResponseObjectDTO("upload files successfully ",responseData));
     }
     return ResponseEntity.ok(new ResponseObjectDTO("upload file failed ",null));
   }

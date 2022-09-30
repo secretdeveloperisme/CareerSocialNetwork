@@ -1,6 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.mappers;
 
-import com.hoanglinhplus.CareerSocialNetwork.dto.UserDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import org.springframework.data.domain.Page;

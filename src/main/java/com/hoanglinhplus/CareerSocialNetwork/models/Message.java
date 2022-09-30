@@ -1,8 +1,10 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.MessageType;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,6 +18,7 @@ import java.util.Iterator;
 @Getter
 @Setter
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 @Table(name = "messages")
 public class Message {
   @Id
@@ -23,7 +26,8 @@ public class Message {
   @Column(name = "message_id")
   private Long messageId;
   private String message;
-  private String messageType;
+  @Enumerated(EnumType.STRING)
+  private MessageType messageType;
   @CreatedDate
   private Date createdAt;
   @LastModifiedDate

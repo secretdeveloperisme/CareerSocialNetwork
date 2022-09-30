@@ -18,10 +18,10 @@ public class Attachment {
   private Long attachmentId;
   @Column(nullable = false, length = 1000)
   private String attachmentUrl;
-  @ManyToOne(cascade = {CascadeType.PERSIST})
+  @ManyToOne
   @JoinColumn(name = "message_id", referencedColumnName = "message_id", nullable = false)
   private Message message;
-  @ManyToOne(cascade = CascadeType.PERSIST)
+  @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinColumn(name = "attachment_type_id", referencedColumnName = "attachment_type_id", nullable = false)
   private AttachmentType attachmentType;
   public Message getMessages() {
@@ -45,18 +45,6 @@ public class Attachment {
     return attachmentType;
   }
 
-  public void setAttachmentTypes(AttachmentType newAttachmentType) {
-    if (this.attachmentType == null || !this.attachmentType.equals(newAttachmentType)) {
-      if (this.attachmentType != null) {
-        AttachmentType oldAttachmentType = this.attachmentType;
-        this.attachmentType = null;
-        oldAttachmentType.removeAttachments(this);
-      }
-      if (newAttachmentType != null) {
-        this.attachmentType = newAttachmentType;
-        this.attachmentType.addAttachments(this);
-      }
-    }
-  }
+
 
 }

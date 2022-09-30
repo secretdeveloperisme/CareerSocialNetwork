@@ -1,17 +1,14 @@
 package com.hoanglinhplus.CareerSocialNetwork;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.EducationDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.UserCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.UserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.TagRepository;
 import com.hoanglinhplus.CareerSocialNetwork.services.TagService;
 import com.hoanglinhplus.CareerSocialNetwork.utils.DateUtil;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.Arrays;
 import java.util.List;

@@ -1,7 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.UserCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
