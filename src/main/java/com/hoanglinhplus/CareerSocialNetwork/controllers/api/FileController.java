@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.FileService;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
-@RequestMapping("/file")
+@RequestMapping("/api/file")
 @Validated
 public class FileController {
   private final FileService fileService;

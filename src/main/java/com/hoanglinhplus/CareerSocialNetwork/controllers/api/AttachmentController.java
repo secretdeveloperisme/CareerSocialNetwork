@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.chat.AttachmentDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.List;
 
 @RestController
-@RequestMapping("/chat/message/attachment")
+@RequestMapping("/api/chat/message/attachment")
 public class AttachmentController {
   private final AttachmentService attachmentService;
   @Autowired

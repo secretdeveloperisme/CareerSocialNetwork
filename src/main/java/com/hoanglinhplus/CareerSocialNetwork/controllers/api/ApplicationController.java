@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/application")
+@RequestMapping("/api/application")
 public class ApplicationController {
   private final ApplicationService applicationService;
 

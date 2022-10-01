@@ -36,7 +36,7 @@ public class FileService {
       for (MultipartFile file : files) {
         String fileName = generateUniqueFileName(generateUniqueFileName(file.getOriginalFilename()));
         Path filePath = Paths.get(createdDirPath.toString(), fileName);
-        String filepathString = "/file" + "/" + uploadFolder + "/" + userId + "/" + fileName;
+        String filepathString = "/api/file" + "/" + uploadFolder + "/" + userId + "/" + fileName;
         FileInfo fileInfo = new FileInfo(fileName, filepathString, file.getContentType());
         fileOutputStream = new FileOutputStream(filePath.toFile());
         fileOutputStream.write(file.getBytes());

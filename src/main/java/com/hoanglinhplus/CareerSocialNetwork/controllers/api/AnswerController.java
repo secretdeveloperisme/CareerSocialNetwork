@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.job_question.AnswerDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job_question.AnswerFilterDTO;
@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/answer")
+@RequestMapping("/api/answer")
 public class AnswerController {
   private final AnswerService answerService;
 

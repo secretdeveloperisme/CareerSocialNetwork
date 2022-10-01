@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentLikeDTO;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/comment")
+@RequestMapping("/api/comment")
 @Validated
 public class CommentController {
   private final CommentService commentService;

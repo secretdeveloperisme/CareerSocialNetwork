@@ -1,0 +1,3354 @@
+{
+	"info": {
+		"_postman_id": "691cf060-f155-423f-8733-f8c41a96d52e",
+		"name": "CareerSocialNetwork",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "19626469"
+	},
+	"item": [
+		{
+			"name": "auth",
+			"item": [
+				{
+					"name": "admin login",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "hoanglinh",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "HoangLinh@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login vana",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "vana123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "VanA@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login Van Minh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "VanMinh",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "VamMinh@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login MinhMAN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "MinhMan",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "MinhMan@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/auth/login",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user login Ngoc Hoa",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "username",
+									"value": "ngochoa123",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "NgocHoa@123",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/auth/login?",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							],
+							"query": [
+								{
+									"key": "",
+									"value": null
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "refresh-token",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob2FuZ2xpbmgiLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiIvYXV0aC9sb2dpbiIsImV4cCI6MTY2MzA2MTc0N30.-PoPo5B9J2m7tiDbVFLmRDivU5z8nVazIO0rR8RxTbc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/auth/refresh-token",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"auth",
+								"refresh-token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User CRUD",
+			"item": [
+				{
+					"name": "Create User Minh Man",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"MinhMan\",\r\n    \"password\": \"MinhMan@123\",\r\n    \"email\": \"minhman123@gmail.com\",\r\n    \"biography\": \"Hello everyone, i am an engineer\",\r\n    \"dob\": \"2000-04-25\",\r\n    \"gender\": \"m\",\r\n    \"address\": \"long hồ, vĩnh long\",\r\n    \"roleIds\":[\r\n        1\r\n    ],\r\n    \"userSkillIds\":[1,3,2],\r\n    \"educations\": [\r\n        {\r\n            \"schoolName\": \"Can Tho Univesity\",\r\n            \"startDate\": \"2018-04-12\",\r\n            \"endDate\": \"2022-12-12\"\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User Van Minh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"VanMinh\",\r\n    \"password\": \"VamMinh@123\",\r\n    \"email\": \"vanminh7676@gmail.com\",\r\n    \"biography\": \"Hello everyone, i am an worker\",\r\n    \"dob\": \"1998-12-03\",\r\n    \"gender\": \"m\",\r\n    \"address\": \"Bình Thuận\",\r\n    \"roleIds\":[\r\n        1\r\n    ],\r\n    \"userSkillIds\":[4,5],\r\n    \"educations\": [\r\n        {\r\n            \"schoolName\": \"Binh Thuan Univesity\",\r\n            \"startDate\": \"2015-04-12\",\r\n            \"endDate\": \"2019-12-02\"\r\n        }\r\n    ]\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create User ADMIN",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"username\": \"customer123\",\r\n    \"password\": \"HoangLinh@123\",\r\n    \"dob\": \"2000-11-25\",\r\n    \"gender\": \"m\",\r\n    \"address\": \"kiengiang\",\r\n    \"roles\":[\r\n        \"USER\"\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2YW5hMTIzIiwicm9sZXMiOlsiVVNFUiJdLCJpc3MiOiIvYXV0aC9sb2dpbiIsImV4cCI6MTY2MjU5Mzk4MH0.iMFptbKAyaKeHVyRTVwuZQT52LXSOa0P5kXCMZVanSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"username\": \"MinhMan\",\r\n    \"password\": \"MinhMan@123\",\r\n    \"email\": \"minhman321@gmail.com\",\r\n    \"biography\": \"Hello everyone, i am an engineer\",\r\n    \"dob\": \"2000-04-25\",\r\n    \"gender\": \"f\",\r\n    \"address\": \"long hồ, vĩnh long\",\r\n    \"fullname\": \"tran minh man\",\r\n    \"roleIds\":[\r\n        1\r\n    ],\r\n    \"userSkillIds\":[5,2,6]\r\n    ,\"educations\": [\r\n        {   \"educationId\": 22,\r\n            \"schoolName\": \"Can Tho 532 Univesity\",\r\n            \"startDate\": \"2018-10-12\",\r\n            \"endDate\": \"2022-11-11\",\r\n            \"grade\":3.54\r\n        }\r\n    ]\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete users",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[\r\n    12\r\n]",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user/many",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"many"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2YW5hMTIzIiwicm9sZXMiOlsiVVNFUiJdLCJpc3MiOiIvYXV0aC9sb2dpbiIsImV4cCI6MTY2MjU5Mzk4MH0.iMFptbKAyaKeHVyRTVwuZQT52LXSOa0P5kXCMZVanSA",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user/get-user?username=MinhMan",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"get-user"
+							],
+							"query": [
+								{
+									"key": "username",
+									"value": "MinhMan"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get all users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user/get-all-users?sort=address_asc,gender_asc&size=10&page=0&address=long&username=van",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user",
+								"get-all-users"
+							],
+							"query": [
+								{
+									"key": "address",
+									"value": "L",
+									"disabled": true
+								},
+								{
+									"key": "username",
+									"value": "test1",
+									"disabled": true
+								},
+								{
+									"key": "dob",
+									"value": "2000-04-25",
+									"disabled": true
+								},
+								{
+									"key": "sort",
+									"value": "address_asc,gender_asc"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "address",
+									"value": "long"
+								},
+								{
+									"key": "username",
+									"value": "van"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete One User",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ2YW5hMTIzIiwicm9sZXMiOlsiVVNFUiJdLCJpc3MiOiIvYXV0aC9sb2dpbiIsImV4cCI6MTY2MjUyNzM3M30.ZGWPPVbJUepDXtCl7GbXpIMLpHaWkIlAGkfbFExn14E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"userId\": 19\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/user",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJob2FuZ2xpbmgiLCJyb2xlcyI6WyJBRE1JTiJdLCJpc3MiOiIvYXV0aC9sb2dpbiIsImV4cCI6MTY2MjQ2Njc0M30.qTUyVCUjJfLlBN4yCzOhYwE0lLY61TEmqXwGwp8LG-8",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Comany CRUD",
+			"item": [
+				{
+					"name": "Create Company",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"hoanglinhplus\",\r\n    \"website\": \"https://hoanglinhplus.com\",\r\n    \"logo\": \"hello\",\r\n    \"tagLine\": \"life is riding a bicycle\",\r\n    \"organizationSize\":{\r\n        \"organizationId\": 1\r\n    },\r\n    \"industry\": {\r\n        \"industryId\": 2\r\n    }\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/company",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Company 1",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiVVNFUiJdLCJ1c2VySWQiOjIxfSwic3ViIjoiVmFuTWluaCIsImlzcyI6Ii9hdXRoL2xvZ2luIiwiZXhwIjoxNjYzMjQ4MzMzfQ.sLY2pcP56QL2eUmoYei35i5Pu6wYCcFHGPdCb7NLs3Q",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"name\": \"vanminh farmers\",\r\n    \"website\": \"https://vanminhfarmer.com.vn\",\r\n    \"logo\": \"van minh logo\",\r\n    \"tagLine\": \"that is a good idea haha\",\r\n    \"organizationSize\":{\r\n        \"organizationId\": 1\r\n    },\r\n    \"industry\": {\r\n        \"industryId\": 5\r\n    }\r\n\r\n}\r\n\r\n// {\r\n//     \"name\": \"minhmanhaha\",\r\n//     \"website\": \"https://minhmanhaha.com.vn\",\r\n//     \"logo\": \"minhman logo 123321\",\r\n//     \"tagLine\": \"that is a good idea yeah\",\r\n//     \"organizationSize\":{\r\n//         \"organizationId\": 5\r\n//     },\r\n//     \"industry\": {\r\n//         \"industryId\": 3\r\n//     }\r\n\r\n// }\r\n// {\r\n//     \"name\": \"minhmanauto\",\r\n//     \"website\": \"https://minhmnan.com.vn\",\r\n//     \"logo\": \"minhman logo\",\r\n//     \"tagLine\": \"that is a good idea\",\r\n//     \"organizationSize\":{\r\n//         \"organizationId\": 3\r\n//     },\r\n//     \"industry\": {\r\n//         \"industryId\": 4\r\n//     }\r\n// }\r\n\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/company",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Company",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiVVNFUiJdLCJ1c2VySWQiOjIwfSwic3ViIjoiTWluaE1hbiIsImlzcyI6Ii9hdXRoL2xvZ2luIiwiZXhwIjoxNjYyOTM4NDkzfQ.YVPDAxPGqSAUlTm4sqktwTjMmU7Ac_fW7ZInTnl2Mgk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"companyId\": 15,\r\n    \"name\": \"minhmanlogistic\",\r\n    \"website\": \"https://minhmnan.com.vn.zaa\",\r\n    \"logo\": \"minhman logo okay yeah\",\r\n    \"tagLine\": \"that is a good idea\",\r\n    \"organizationSize\":{\r\n        \"organizationId\": 3\r\n    },\r\n    \"industry\": {\r\n        \"industryId\": 5\r\n    },\r\n    \"userId\": 20\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/company",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteCompany",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiVVNFUiJdLCJ1c2VySWQiOjIwfSwic3ViIjoiTWluaE1hbiIsImlzcyI6Ii9hdXRoL2xvZ2luIiwiZXhwIjoxNjYyNzcwMzc4fQ.uGxu1TvB9AWxgK9gmJaZnIy3IT7n0QWnGtiJdz8Aqbk",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"companyId\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/company",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All companies",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiQURNSU4iXSwidXNlcklkIjoxfSwic3ViIjoiaG9hbmdsaW5oIiwiaXNzIjoiL2F1dGgvbG9naW4iLCJleHAiOjE2NjQxNDkwMzR9.IbhGRYyXjk_pSm-b_usxuz4GQM36ApsIkxxs6cCj6LM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    nam\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/company/get-all-companies?page=0&size=10",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"company",
+								"get-all-companies"
+							],
+							"query": [
+								{
+									"key": "industryId",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "organizationId",
+									"value": "3",
+									"disabled": true
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "size",
+									"value": "10"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Companies",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiQURNSU4iXSwidXNlcklkIjoxfSwic3ViIjoiaG9hbmdsaW5oIiwiaXNzIjoiL2F1dGgvbG9naW4iLCJleHAiOjE2NjI5Mzg5NDJ9.sox0jKuHFCMnPdduHqXDDhjYO51H7XO_l40GRQGj1G4",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[15,16]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/company/many",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"company",
+								"many"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job CRUD",
+			"item": [
+				{
+					"name": "Create Job",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"web backend developer\",\r\n    \"jobDescription\": \"tma want to hire a backend  developer\",\r\n    \"image\" : \"https://image.jpg\",\r\n    \"location\" : \"ho chi minh\",\r\n    \"amount\": 10,\r\n    \"salaryMin\": 500,\r\n    \"salaryMax\": 1000,\r\n    \"experience\": 0,\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"Web\"\r\n        },\r\n        {\r\n            \"name\": \"Java\"\r\n        },\r\n        {\r\n            \"name\": \"Backend\"\r\n        }\r\n    ],\r\n    \"jobSkills\": [\r\n        {\r\n            \"skillId\": 1\r\n        },\r\n        {\r\n            \"skillId\": 2\r\n        }\r\n    ],\r\n    \"employmentType\": {\r\n        \"employmentTypeId\": 1\r\n    },\r\n    \"company\": {\r\n        \"companyId\": 18\r\n    },\r\n    \"position\": {\r\n        \"positionId\": 1\r\n    },\r\n    \"workPlace\": {\r\n        \"workPlaceId\": 1\r\n    }\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Job HoangLinh",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiQURNSU4iXSwidXNlcklkIjoxfSwic3ViIjoiaG9hbmdsaW5oIiwiaXNzIjoiL2F1dGgvbG9naW4iLCJleHAiOjE2NjQxNDkwMzR9.IbhGRYyXjk_pSm-b_usxuz4GQM36ApsIkxxs6cCj6LM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"web front developer\",\r\n    \"jobDescription\": \"tma want to hire a backend developer\",\r\n    \"image\" : \"https://image.jpg\",\r\n    \"location\" : \"ho chi minh\",\r\n    \"amount\": 10,\r\n    \"salaryMin\": 500,\r\n    \"salaryMax\": 1000,\r\n    \"experience\": 0,\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"frontend\"\r\n        },\r\n        {\r\n            \"name\": \"rearctjs\"\r\n        },\r\n        {\r\n            \"name\": \"javascript\"\r\n        }\r\n    ],\r\n    \"jobSkills\": [\r\n        {\r\n            \"skillId\": 3\r\n        },\r\n        {\r\n            \"skillId\": 4\r\n        }\r\n    ],\r\n    \"employmentType\": {\r\n        \"employmentTypeId\": 2\r\n    },\r\n    \"company\": {\r\n        \"companyId\": 8\r\n    },\r\n    \"position\": {\r\n        \"positionId\": 2\r\n    },\r\n    \"workPlace\": {\r\n        \"workPlaceId\": 2\r\n    }\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create Job Van Minh Company",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiQURNSU4iXSwidXNlcklkIjoxfSwic3ViIjoiaG9hbmdsaW5oIiwiaXNzIjoiL2F1dGgvbG9naW4iLCJleHAiOjE2NjQxNDkwMzR9.IbhGRYyXjk_pSm-b_usxuz4GQM36ApsIkxxs6cCj6LM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"title\": \"farmer\",\r\n    \"jobDescription\": \"van minh want to hire a farmer to water plants\",\r\n    \"image\" : \"https://image.jpg\",\r\n    \"location\" : \"ho chi minh\",\r\n    \"amount\": 10,\r\n    \"salaryMin\": 500,\r\n    \"salaryMax\": 1000,\r\n    \"experience\": 0,\r\n    \"tags\": [\r\n        {\r\n            \"name\": \"agriculture\"\r\n        },\r\n        {\r\n            \"name\": \"warter\"\r\n        },\r\n        {\r\n            \"name\": \"plant\"\r\n        }\r\n    ],\r\n    \"jobSkills\": [\r\n        {\r\n            \"skillId\": 1\r\n        },\r\n        {\r\n            \"skillId\": 6\r\n        }\r\n    ],\r\n    \"employmentType\": {\r\n        \"employmentTypeId\": 1\r\n    },\r\n    \"company\": {\r\n        \"companyId\": 19\r\n    },\r\n    \"position\": {\r\n        \"positionId\": 1\r\n    },\r\n    \"workPlace\": {\r\n        \"workPlaceId\": 1\r\n    }\r\n\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiVVNFUiJdLCJ1c2VySWQiOjIxfSwic3ViIjoiVmFuTWluaCIsImlzcyI6Ii9hdXRoL2xvZ2luIiwiZXhwIjoxNjY0MzE5Mzg5fQ.9XrqCgGNEeSq-PZz2h-TRqNlzCDNyP2N_F4j5xxVZDs",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n                \"jobId\": 8,\r\n                \"title\": \"farmer job\",\r\n                \"jobDescription\": \"van minh want to hire a farmer to water plants\",\r\n                \"image\": \"https://image-farmer.jpg\",\r\n                \"location\": \"ho chi minh city\",\r\n                \"amount\": 12,\r\n                \"startDate\": \"2022-09-15\",\r\n                \"endDate\": \"2023-01-12\",\r\n                \"salaryMin\": 500,\r\n                \"salaryMax\": 1000,\r\n                \"experience\": 0,\r\n                \"tags\": [\r\n                    {\r\n                        \"tagId\": 13,\r\n                        \"name\": \"agriculture\"\r\n                    },\r\n                    {\r\n                        \"tagId\": 14,\r\n                        \"name\": \"warter\"\r\n                    },\r\n                    {\r\n                        \"tagId\": 15,\r\n                        \"name\": \"plant\"\r\n                    },\r\n                    {\r\n                        \"name\": \"fresh\"\r\n                    }\r\n                ],\r\n                \"jobSkills\": [\r\n                    {\r\n                        \"skillId\": 1,\r\n                        \"name\": \"NONO\"\r\n                        \r\n                    },\r\n                    {\r\n                        \"skillId\": 2,\r\n                        \"name\": \"NONO\"\r\n                        \r\n                    }\r\n                ],\r\n                \"employmentType\": {\r\n                    \"employmentTypeId\": 1,\r\n                    \"name\": \"full-time\"\r\n                },\r\n                \"company\": {\r\n                    \"companyId\": 19,\r\n                    \"name\": \"vanminh farmers\",\r\n                    \"website\": null,\r\n                    \"logo\": null,\r\n                    \"tagLine\": null,\r\n                    \"organizationSize\": null,\r\n                    \"industry\": null,\r\n                    \"userId\": null\r\n                },\r\n                \"position\": {\r\n                    \"positionId\": 2,\r\n                    \"name\": \"Senior Engineer\"\r\n                },\r\n                \"workPlace\": {\r\n                    \"workPlaceId\": 1,\r\n                    \"place\": \"onsite\"\r\n                }\r\n            }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteJob",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiVVNFUiJdLCJ1c2VySWQiOjIwfSwic3ViIjoiTWluaE1hbiIsImlzcyI6Ii9hdXRoL2xvZ2luIiwiZXhwIjoxNjY0MTUxODkwfQ.PtUloBYinxxMI5R1Zso2CJJmMwKITGH_ZNN7LwVpL7E",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": 2\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Jobs",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiQURNSU4iXSwidXNlcklkIjoxfSwic3ViIjoiaG9hbmdsaW5oIiwiaXNzIjoiL2F1dGgvbG9naW4iLCJleHAiOjE2NjQxNDkwMzR9.IbhGRYyXjk_pSm-b_usxuz4GQM36ApsIkxxs6cCj6LM",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job/get-all-jobs?size=3&page=0&jobId=7",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job",
+								"get-all-jobs"
+							],
+							"query": [
+								{
+									"key": "title",
+									"value": "backend",
+									"disabled": true
+								},
+								{
+									"key": "jobDescription",
+									"value": "tma",
+									"disabled": true
+								},
+								{
+									"key": "tagIds",
+									"value": "1",
+									"disabled": true
+								},
+								{
+									"key": "jobSkillIds",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "jobSkillIds",
+									"value": "4",
+									"disabled": true
+								},
+								{
+									"key": "jobSkillIds",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "employmentTypeId",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "companyId",
+									"value": "19",
+									"disabled": true
+								},
+								{
+									"key": "positionId",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "workPlaceId",
+									"value": "2",
+									"disabled": true
+								},
+								{
+									"key": "size",
+									"value": "3"
+								},
+								{
+									"key": "page",
+									"value": "0"
+								},
+								{
+									"key": "jobId",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Jobs",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "[9]\r\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job/many",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job",
+								"many"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Other Sites",
+			"item": [
+				{
+					"name": "Upload File",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "type",
+									"value": "image",
+									"type": "text"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/E:/Pictures/lovely_girls/0f322d727f1ca8835b5e9f0a9948a11b.png"
+								},
+								{
+									"key": "files",
+									"type": "file",
+									"src": "/E:/Pictures/lovely_girls/_hmnguyen__B5NmM-nBXMM.jpg",
+									"disabled": true
+								}
+							]
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/file/upload",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"upload"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET FILE",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/file/images/upload/20/1663201517737_1663201517737____minminn_B2TuaKghJgN.jpg",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"file",
+								"images",
+								"upload",
+								"20",
+								"1663201517737_1663201517737____minminn_B2TuaKghJgN.jpg"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "JobQuestion",
+			"item": [
+				{
+					"name": "Create Job Question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{VANA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\" : 7,\r\n    \"question\":{\r\n        \"content\" : \"do you have any certificates\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-question",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-question"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET Job Question",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\" : 7,\r\n    \"question\":{\r\n        \"content\" : \"what do think about this job ?\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-question/get-job-questions?jobId=7",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-question",
+								"get-job-questions"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "7"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update JobQuestion",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\" : 1,\r\n    \"content\" : \"what do think about this job edited?\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-question",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-question"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Job Question",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{VANA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\" : 7,\r\n    \"question\":{\r\n        \"content\" : \"what do think about this job ?\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-question?questionId=5",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-question"
+							],
+							"query": [
+								{
+									"key": "questionId",
+									"value": "5"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job Action",
+			"item": [
+				{
+					"name": "Like Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{VANA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n   \r\n    \"userId\": 1,\r\n    \"jobId\": 8,\r\n    \"typeLike\": \"LIKE\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-action/like",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-action",
+								"like"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Bookmark Job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{VANA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-action/bookmark",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-action",
+								"bookmark"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number Of Like",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\" : 7,\r\n    \"question\":{\r\n        \"content\" : \"what do think about this job ?\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-action/count?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-action",
+								"count"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number Of BookMarks",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\" : 7,\r\n    \"question\":{\r\n        \"content\" : \"what do think about this job ?\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-action/count-bookmark?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-action",
+								"count-bookmark"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Have Reaction Job",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\" : 1,\r\n    \"content\" : \"what do think about this job edited?\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-action/have-reaction-job?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-action",
+								"have-reaction-job"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Have Bookmark Job",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{VANA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\" : 1,\r\n    \"content\" : \"what do think about this job edited?\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/job-action/have-bookmark-job?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"job-action",
+								"have-bookmark-job"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Comment",
+			"item": [
+				{
+					"name": "CreateComment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{VANA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \"parentCommentId\": 6,\r\n    \"content\": \"you just click the button of this job\",\r\n    \"jobId\": 8\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{   \r\n    \"content\": \"that's good edited dsfdfdf\",\r\n    \"commentId\": 13\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": 8\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment/13",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"13"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get All Comments",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\" : 7,\r\n    \"question\":{\r\n        \"content\" : \"what do think about this job ?\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment/get-all-comments?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"get-all-comments"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number Of Likes",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment/like/get-number-of-likes?commentId=6",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"like",
+								"get-number-of-likes"
+							],
+							"query": [
+								{
+									"key": "commentId",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Have Reaction Comment",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\" : 1,\r\n    \"content\" : \"what do think about this job edited?\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment/like/have-reaction?commentId=6",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"like",
+								"have-reaction"
+							],
+							"query": [
+								{
+									"key": "commentId",
+									"value": "6"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Like Comment",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"commentId\": 6,\r\n    \"typeLike\" : \"UNLIKE\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/comment/like",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"comment",
+								"like"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Follow Company",
+			"item": [
+				{
+					"name": "Follow Company",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"companyId\": 8\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/follow-company",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"follow-company"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number Of  Follows",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/follow-company/get-number-of-follow-company?companyId=9",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"follow-company",
+								"get-number-of-follow-company"
+							],
+							"query": [
+								{
+									"key": "companyId",
+									"value": "9"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Have Follow Company",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\" : 1,\r\n    \"content\" : \"what do think about this job edited?\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/follow-company/have-follow-company?companyId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"follow-company",
+								"have-follow-company"
+							],
+							"query": [
+								{
+									"key": "companyId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Follow Company Copy",
+			"item": [
+				{
+					"name": "apply for job",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobId\": 8    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/application",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Number Of  Application",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/application/get-number-of-applications?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application",
+								"get-number-of-applications"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Have Applicaton",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{NGOC_HOA_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"questionId\" : 1,\r\n    \"content\" : \"what do think about this job edited?\"\r\n    \r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/application/have-application?jobId=8",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"application",
+								"have-application"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "8"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Answer",
+			"item": [
+				{
+					"name": "Create Answer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{MINHMAN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobQueId\": 4,\r\n    \"answer\": \"{{$randomLoremText}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/answer",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"answer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update Anwer",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobQueId\": 3,\r\n    \"answer\": \"{{$randomLoremText}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/answer",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"answer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get Answers",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobQueId\": 3,\r\n    \"answer\": \"{{$randomLoremText}}\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/answer/get-answers?jobId=7&userId=20",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"answer",
+								"get-answers"
+							],
+							"query": [
+								{
+									"key": "jobId",
+									"value": "7"
+								},
+								{
+									"key": "userId",
+									"value": "20"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE Answers",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{ADMIN_TOKEN}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"jobQueId\": 3\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://127.0.0.1:8080/api/answer",
+							"protocol": "http",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "8080",
+							"path": [
+								"api",
+								"answer"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Chat",
+			"item": [
+				{
+					"name": "Conversation",
+					"item": [
+						{
+							"name": "Create Conversation",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/conversation",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"conversation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Conversation",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"conversationId\": 10\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/conversation",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"conversation"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Conversation",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"conversationId\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/conversation/get-user-conversations",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"conversation",
+										"get-user-conversations"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Conversation",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"conversationId\": 3\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/conversation/get-all-conversations",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"conversation",
+										"get-all-conversations"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "participant",
+					"item": [
+						{
+							"name": "add Participant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"inviteUserId\": 3,\r\n    \"conversationId\": 11\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/participant",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"participant"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "remove participant",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{NGOC_HOA_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"conversationId\": 11\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/participant",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"participant"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": [
+							{
+								"key": "token",
+								"value": "{{MINHMAN_TOKEN}}",
+								"type": "string"
+							}
+						]
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "message",
+					"item": [
+						{
+							"name": "Attachment",
+							"item": [
+								{
+									"name": "Create Attachments",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{MINHMAN_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "formdata",
+											"formdata": [
+												{
+													"key": "files",
+													"type": "file",
+													"src": [
+														"/E:/Pictures/lovely_girls/Gai_Xinh_Chon_Loc/2da3f4822d09198f6fbcec142d811f9e0b8b7547.jpg",
+														"/E:/Pictures/lovely_girls/Gai_Xinh_Chon_Loc/2edc16f907d1c00022f13a667be12370c49ffeb8.jpg",
+														"/E:/Pictures/lovely_girls/Gai_Xinh_Chon_Loc/3b7fd80a3fdd87bb4dee9bbc219629514c468e41.jpg",
+														"/E:/Pictures/lovely_girls/Gai_Xinh_Chon_Loc/3bf994a2dc2d56693a771dea0a7c4d9b012daffb.jpg",
+														"/E:/Pictures/lovely_girls/Gai_Xinh_Chon_Loc/3cf2160a031bd95788535f28633647ad47975bbf.jpg",
+														"/E:/Pictures/lovely_girls/Gai_Xinh_Chon_Loc/4abc5d571abc9937bd7f3b5af86aa93b52793e9f.jpg"
+													]
+												},
+												{
+													"key": "messageId",
+													"value": "18",
+													"type": "text"
+												}
+											]
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8080/api/chat/message/attachment/many",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8080",
+											"path": [
+												"api",
+												"chat",
+												"message",
+												"attachment",
+												"many"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Attachments By Message",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{MINHMAN_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "http://127.0.0.1:8080/api/chat/message/attachment/get-attachment-by-message?messageId=18",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8080",
+											"path": [
+												"api",
+												"chat",
+												"message",
+												"attachment",
+												"get-attachment-by-message"
+											],
+											"query": [
+												{
+													"key": "messageId",
+													"value": "18"
+												}
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Delete Attachments",
+									"request": {
+										"auth": {
+											"type": "bearer",
+											"bearer": [
+												{
+													"key": "token",
+													"value": "{{MINHMAN_TOKEN}}",
+													"type": "string"
+												}
+											]
+										},
+										"method": "DELETE",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"attachmentId\": 11\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "http://127.0.0.1:8080/api/chat/message/attachment/",
+											"protocol": "http",
+											"host": [
+												"127",
+												"0",
+												"0",
+												"1"
+											],
+											"port": "8080",
+											"path": [
+												"api",
+												"chat",
+												"message",
+												"attachment",
+												""
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Create Message",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"message\" : \"good mornig\",\r\n    \"messageType\" : \"TEXT\",\r\n    \"conversation\" : {\r\n        \"conversationId\": 11\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/message",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"message"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Message 1",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{NGOC_HOA_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"message\" : \"HELLO Ban Man\",\r\n    \"messageType\" : \"TEXT\",\r\n    \"conversation\" : {\r\n        \"conversationId\": 11\r\n    }\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/message",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"message"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Message",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\r\n    \"message\" : \"hello world edit\",\r\n    \"messageType\" : \"TEXT\",\r\n    \"messageId\": 18\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/message",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"message"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Messages Admin",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{ADMIN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "[8]",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/message/many",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"message",
+										"many"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Message",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"messageId\": 18\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/message/",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"message",
+										""
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Message By Conversation",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{MINHMAN_TOKEN}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "http://127.0.0.1:8080/api/chat/message/get-message-by-conversation?conversationId=11",
+									"protocol": "http",
+									"host": [
+										"127",
+										"0",
+										"0",
+										"1"
+									],
+									"port": "8080",
+									"path": [
+										"api",
+										"chat",
+										"message",
+										"get-message-by-conversation"
+									],
+									"query": [
+										{
+											"key": "conversationId",
+											"value": "11"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJwcmluY2lwYWwiOnsicm9sZXMiOlsiVVNFUiJdLCJ1c2VySWQiOjIwfSwic3ViIjoiTWluaE1hbiIsImlzcyI6Ii9hdXRoL2xvZ2luIiwiZXhwIjoxNjYzMDYyNDY2fQ.xn7CiWTIwQlrjbaCDqSQunIZiaczhfAdA7Stt81KlHM",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

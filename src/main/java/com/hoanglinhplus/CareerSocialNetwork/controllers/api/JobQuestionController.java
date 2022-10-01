@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.job_question.JobQuestionDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job_question.QuestionDTO;
@@ -10,7 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/job-question")
+@RequestMapping("/api/job-question")
 public class JobQuestionController {
   private final JobQuestionService jobQuestionService;
   @Autowired

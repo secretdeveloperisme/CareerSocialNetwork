@@ -29,11 +29,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
   @Override
   protected void configure(HttpSecurity http) throws Exception {
     AuthenticationFilter authenticationFilter = new AuthenticationFilter(this.authenticationManagerBean());
-    authenticationFilter.setFilterProcessesUrl("/auth/login");
+    authenticationFilter.setFilterProcessesUrl("/api/auth/login");
     http.csrf().disable()
       .authorizeHttpRequests().anyRequest().permitAll()
       .and().addFilter(authenticationFilter)
-      .formLogin().loginPage("/auth/login").loginProcessingUrl("/auth/login");
+      .formLogin().loginPage("/api/auth/login").loginProcessingUrl("/api/auth/login");
     http.addFilterBefore(new CustomOnePerRequestFilter(), UsernamePasswordAuthenticationFilter.class);
   }
   @Bean

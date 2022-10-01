@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.controllers;
+package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
@@ -20,7 +20,7 @@ import java.util.Map;
 
 
 @RestController
-@RequestMapping("/job")
+@RequestMapping("/api/job")
 @Validated
 public class JobController {
   private final JobService jobService;
