@@ -85,12 +85,13 @@ public class ConversationService {
 
   public boolean isUserInConversation(User user, Conversation conversation){
     Specification<Conversation> conversationSpecAll = ConversationSpecification.joinParticipants(user);
-    SearchCriteria<Conversation, Long> searchIdCriteria = new SearchCriteria<Conversation, Long>(
-      Conversation_.conversationId,conversation.getConversationId(), SearchOperator.EQUAL);
+    SearchCriteria<Conversation, Long> searchIdCriteria = new SearchCriteria<>(
+      Conversation_.conversationId, conversation.getConversationId(), SearchOperator.EQUAL);
     ConversationSpecification conversationSpecId = new ConversationSpecification();
     conversationSpecId.getConditions().add(searchIdCriteria);
     conversationSpecAll = conversationSpecAll.and(conversationSpecId);
     List<Conversation> userConversation = conversationRepository.findAll(conversationSpecAll);
     return userConversation.size() > 0;
   }
+
 }

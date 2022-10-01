@@ -26,16 +26,16 @@ public class MessageController {
     return messageService.create(messageDTO);
   }
   @PutMapping
-  public ResponseEntity<ResponseObjectDTO> update(MessageDTO messageD){
-    return messageService.update(messageD);
+  public ResponseEntity<ResponseObjectDTO> update(@RequestBody MessageDTO messageDTO){
+    return messageService.update(messageDTO);
   }
-  @DeleteMapping("/many")
-  public ResponseEntity<ResponseObjectDTO> delete(MessageDTO messageD){
+  @DeleteMapping("/")
+  public ResponseEntity<ResponseObjectDTO> delete(@RequestBody MessageDTO messageD){
     return messageService.deleteMessage(messageD.getMessageId());
   }
-  @DeleteMapping
+  @DeleteMapping("/many")
   @PreAuthorize("hasAuthority('ADMIN')")
-  public ResponseEntity<ResponseObjectDTO> deleteMessages(List<Long> ids){
+  public ResponseEntity<ResponseObjectDTO> deleteMessages(@RequestBody List<Long> ids){
     return messageService.deleteMessages(ids);
   }
   @GetMapping("/get-message-by-conversation")

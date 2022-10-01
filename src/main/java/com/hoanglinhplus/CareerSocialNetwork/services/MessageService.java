@@ -5,22 +5,26 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.chat.MessageDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.MessageMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseMessageMapper;
-import com.hoanglinhplus.CareerSocialNetwork.models.*;
+import com.hoanglinhplus.CareerSocialNetwork.models.Conversation;
+import com.hoanglinhplus.CareerSocialNetwork.models.Message;
+import com.hoanglinhplus.CareerSocialNetwork.models.Message_;
+import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.MessageRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.MessageSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
 import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.util.*;
@@ -31,13 +35,13 @@ public class MessageService {
   private final MyUserDetailsService myUserDetailsService;
   private final ConversationService conversationService;
   private final PermissionService permissionService;
-  private final FileService fileService;
-  public MessageService(MessageRepository messageRepository, MyUserDetailsService myUserDetailsService, ConversationService conversationService, PermissionService permissionService, FileService fileService) {
+
+  @Autowired
+  public MessageService(MessageRepository messageRepository, MyUserDetailsService myUserDetailsService, ConversationService conversationService, PermissionService permissionService) {
     this.messageRepository = messageRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.conversationService = conversationService;
     this.permissionService = permissionService;
-    this.fileService = fileService;
   }
 
   public Message getMessage(Long messageId) {
@@ -51,7 +55,7 @@ public class MessageService {
     Conversation conversation = conversationService.getConversation(conversationId);
     User user = User.builder().userId(myUserDetailsService.getCurrentUserId()).build();
     if(conversationService.isUserInConversation(user, conversation)){
-      SearchCriteria<Message, Conversation> searchCriteria = new SearchCriteria<Message, Conversation>(Message_.conversation, conversation, SearchOperator.EQUAL);
+      SearchCriteria<Message, Conversation> searchCriteria = new SearchCriteria<>(Message_.conversation, conversation, SearchOperator.EQUAL);
       MessageSpecification messageSpecification = new MessageSpecification();
       messageSpecification.getConditions().add(searchCriteria);
       PageRequest pageRequest =PageRequest.of(pageableDTO.getPage()
@@ -71,40 +75,48 @@ public class MessageService {
     ResponseObjectDTO responseObjectDTO = ResponseMessageMapper.toDTO(messagePage);
     return ResponseEntity.ok(responseObjectDTO);
   }
-  public ResponseEntity<ResponseObjectDTO> create(MessageDTO messageDTO){
+  public ResponseEntity<ResponseObjectDTO> create(MessageDTO messageDTO) {
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     messageDTO.setUserId(currentUserId);
     Message message = MessageMapper.toEntity(messageDTO);
-    Message savedMessage = messageRepository.save(message);
-    MessageDTO savedMessageDTO = MessageMapper.toDTO(savedMessage);
-    Map<String, Object> responseData = new HashMap<>();
-    responseData.put("message", savedMessageDTO);
-    return ResponseEntity.ok(new ResponseObjectDTO("Create Message Successfully", responseData));
+    if (permissionService.isAdmin() || conversationService.isUserInConversation(message.getUser(), message.getConversation())){
+      Message savedMessage = messageRepository.save(message);
+      MessageDTO savedMessageDTO = MessageMapper.toDTO(savedMessage);
+      Map<String, Object> responseData = new HashMap<>();
+      responseData.put("message", savedMessageDTO);
+      return ResponseEntity.ok(new ResponseObjectDTO("Create Message Successfully", responseData));
+    }
+    throw new PermissionDeniedException("You are not allowed to create messages because you are not in this conversation");
+
+
   }
 
   public ResponseEntity<ResponseObjectDTO> update(MessageDTO messageDTO){
     Message message = getMessage(messageDTO.getMessageId());
-    if(messageDTO.getMessage() != null ){
-      message.setMessage(messageDTO.getMessage());
+    if(permissionService.isOwnerMessage(message)){
+      if(messageDTO.getMessage() != null ){
+        message.setMessage(messageDTO.getMessage());
+      }
+      if(messageDTO.getMessageType() != null ){
+        message.setMessageType(messageDTO.getMessageType());
+      }
+      Message updatedMessage = messageRepository.save(message);
+      MessageDTO updatedMessageDTO = MessageMapper.toDTO(updatedMessage);
+      Map<String, Object> responseData = new HashMap<>();
+      responseData.put("message", updatedMessageDTO);
+      return ResponseEntity.ok(new ResponseObjectDTO("Updated Message Successfully", responseData));
     }
-    if(messageDTO.getMessageType() != null ){
-      message.setMessageType(messageDTO.getMessageType());
-    }
-    Message updatedMessage = messageRepository.save(message);
-    MessageDTO updatedMessageDTO = MessageMapper.toDTO(updatedMessage);
-    Map<String, Object> responseData = new HashMap<>();
-    responseData.put("message", updatedMessageDTO);
-    return ResponseEntity.ok(new ResponseObjectDTO("Updated Message Successfully", responseData));
+    throw new PermissionDeniedException("You are not allowed to modify this message.");
   }
   public ResponseEntity<ResponseObjectDTO> remove(MessageDTO messageDTO){
-    Optional<Message> messageOptional = messageRepository.findById(messageDTO.getMessageId());
-    Map<String, Object> responseData = new HashMap<>();
-    if(messageOptional.isPresent()) {
-      messageRepository.delete(messageOptional.get());
+    Message message = getMessage(messageDTO.getMessageId());
+    if(permissionService.isOwnerMessage(message)){
+      Map<String, Object> responseData = new HashMap<>();
+      messageRepository.delete(message);
       responseData.put("removedMessage", messageDTO);
       return ResponseEntity.ok(new ResponseObjectDTO("Remove message successfully", responseData));
     }
-    return ResponseEntity.ok(new ResponseObjectDTO("Remove message failed", responseData));
+    throw new PermissionDeniedException("You are not allowed to delete a message.");
   }
 
   @Transactional

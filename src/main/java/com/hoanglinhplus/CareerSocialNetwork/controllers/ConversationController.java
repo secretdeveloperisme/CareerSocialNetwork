@@ -3,9 +3,12 @@ package com.hoanglinhplus.CareerSocialNetwork.controllers;
 import com.hoanglinhplus.CareerSocialNetwork.dto.chat.ConversationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.ConversationService;
+import lombok.Builder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.constraints.Null;
 
 @RestController
 @RequestMapping("/chat/conversation")

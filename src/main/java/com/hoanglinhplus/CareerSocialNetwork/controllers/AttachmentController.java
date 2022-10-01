@@ -18,17 +18,24 @@ public class AttachmentController {
   public AttachmentController(AttachmentService attachment) {
     this.attachmentService = attachment;
   }
+  @GetMapping("/get-attachment-by-message")
+  public ResponseEntity<ResponseObjectDTO> getAttachmentsByMessage(Long messageId){
+    return attachmentService.getAttachmentsByMessage(messageId);
+  }
+
   @PostMapping("/many")
   public ResponseEntity<ResponseObjectDTO> createAttachments(@RequestPart List<MultipartFile> files, Long messageId){
     return attachmentService.create(files,messageId);
   }
 
   @PostMapping
-  public ResponseEntity<ResponseObjectDTO> createAttachment(AttachmentDTO attachmentDTO){
+  public ResponseEntity<ResponseObjectDTO> createAttachment(@RequestBody AttachmentDTO attachmentDTO){
     return attachmentService.create(attachmentDTO);
   }
   @DeleteMapping
-  public ResponseEntity<ResponseObjectDTO> delete(AttachmentDTO attachmentDTO) {
+  public ResponseEntity<ResponseObjectDTO> delete(@RequestBody AttachmentDTO attachmentDTO) {
     return attachmentService.remove(attachmentDTO);
   }
+
+
 }
