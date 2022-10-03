@@ -1,0 +1,48 @@
+<nav class="navbar navbar-expand-lg navbar-light">
+    <div class="container-lg">
+        <a class="navbar-brand" href="/">
+            <img class="rounded" src="/images/icons/linh_plus_blog_logo.svg" alt="">
+            <span>CareerSocialNetWork</span>
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0 container-fluid">
+                <form action="/search" method="get" class="d-flex input-group">
+                    <div class="d-flex input-search-group" >
+                        <input class="form-control" id="searchInput" type="search" name="query" placeholder="Search" aria-label="Search">
+                        <div class="list-group auto-complete-search" id="autocompleteSearchPosts">
+                        </div>
+                    </div>
+                    <button class="btn btn-outline-success input-group-append" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
+                </form>
+                <% if(user) { %>
+                <li class="nav-item dropdown ms-lg-auto">
+                    <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <div class="nav-user__avatar rounded-circle" style="background-image: url('<%= user.avatar %>');">
+                        </div>
+                        <div class="nav-user__username">
+                            <%= user.username %>
+                        </div>
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="/post/write">Viết Bài</a></li>
+                        <li><a class="dropdown-item" href="/me/posts">Bài viết của tôi</a></li>
+                        <li><a class="dropdown-item" href="/user/edit">Thông tin của tôi</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#" id="btnLogout">Logout</a></li>
+                    </ul>
+                </li>
+                <% } else {%>
+                <li class="nav-item ms-lg-auto d-flex">
+                    <button class="btn btn-light text-center me-3" id="btnLogin" data-bs-target="#loginModal" data-bs-toggle="modal">Login</button>
+                    <button class="btn btn-info" id="btnSignup" data-bs-target="#loginModal" data-bs-toggle="modal">Register</button>
+                </li>
+                <% } %>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+<script src="/js/NavigationBar.js"></script>

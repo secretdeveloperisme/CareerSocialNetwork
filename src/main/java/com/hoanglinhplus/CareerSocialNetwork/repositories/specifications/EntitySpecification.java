@@ -2,7 +2,6 @@ package com.hoanglinhplus.CareerSocialNetwork.repositories.specifications;
 
 
 import lombok.Getter;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -21,7 +20,7 @@ public class EntitySpecification<T> implements Specification<T> {
     this.conditions = new ArrayList<>();
   }
   @Override
-  public Predicate toPredicate(@NotNull Root<T> root, @NotNull CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+  public Predicate toPredicate( Root<T> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
     List<Predicate> predicates = new ArrayList<>();
     conditions.forEach(condition->{
       if(condition.getOperator().equals(SearchOperator.EQUAL)){

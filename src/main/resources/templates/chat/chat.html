@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Chat</title>
+    <div th:replace="partials/head"></div>
+</head>
+<body>
+  <div id="main-content" class="container">
+    <div class="row">
+      <div class="col-md-12">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="connect">WebSocket connection:</label>
+            <button id="connect" class="btn btn-default" type="submit">Connect</button>
+            <button id="disconnect" class="btn btn-default" type="submit" disabled="disabled">Disconnect
+            </button>
+          </div>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="conversationId0">ConversationId 0</label>
+            <input type="text" id="conversationId0" class="form-control" placeholder="group name here...">
+          </div>
+          <button id="setConversationId0" class="btn btn-default" type="submit">Send</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="conversationId1">ConversationId 1</label>
+            <input type="text" id="conversationId1" class="form-control" placeholder="group name here...">
+          </div>
+          <button id="setConversationId1" class="btn btn-default" type="submit">Send</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="message0">Message 0?</label>
+            <input type="text" id="message0" class="form-control" placeholder="Your name here...">
+          </div>
+          <button id="send0" class="btn btn-default" type="submit">Send</button>
+        </form>
+      </div>
+      <div class="col-md-6">
+        <form class="form-inline">
+          <div class="form-group">
+            <label for="message1">Message 1?</label>
+            <input type="text" id="message1" class="form-control" placeholder="Your name here...">
+          </div>
+          <button id="send1" class="btn btn-default" type="submit">Send1</button>
+        </form>
+      </div>
+
+    </div>
+    <div class="row">
+      <div class="col-md-12">
+        <table id="conversation" class="table table-striped">
+          <thead>
+          <tr>
+            <th>message</th>
+          </tr>
+          </thead>
+          <tbody id="messages">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div th:replace="partials/footer"></div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js" integrity="sha512-iKDtgDyTHjAitUDdLljGhenhPwrbBfqTKWO1mkhSFH3A7blITC9MhYon6SjnMhp4o0rADGw9yAC6EW4t5a4K3g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sockjs-client@1.6.1/dist/sockjs.min.js"></script>
+  <script type="text/javascript" th:src="@{/js/chat.js}"></script>
+</body>
+</html>

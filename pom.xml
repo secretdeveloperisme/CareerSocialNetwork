@@ -16,8 +16,9 @@
 	<properties>
 		<java.version>18</java.version>
 		<jpa.version>2.7.0</jpa.version>
-		<security.version>2.7.0</security.version>
-		<socket.version>2.1.0</socket.version>
+		<security.version>2.7.2</security.version>
+		<socket-client.version>2.1.0</socket-client.version>
+		<socket.version>2.7.2</socket.version>
 		<oauth.version>2.7.0</oauth.version>
 		<validation.version>2.7.0</validation.version>
 		<web.version>2.7.0</web.version>
@@ -28,6 +29,8 @@
 		<modelmapper.version>3.1.0</modelmapper.version>
 		<java-jwt.version>4.0.0</java-jwt.version>
 		<jpamodelgen.version>5.6.10.Final</jpamodelgen.version>
+		<spring-boot-thymeleaf.version>2.7.4</spring-boot-thymeleaf.version>
+		<dev-tools.version>2.7.3</dev-tools.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -72,8 +75,8 @@
 			<version>${oauth.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>io.socket</groupId>
-			<artifactId>socket.io-client</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-websocket</artifactId>
 			<version>${socket.version}</version>
 		</dependency>
 		<dependency>
@@ -104,6 +107,17 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
 			<version>${jpamodelgen.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+			<version>${spring-boot-thymeleaf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<scope>runtime</scope>
+			<version>${dev-tools.version}</version>
 		</dependency>
 	</dependencies>
 

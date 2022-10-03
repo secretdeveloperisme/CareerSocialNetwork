@@ -11,6 +11,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter @Setter
+@ToString
 public class MessageDTO implements Serializable {
   private Long messageId;
   private String message;

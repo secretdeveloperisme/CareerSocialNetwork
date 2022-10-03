@@ -6,7 +6,6 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.TagRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.TagSpecification;
-import org.jetbrains.annotations.NotNull;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -27,7 +26,7 @@ public class TagService {
     }
   }
   @Transactional
-  public List<Tag> createTags(@NotNull List<String> tagNames){
+  public List<Tag> createTags(List<String> tagNames){
     List<Tag> tags = getTags(tagNames);
     List<Tag> newTags = new ArrayList<Tag>();
     for (String tagName : tagNames) {
