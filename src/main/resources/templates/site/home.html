@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Home</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+      <div th:if="${user}">
+        <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+      </div>
+      <div th:unless="${user}">
+        <div th:replace="/fragments/navigation"></div>
+      </div>
+    </header>
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5">
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark" aria-current="page">
+              <i class="fa fa-home" aria-hidden="true"></i>
+              Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/job" class="nav-link link-dark" aria-current="page">
+              <i class="fa-solid fa-briefcase"></i>
+              Jobs
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/message" class="nav-link link-dark" aria-current="page">
+              <i class="fa-solid fa-message"></i>
+              Messages
+            </a>
+          </li>
+          <!--/*@thymesVar id="companies" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO>"*/-->
+            <li th:if="${companies}" class="nav-item">
+            <a  th:href="@{/company}" class="nav-link link-dark" data-bs-toggle="collapse" href="#companyList" aria-expanded="true">
+              <i class="fa-solid fa-building"></i>
+              Companies
+            </a>
+              <ul  id="companyList" class="collapse show mr-2 list-group list-group-flush">
+              <!--/*@thymesVar id="companies" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO>"*/-->
+              <li th:each="company: ${companies}" class="list-group-item list-group-item-action">
+                <a class="text-decoration-none" th:href="@{'/company/'+${company.getCompanyId()}}" th:text="${company.getName()}"></a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item">
+            <a href="#tagList" class="nav-link link-dark" data-bs-toggle="collapse" >
+              <i class="fa fa-tags" aria-hidden="true"></i>
+              Tag
+            </a>
+            <!--/*@thymesVar id="tags" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO>"*/-->
+            <ul th:ìf="${tags}" class="collapse show list-style-none list-group list-group-flush" id="tagList" >
+              <li th:each="tag : ${tags}" class="list-group-item list-group-item-action">
+                <a th:href="'/tag/'+${tag.getName()}" class="text-decoration-none" th:text="${tag.getName()}"> </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content row">
+        <div class="posts px-4 col-xl-9">
+          <div class="post-list-header d-flex my-2">
+            <h5>Bài đăng mới nhất</h5>
+            <div class="list-mode ms-auto btn btn-primary" id="btnChangeListMode">
+              <span>Grid</span>
+              <i class="fas fa-th-large"></i>
+            </div>
+          </div>
+          <div class="post-list row g-3">
+            <!--/*@thymesVar id="jobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO>"*/-->
+            <div class="col-xl-12" th:each="job: ${jobs}">
+              <div class="post-item container-fluid d-flex shadow rounded py-2">
+                <div class="post-item-thumbnail me-3">
+                  <a th:href="${job.getTitle()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
+                  </a>
+                </div>
+                <div class="post-content">
+                  <div class="post-tag">
+                    <a th:each="tag: ${job.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}">
+                    </a>
+                  </div>
+                  <h6 class="post-title">
+                    <a th:href="'/job/'+${job.getJobId()} " class="text-decoration-none text-dark" th:text="${job.getTitle()}">  </a>
+                  </h6>
+                  <div class="post-info ">
+                    <div class="post-author">
+                      <a th:href="'/company/'+${job.getCompany().getCompanyId()}" class="text-decoration-none text-secondary">
+                        <i class="fa-solid fa-building"></i>
+                        <span th:text="${job.getCompany().getName()}"></span>
+                      </a>
+                    </div>
+                    <div class="post-published">
+                      <i class="fa-solid fa-calendar-days"></i>
+                      <span th:text="${#dates.format(job.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
+                    </div>
+                    <div class="post-location">
+                      <i class="fa fa-location-dot"></i>
+                      <span th:text="${job.getLocation()}"></span>
+                      (<span th:text="${job.getWorkPlace().getPlace()}"></span>)
+                    </div>
+                  </div>
+                </div>
+                <form class="post-action" action="/application" method="post">
+                  <input type="hidden" name="jobId" th:value="${job.getJobId()}">
+                  <button class="btn btn-success">Apply</button>
+                </form>
+              </div>
+            </div>
+          </div>
+          <div class="btn-more-wrapper my-2 d-flex">
+            <button type="button" id='btnMore' data-type='"user?"user":"guest"' class="btn btn-outline-primary m-auto">Thêm</button>
+          </div>
+        </div>
+        <div class="col-xl-3">
+          <div class="popular-post">
+            <div class="popular-post-header pt-2">
+              <h4>Bài viết phổ biến</h4>
+            </div>
+            <!--/*@thymesVar id="popularJobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Job>"*/-->
+            <div th:if="${popularJobs}" class="popular-post-list">
+              <div th:each="popularJob : ${popularJobs}" class="popular-post-item d-flex p-2">
+                <div class="popular-post-item-order">
+                </div>
+                <div class="post-content">
+                  <h6 class="post-title">
+                    <a th:href="'/job/'+${popularJob.getJobId()} " class="text-decoration-none text-dark" th:text="${popularJob.getTitle()}"></a>
+                  </h6>
+                  <div class="post-tag">
+                      <a th:each="tag: ${popularJob.getTags()}" th:href="'/tag/'+${tag.name}" class="tag-link" th:text="'#'+${tag.getName()}"> </a></div>
+                  <div class="post-info">
+                    <div class="post-author">
+                      <a th:href="'/company/'+${popularJob.getCompany().getName()}" class="text-decoration-none text-secondary" th:text="${popularJob.getCompany().getName()}"></a>
+                    </div>
+                    <div class="post-published">
+                      <span th:text="${#dates.format(popularJob.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="col-xl-12">
+          <div th:replace="/fragments/footer"></div>
+        </footer>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div th:replace="/auth/login"></div>
+  <script type="module" src="/js/home.js"></script>
+  <script type="module" src="/js/login.js"></script>
+</body>
+</html>

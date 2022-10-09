@@ -13,6 +13,7 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.JobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseJobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job_;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJob;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.JobRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
@@ -26,6 +27,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -68,7 +70,7 @@ public class JobService {
     }
     throw new NotFoundException("Job not found", "id", jobId.toString());
   }
-  public ResponseEntity<ResponseObjectDTO> getJobs(JobFilterDTO jobFilterDTO, PageableDTO pageableDTO){
+  public Page<Job> getJobs(JobFilterDTO jobFilterDTO, PageableDTO pageableDTO){
     JobSpecification jobSpecification = new JobSpecification();
     String title = jobFilterDTO.getTitle();
     String location = jobFilterDTO.getLocation();
@@ -146,19 +148,23 @@ public class JobService {
     }
     Page<Job> jobPage;
     Pageable pageable = PageRequest.of(pageableDTO.getPage(),pageableDTO.getSize(),Sort.by(orders));
-    if(!jobSpecification.getConditions().isEmpty()){
-      jobPage = jobRepository.findAll(resultSpecification, pageable);
-    }
-    else{
-      jobPage = jobRepository.findAll(resultSpecification, pageable);
-    }
-    return ResponseEntity.ok(ResponseJobMapper.toDTO(jobPage));
+    jobPage = jobRepository.findAll(resultSpecification, pageable);
+    return jobPage;
+  }
+  public List<Job> getPopularJobs(){
+    return jobRepository.getPopularJobs();
+  }
+  public ResponseEntity<ResponseObjectDTO> responseGetJobs(JobFilterDTO jobFilterDTO, PageableDTO pageableDTO){
+    Page<Job> jobPage = getJobs(jobFilterDTO, pageableDTO);
+    return  ResponseEntity.ok(ResponseJobMapper.toDTO(jobPage));
   }
   @Transactional
+  @Modifying
   public ResponseEntity<ResponseObjectDTO> createJob(JobCreationDTO jobUpdateDTO) {
     Job job = JobMapper.toEntity(jobUpdateDTO);
     Long userId = myUserDetailsService.getCurrentUserId();
-    Optional<Company> company = companyRepository.findById(jobUpdateDTO.getCompany().getCompanyId());
+    Long companyId = jobUpdateDTO.getCompany().getCompanyId();
+    Optional<Company> company = companyRepository.findById(companyId);
     if (company.isPresent()) {
       Optional<User> userOptional = userRepository.findById(userId);
       if (userOptional.isPresent()) {

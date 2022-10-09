@@ -4,7 +4,6 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -23,7 +22,7 @@ public class FileController {
     this.fileService = fileService;
   }
 
-  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
+//  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @PostMapping("/upload")
   public ResponseEntity<ResponseObjectDTO> uploads(@RequestParam List<MultipartFile> files) {
     return fileService.uploadFiles(files);

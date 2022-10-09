@@ -216,4 +216,9 @@ public class CompanyService {
       companyRepository.delete(company);
     }
   }
+  public List<CompanyCreationDTO> getPopularCompanies(){
+    List<Company> companies = companyRepository.getPopularCompanies();
+    List<CompanyCreationDTO> poplularCompany = companies.stream().map(CompanyMapper::toDTO).toList();
+    return poplularCompany;
+  }
 }

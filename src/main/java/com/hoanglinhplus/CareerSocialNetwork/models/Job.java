@@ -21,7 +21,7 @@ import java.util.Iterator;
 public class Job {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  @Column(name = "job_id", columnDefinition = "bigint default null")
+  @Column(name = "job_id")
   private Long jobId;
   @Column(nullable = false, length = 255)
   private String title;

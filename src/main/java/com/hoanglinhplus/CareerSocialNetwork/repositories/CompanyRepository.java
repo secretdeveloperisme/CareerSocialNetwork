@@ -26,4 +26,14 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
   List<Long> findExistedIds(List<Long> ids);
   @Query("SELECT c.companyId FROM Company c WHERE c.name = :name")
   Long findIdByCompanyName(String name);
+  @Query(value = """
+    select c.company_id as company_id, c.created_at,c.user_id
+    ,c.industry_id, c.name, deleted_at, logo,organization_size_id
+    ,c.tag_line, updated_at, website, count(c.company_id) as number_of_follows
+    from companies c join follow_companies fc on c.company_id = fc.company_id
+    group by c.company_id
+    order by number_of_follows desc
+    limit 10
+    """, nativeQuery = true)
+  List<Company> getPopularCompanies();
 }

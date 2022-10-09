@@ -29,12 +29,12 @@ public class JobController {
   JobController(JobService jobService){
     this.jobService = jobService;
   }
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+//  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   @GetMapping("/get-all-jobs")
   public ResponseEntity<?> getAllJobs(
     @Valid JobFilterDTO jobFilterDTO, @Valid PageableDTO pageableDTO
   ){
-    return jobService.getJobs(jobFilterDTO, pageableDTO);
+    return jobService.responseGetJobs(jobFilterDTO, pageableDTO);
   }
 
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")

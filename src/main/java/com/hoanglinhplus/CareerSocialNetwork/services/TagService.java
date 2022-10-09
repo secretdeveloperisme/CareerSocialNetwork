@@ -1,11 +1,14 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
+import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
+import com.hoanglinhplus.CareerSocialNetwork.mappers.TagMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag_;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.TagRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.TagSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -43,5 +46,11 @@ public class TagService {
     SearchCriteria<Tag, String> searchCriteria = new SearchCriteria<>(Tag_.name, names, SearchOperator.IN);
     tagSpecification.getConditions().add(searchCriteria);
     return tagRepository.findAll(tagSpecification);
+  }
+
+  public List<TagDTO> getPopularTags(){
+    List<Tag> tags = tagRepository.getPopularTags();
+    List<TagDTO> tagDTOs = tags.stream().map(TagMapper::toDTO).toList();
+    return tagDTOs;
   }
 }

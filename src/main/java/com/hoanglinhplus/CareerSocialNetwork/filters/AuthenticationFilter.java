@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,6 +44,16 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
   protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
     String accessToken = jwtUtil.generateToken((MyUser) authResult.getPrincipal(), 0);
     String refreshToken = jwtUtil.generateToken((MyUser) authResult.getPrincipal(), 1);
+    Cookie accessTokenCookie = new Cookie("accessToken", accessToken);
+    Cookie refreshTokenCookie = new Cookie("refreshToken", refreshToken);
+    accessTokenCookie.setHttpOnly(true);
+    refreshTokenCookie.setHttpOnly(true);
+    accessTokenCookie.setMaxAge(24*60*60*1000*7);
+    refreshTokenCookie.setMaxAge(24*60*60*1000*7);
+    accessTokenCookie.setPath("/");
+    refreshTokenCookie.setPath("/");
+    response.addCookie(accessTokenCookie);
+    response.addCookie(refreshTokenCookie);
     Map<String, String> responseMap = new HashMap<>();
     responseMap.put("accessToken", accessToken);
     responseMap.put("refreshToken", refreshToken);

@@ -3,7 +3,8 @@ package com.hoanglinhplus.CareerSocialNetwork.filters;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseErrorDTO;
-import com.hoanglinhplus.CareerSocialNetwork.securities.MyUser;
+import com.hoanglinhplus.CareerSocialNetwork.securities.AllowedRequests;
+import com.hoanglinhplus.CareerSocialNetwork.securities.RequestInfo;
 import com.hoanglinhplus.CareerSocialNetwork.utils.JWTUtil;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -14,6 +15,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -23,18 +25,28 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class CustomOnePerRequestFilter extends OncePerRequestFilter {
+
   @Override
   protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-    if(request.getServletPath().equalsIgnoreCase("/api/auth/login")
-      || request.getServletPath().equalsIgnoreCase("/api/auth/refresh-token")
-      || (request.getMethod().equalsIgnoreCase("POST") && request.getServletPath().equalsIgnoreCase("/api/user"))
-      || (request.getMethod().equalsIgnoreCase("GET") && request.getServletPath().startsWith("/api/file"))
+
+    if(AllowedRequests.isAllowed(new RequestInfo(request.getMethod(), request.getServletPath()))
       || (request.getMethod().equalsIgnoreCase("GET") && !request.getServletPath().startsWith("/api"))){
       filterChain.doFilter(request, response);
     }else {
       String authorizationHeader = request.getHeader(HttpHeaders.AUTHORIZATION);
+      String token = null;
+      Cookie[] cookies = request.getCookies();
+      if(cookies != null) {
+        for (Cookie cookie : cookies) {
+          if(cookie.getName().equals("accessToken")){
+            token = cookie.getValue();
+          }
+        }
+      }
       if(authorizationHeader != null && authorizationHeader.startsWith("Bearer ")){
-        String token = authorizationHeader.substring("Bearer ".length());
+        token = authorizationHeader.substring("Bearer ".length());
+      }
+      if(token != null){
         try{
           DecodedJWT decodedJWT = JWTUtil.getInstance().decodeToken(token);
           Map<String, Object> principal = decodedJWT.getClaim("principal").asMap();

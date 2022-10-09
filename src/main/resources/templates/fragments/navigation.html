@@ -1,7 +1,9 @@
-<nav class="navbar navbar-expand-lg navbar-light">
+<!--/*@thymesVar id="user" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.User>"*/-->
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">-->
+<nav th:fragment="navbar(user)" class="navbar navbar-expand-lg navbar-light">
     <div class="container-lg">
         <a class="navbar-brand" href="/">
-            <img class="rounded" src="/images/icons/linh_plus_blog_logo.svg" alt="">
+            <img class="rounded" th:src="@{/images/icons/Logo.png}" alt="Logo">
             <span>CareerSocialNetWork</span>
         </a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,32 +19,46 @@
                     </div>
                     <button class="btn btn-outline-success input-group-append" type="submit"><i class="fa fa-search" aria-hidden="true"></i></button>
                 </form>
-                <% if(user) { %>
-                <li class="nav-item dropdown ms-lg-auto">
+                <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserDTO"*/-->
+                <li th:if="${user}" class="nav-item dropdown ms-lg-auto">
                     <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <div class="nav-user__avatar rounded-circle" style="background-image: url('<%= user.avatar %>');">
+                        <div class="nav-user__avatar rounded-circle" th:style="'background-image: url(\''+ ${user.getAvatar()} +'\');'">
                         </div>
-                        <div class="nav-user__username">
-                            <%= user.username %>
+                        <div class="nav-user__username" th:text="${user.getUsername()}">
+                           username
                         </div>
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="/post/write">Viết Bài</a></li>
-                        <li><a class="dropdown-item" href="/me/posts">Bài viết của tôi</a></li>
-                        <li><a class="dropdown-item" href="/user/edit">Thông tin của tôi</a></li>
+                        <li>
+                            <a class="dropdown-item" href="/me/company">
+                                <i class="fa-solid fa-building"></i>
+                                Quản lý Công Ty
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/me/posts">
+                                <i class="fa-solid fa-briefcase"></i>
+                                Công Việc của tôi
+                            </a>
+                        </li>
+                        <li>
+                            <a class="dropdown-item" href="/user/edit">
+                                <i class="fa-solid fa-user"></i>
+                                Thông tin của tôi
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="#" id="btnLogout">Logout</a></li>
                     </ul>
                 </li>
-                <% } else {%>
-                <li class="nav-item ms-lg-auto d-flex">
+
+                <li th:unless="${user}" class="nav-item ms-lg-auto d-flex">
                     <button class="btn btn-light text-center me-3" id="btnLogin" data-bs-target="#loginModal" data-bs-toggle="modal">Login</button>
                     <button class="btn btn-info" id="btnSignup" data-bs-target="#loginModal" data-bs-toggle="modal">Register</button>
                 </li>
-                <% } %>
             </ul>
 
         </div>
     </div>
 </nav>
-<script src="/js/NavigationBar.js"></script>
+<script th:src="@{/js/NavigationBar.js}"></script>

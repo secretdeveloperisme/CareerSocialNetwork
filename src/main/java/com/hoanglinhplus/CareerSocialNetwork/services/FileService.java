@@ -32,11 +32,12 @@ public class FileService {
     List<FileInfo> uploadedFiles = new ArrayList<>();
     FileOutputStream fileOutputStream;
     try {
-      Path createdDirPath = createDirectory(currentDirectory, userId.toString());
+      String nameDirectory = userId == null ? "guest": userId.toString();
+      Path createdDirPath = createDirectory(currentDirectory, nameDirectory);
       for (MultipartFile file : files) {
         String fileName = generateUniqueFileName(generateUniqueFileName(file.getOriginalFilename()));
         Path filePath = Paths.get(createdDirPath.toString(), fileName);
-        String filepathString = "/api/file" + "/" + uploadFolder + "/" + userId + "/" + fileName;
+        String filepathString = "/api/file" + "/" + uploadFolder + "/" + nameDirectory + "/" + fileName;
         FileInfo fileInfo = new FileInfo(fileName, filepathString, file.getContentType());
         fileOutputStream = new FileOutputStream(filePath.toFile());
         fileOutputStream.write(file.getBytes());

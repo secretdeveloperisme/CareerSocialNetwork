@@ -24,4 +24,13 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
 
   @Query("SELECT j.jobId FROM Job j WHERE j.jobId in :ids")
   List<Long> findExistedIds(List<Long> ids);
+
+  @Query(value = """
+    select l.job_id, count(l.job_id) as numberOfLikes from jobs
+    inner join likes l on jobs.job_id = l.job_id
+    group by l.job_id
+    order by numberOfLikes desc
+    limit 5
+    """, nativeQuery = true)
+  List<Job> getPopularJobs();
 }

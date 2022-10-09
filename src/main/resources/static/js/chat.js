@@ -44,8 +44,9 @@ $(()=>{
         , JSON.stringify(message));
   }
   function sendName1() {
-    console.log()
-    stompClient.send("/chat/send-message/"+$("#conversationId1").val(), {}, JSON.stringify({'name': $("#message1").val()}));
+    let message = JSON.parse($("#message1").val());
+    stompClient.send("/chat/send-message/"+$("#conversationId1").val(), {}
+        , JSON.stringify(message));
   }
 
   function showGreeting(message) {

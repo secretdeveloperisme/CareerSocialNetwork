@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 
 public class ResponseJobMapper {
   public static ResponseObjectDTO toDTO(Page<Job> jobPage){
-    List<JobCreationDTO> usersDTO = jobPage.getContent().stream().map(JobMapper::toDTO).collect(Collectors.toList());
+    List<JobCreationDTO> jobCreationDTOS = jobPage.getContent().stream().map(JobMapper::toDTO).collect(Collectors.toList());
     Map<String, Object> responseData = new HashMap<>();
-    responseData.put("users", usersDTO);
+    responseData.put("jobs", jobCreationDTOS);
     responseData.put("totalPages", jobPage.getTotalPages());
     responseData.put("size", jobPage.getSize());
     responseData.put("totalElements", jobPage.getTotalElements());
