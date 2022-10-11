@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.FileService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 @RestController
@@ -23,10 +26,15 @@ public class FileController {
   }
 
 //  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
-  @PostMapping("/upload")
-  public ResponseEntity<ResponseObjectDTO> uploads(@RequestParam List<MultipartFile> files) {
+  @PostMapping("/upload/many")
+  public ResponseEntity<ResponseObjectDTO> uploads(@RequestParam("files") List<MultipartFile> files) {
     return fileService.uploadFiles(files);
   }
+  @PostMapping("/upload")
+  public ResponseEntity<ResponseObjectDTO> uploads(@RequestParam("file") MultipartFile file) {
+    return fileService.uploadFiles(Collections.singletonList(file));
+  }
+
 
   @GetMapping("/images/**")
   public void getImage(HttpServletRequest request, HttpServletResponse response) {

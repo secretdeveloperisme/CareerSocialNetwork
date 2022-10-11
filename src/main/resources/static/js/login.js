@@ -1,4 +1,5 @@
 import {objectifyForm} from "./utils/common-utils.js";
+import {uploadFile} from "./common/common.js";
 
 $(()=>{
   const $btnLogin = $("#btnLogin");
@@ -138,18 +139,11 @@ $(()=>{
       $signupPassword.val() === $retypePassword.val())
       )
       return;
-    const xhrAvatar = new XMLHttpRequest();
-    xhrAvatar.open("POST","/api/file/upload",false);
-    let form  = new FormData();
-    let avatarFile = $avatarInput[0].files[0];
-    form.append("files", avatarFile);
-    form.append("type", "image");
-    xhrAvatar.send(form);
-    if(xhrAvatar.status === 200){
-      $avatarPath.val(response.data.fileInfo[0].filePath);
+    let filePathUpload = uploadFile($avatarInput)
+    if(filePathUpload != null){
+      $avatarPath.val(filePathUpload);
       console.log("SignupForm: ",$signupForm.serializeArray());
       let userCreation = objectifyForm($signupForm.serializeArray())
-
       $.ajax({
         type: "POST",
         url: "/api/user/",

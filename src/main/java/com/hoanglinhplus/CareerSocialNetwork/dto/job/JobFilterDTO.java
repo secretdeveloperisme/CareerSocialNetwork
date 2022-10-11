@@ -1,13 +1,11 @@
 package com.hoanglinhplus.CareerSocialNetwork.dto.job;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.NumberConstant;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.List;
 
+@Builder
 @Getter
 @Setter
 @NoArgsConstructor
@@ -16,7 +14,9 @@ public class JobFilterDTO {
   private Long jobId;
   private String title;
   private String location;
+  @Builder.Default
   private int salary = NumberConstant.NO_SET;
+  @Builder.Default
   private float experience = 0;
   private List<Long> tagIds;
   private List<Long> jobSkillIds;

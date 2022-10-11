@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @ToString
+@Builder
 @Getter
 @Setter
 @AllArgsConstructor

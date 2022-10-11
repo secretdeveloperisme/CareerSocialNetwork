@@ -5,6 +5,7 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.CompanyStatistics;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyMapper;
@@ -12,6 +13,7 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.Company_;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.IndustryRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.OrganizationSizeRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CompanySpecification;
@@ -35,14 +37,18 @@ public class CompanyService {
   private final UserRepository userRepository;
   private final CompanyRepository companyRepository;
   private final MyUserDetailsService myUserDetailsService;
+  private final IndustryRepository industryRepository;
   private final AuthService authService;
+  private final OrganizationSizeRepository organizationSizeRepository;
 
   @Autowired
-  public CompanyService(UserRepository userRepository, CompanyRepository companyRepository, OrganizationSizeRepository organizationSizeRepository, MyUserDetailsService myUserDetailsService, AuthService authService){
+  public CompanyService(UserRepository userRepository, CompanyRepository companyRepository, OrganizationSizeRepository organizationSizeRepository, MyUserDetailsService myUserDetailsService, IndustryRepository industryRepository, AuthService authService, OrganizationSizeRepository organizationSizeRepository1){
     this.userRepository = userRepository;
     this.companyRepository = companyRepository;
     this.myUserDetailsService = myUserDetailsService;
+    this.industryRepository = industryRepository;
     this.authService = authService;
+    this.organizationSizeRepository = organizationSizeRepository1;
   }
   public ResponseEntity<ResponseObjectDTO> responseGetCompany(Long companyId) {
     Company company = getCompany(companyId);
@@ -58,11 +64,25 @@ public class CompanyService {
     }
     throw new NotFoundException("companyId not found", "id", companyId.toString());
   }
-  public ResponseEntity<ResponseObjectDTO> getAllCompanies(CompanyFilterDTO companyFilterDTO, PageableDTO pageableDTO){
+  public Page<Company> getOwnCompanies(CompanyFilterDTO companyFilterDTO,PageableDTO pageableDTO){
+    companyFilterDTO.setUserId(myUserDetailsService.getCurrentUserId());
+
+    return getAllCompanies(companyFilterDTO, pageableDTO);
+  }
+  public ResponseEntity<ResponseObjectDTO> responseGetOwnCompanies(CompanyFilterDTO companyFilterDTO, PageableDTO pageableDTO){
+    Page<Company> companyPage = getOwnCompanies(companyFilterDTO, pageableDTO);
+    return ResponseEntity.ok(ResponseCompanyMapper.toDTO(companyPage));
+  }
+  public ResponseEntity<ResponseObjectDTO> responseGetAllCompanies(CompanyFilterDTO companyFilterDTO,PageableDTO pageableDTO){
+    Page<Company> allCompanyPage =  getAllCompanies(companyFilterDTO, pageableDTO);
+    return ResponseEntity.ok(ResponseCompanyMapper.toDTO(allCompanyPage));
+  }
+  public Page<Company> getAllCompanies(CompanyFilterDTO companyFilterDTO, PageableDTO pageableDTO){
     CompanySpecification companySpecification = new CompanySpecification();
     String companyName = companyFilterDTO.getName();
     Long industryId = companyFilterDTO.getIndustryId();
     Long organizationId = companyFilterDTO.getOrganizationId();
+    Long createdUser = companyFilterDTO.getUserId();
     if( companyName != null && !companyName.isEmpty()){
       SearchCriteria<Company, String> criteria = new SearchCriteria<>(Company_.name, companyName, SearchOperator.LIKE);
       companySpecification.getConditions().add(criteria);
@@ -75,6 +95,11 @@ public class CompanyService {
     if(organizationId != null){
       OrganizationSize organizationSize = OrganizationSize.builder().organizationId(organizationId).build();
       SearchCriteria<Company, OrganizationSize> criteria = new SearchCriteria<>(Company_.organizationSize, organizationSize, SearchOperator.EQUAL);
+      companySpecification.getConditions().add(criteria);
+    }
+    if(createdUser != null){
+      User user = User.builder().userId(createdUser).build();
+      SearchCriteria<Company, User> criteria = new SearchCriteria<>(Company_.createdUser, user, SearchOperator.EQUAL);
       companySpecification.getConditions().add(criteria);
     }
     List<Sort.Order> orders = new ArrayList<>();
@@ -100,7 +125,7 @@ public class CompanyService {
     else{
       companyPage = companyRepository.findAll(pageable);
     }
-    return ResponseEntity.ok(ResponseCompanyMapper.toDTO(companyPage));
+    return companyPage;
   }
   public ResponseEntity<ResponseObjectDTO> createCompany(CompanyCreationDTO companyCreationDTO){
     Company company = CompanyMapper.toEntity(companyCreationDTO);
@@ -113,7 +138,7 @@ public class CompanyService {
       CompanyCreationDTO savedCompanyDTO = CompanyMapper.toDTO(savedCompany);
       responseData.put("createdCompany", savedCompanyDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
-        "create user successfully"
+        "create company successfully"
         ,responseData);
       return ResponseEntity.ok(responseObjectDTO);
     }
@@ -220,5 +245,27 @@ public class CompanyService {
     List<Company> companies = companyRepository.getPopularCompanies();
     List<CompanyCreationDTO> poplularCompany = companies.stream().map(CompanyMapper::toDTO).toList();
     return poplularCompany;
+  }
+  
+  public List<Industry> getIndustries(){
+    return industryRepository.findAll();
+  }
+  public List<OrganizationSize> getOrganizationSizes() {
+    return organizationSizeRepository.findAll();
+  }
+  public boolean isUserFollowed(Long userId, Long companyId){
+    Company company = getCompany(companyId);
+    List<User> followedUsers = company.getFollow_companies();
+    return followedUsers.stream().anyMatch(user -> user.getUserId().equals(userId));
+  }
+  public boolean isCurrentUserFollowed(Long companyId) {
+    return isUserFollowed(myUserDetailsService.getCurrentUserId(), companyId);
+  }
+  public CompanyStatistics getCompanyStatistics(Long companyId) {
+    Company company = getCompany(companyId);
+    CompanyStatistics companyStatistics = new CompanyStatistics();
+    companyStatistics.setAmountOfFollowers((long) company.getFollow_companies().size());
+    companyStatistics.setAmountOfPublishedJobs((long) company.getJobs().size());
+    return companyStatistics;
   }
 }

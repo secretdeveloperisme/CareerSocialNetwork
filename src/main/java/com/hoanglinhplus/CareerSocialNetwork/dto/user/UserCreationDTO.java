@@ -7,6 +7,8 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -44,5 +46,5 @@ public class UserCreationDTO {
   private Date deletedAt;
   private List<Long> userSkillIds;
   private List<EducationDTO> educations;
-  private List<Long> roleIds;
+  private List<Long> roleIds = List.of(1L);
 }

@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.models.FileInfo;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
@@ -14,14 +15,16 @@ import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class FileService {
   private final MyUserDetailsService myUserDetailsService;
   private final String staticFolder = "src/main/resources/static";
   private final String uploadFolder = "images/upload";
-
   public FileService(MyUserDetailsService myUserDetailsService) {
     this.myUserDetailsService = myUserDetailsService;
   }
@@ -54,11 +57,11 @@ public class FileService {
     }
     return uploadedFiles;
   }
-  public ResponseEntity<ResponseObjectDTO> uploadFiles(List<MultipartFile> files)  {
+  public ResponseEntity<ResponseObjectDTO> uploadFiles(List<MultipartFile> files) {
     List<FileInfo> uploadedFiles = processUploadFile(files);
     if(uploadedFiles.size() > 0){
       Map<String, Object> responseData = new HashMap<>();
-      responseData.put("fileInfo", uploadedFiles );
+      responseData.put("fileInfo", uploadedFiles);
       return ResponseEntity.ok(new ResponseObjectDTO("upload files successfully ",responseData));
     }
     return ResponseEntity.ok(new ResponseObjectDTO("upload file failed ",null));
@@ -95,7 +98,7 @@ public class FileService {
       outputStream.close();
       fileInputStream.close();
     } catch (IOException e) {
-      throw new RuntimeException("There was an error IO exception");
+      throw new InputNotValidException("There was an error IO exception");
     }
   }
 }

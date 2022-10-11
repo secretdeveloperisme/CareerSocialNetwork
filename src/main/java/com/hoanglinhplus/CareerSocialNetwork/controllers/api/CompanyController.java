@@ -30,10 +30,17 @@ public class CompanyController {
   }
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   @GetMapping("/get-all-companies")
-  public ResponseEntity<?> getAllCompanies(
+  public ResponseEntity<ResponseObjectDTO> getAllCompanies(
     @Valid CompanyFilterDTO companyFilterDTO, @Valid PageableDTO pageableDTO
   ){
-    return companyService.getAllCompanies(companyFilterDTO, pageableDTO);
+    return companyService.responseGetAllCompanies(companyFilterDTO, pageableDTO);
+  }
+  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+  @GetMapping("/get-own-companies")
+  public ResponseEntity<ResponseObjectDTO> getOwnCompanies(
+    @Valid CompanyFilterDTO companyFilterDTO, @Valid PageableDTO pageableDTO
+  ){
+    return companyService.responseGetOwnCompanies(companyFilterDTO, pageableDTO);
   }
 
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
