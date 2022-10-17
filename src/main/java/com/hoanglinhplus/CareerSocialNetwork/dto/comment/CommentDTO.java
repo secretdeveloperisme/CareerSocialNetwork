@@ -1,6 +1,8 @@
 package com.hoanglinhplus.CareerSocialNetwork.dto.comment;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.TypeLike;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import lombok.*;
 
 import java.io.Serializable;
@@ -17,6 +19,7 @@ public class CommentDTO implements Serializable {
   private Date createdAt;
   private Long parentCommentId;
   private Long userId;
+  private UserCreationDTO user;
   private Long jobId;
   List<CommentDTO> children;
   private Long numberOfLikes;

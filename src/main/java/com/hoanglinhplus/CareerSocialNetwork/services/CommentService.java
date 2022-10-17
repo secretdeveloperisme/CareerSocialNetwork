@@ -2,6 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CommentMapper;
@@ -25,16 +26,19 @@ public class CommentService {
   private final CommentRepository commentRepository;
   private final PermissionService permissionService;
   private final MyUserDetailsService myUserDetailsService;
+  private final UserService userService;
   @Autowired
-  public CommentService(CommentRepository commentRepository, PermissionService permissionService, MyUserDetailsService myUserDetailsService) {
+  public CommentService(CommentRepository commentRepository, PermissionService permissionService, MyUserDetailsService myUserDetailsService, UserService userService) {
     this.commentRepository = commentRepository;
     this.permissionService = permissionService;
     this.myUserDetailsService = myUserDetailsService;
+    this.userService = userService;
   }
   public ResponseEntity<ResponseObjectDTO> createComment(CommentDTO commentDTO) {
+    commentDTO.setUser(UserCreationDTO.builder().userId(myUserDetailsService.getCurrentUserId()).build());
     Comment comment = CommentMapper.toEntity(commentDTO);
-    comment.setUser(User.builder().userId(myUserDetailsService.getCurrentUserId()).build());
     Comment createdComment = commentRepository.save(comment);
+    createdComment.setUser(userService.getUser(comment.getUser().getUserId()));
     CommentDTO createdCommentDTO = CommentMapper.toDTO(createdComment);
     Map<String, Object> responseData = new HashMap<>();
     responseData.put("comment", createdCommentDTO);
@@ -75,12 +79,16 @@ public class CommentService {
 
       commentRepository.delete(targetComment);
       Map<String, Object> responseData = new HashMap<>();
-      responseData.put("comment", targetComment);
+      CommentDTO commentDTO = CommentMapper.toDTO(targetComment);
+      responseData.put("comment", commentDTO);
       return ResponseEntity.ok(new ResponseObjectDTO("Delete Comment Successfully", responseData));
     }
     throw new PermissionDeniedException("You dont have permission to delete this comment [%s]".formatted(commentId));
   }
-  public ResponseEntity<ResponseObjectDTO> getAllComments(Long jobId){
+  public ResponseEntity<ResponseObjectDTO> responseGetAllComments(Long jobId){
+    return ResponseEntity.ok(new ResponseObjectDTO("Get All Comments Successfully", getAllComments(jobId)));
+  }
+  public Map<String, Object> getAllComments(Long jobId) {
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     CommentSpecification commentSpecification  = new CommentSpecification();
     if(jobId != null){
@@ -114,10 +122,10 @@ public class CommentService {
         }
       }
     }
-    Map<String, Object> responseData = new HashMap<>();
-    responseData.put("jobId", jobId);
-    responseData.put("comments", commentDTOS);
-    responseData.put("numberOfComments", allComments.size());
-    return ResponseEntity.ok(new ResponseObjectDTO("Get All Comments Successfully", responseData));
+    Map<String, Object> data = new HashMap<>();
+    data.put("jobId", jobId);
+    data.put("comments", commentDTOS);
+    data.put("numberOfComments", (long)allComments.size());
+    return data;
   }
 }

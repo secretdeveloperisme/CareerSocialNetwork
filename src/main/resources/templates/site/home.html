@@ -87,7 +87,7 @@
             <div class="col-xl-12" th:each="job: ${jobs}">
               <div class="post-item container-fluid d-flex shadow rounded py-2">
                 <div class="post-item-thumbnail me-3">
-                  <a th:href="${job.getTitle()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
+                  <a th:href="'/job/'+${job.getJobId()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
                   </a>
                 </div>
                 <div class="post-content">
@@ -116,10 +116,9 @@
                     </div>
                   </div>
                 </div>
-                <form class="post-action" action="/application" method="post">
-                  <input type="hidden" name="jobId" th:value="${job.getJobId()}">
-                  <button class="btn btn-success">Apply</button>
-                </form>
+                <div class="post-action">
+                  <button class="btn btn-success btn-apply" th:data-job-id="${job.getJobId()}">Apply</button>
+                </div>
               </div>
             </div>
           </div>
@@ -169,7 +168,9 @@
       </li>
     </ul>
   </div>
+  <div th:replace="/fragments/components/toast"></div>
   <div th:replace="/auth/login"></div>
+  <script type="module" src="/js/Application.js"></script>
   <script type="module" src="/js/common/common.js"></script>
   <script type="module" src="/js/home.js"></script>
   <script type="module" src="/js/login.js"></script>

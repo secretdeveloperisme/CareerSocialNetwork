@@ -13,10 +13,7 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.JobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseJobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job_;
-import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJob;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.JobRepository;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.JobSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
@@ -44,17 +41,23 @@ public class JobService {
   private final MyUserDetailsService myUserDetailsService;
   private final AuthService authService;
   private final TagService tagService;
+  private final SkillRepository skillRepository;
+  private final WorkPlaceRepository workPlaceRepository;
+  private final PositionRepository positionRepository;
 
   @Autowired
   public JobService(UserRepository userRepository, JobRepository jobRepository
     , CompanyRepository companyRepository
-    , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService){
+    , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository){
     this.userRepository = userRepository;
     this.jobRepository = jobRepository;
     this.companyRepository = companyRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.authService = authService;
     this.tagService = tagService;
+    this.skillRepository = skillRepository;
+    this.workPlaceRepository = workPlaceRepository;
+    this.positionRepository = positionRepository;
   }
   public ResponseEntity<ResponseObjectDTO> responseGetJob(Long jobId){
     Job job = getJob(jobId);
@@ -309,5 +312,14 @@ public class JobService {
       job.removeAllRelationShip();
       jobRepository.delete(job);
     }
+  }
+  public List<Skill> getAllSkills() {
+    return skillRepository.findAll();
+  }
+  public List<Position> getAllPositions() {
+    return positionRepository.findAll();
+  }
+  public List<WorkPlace> getAllWorkPlaces() {
+    return workPlaceRepository.findAll();
   }
 }

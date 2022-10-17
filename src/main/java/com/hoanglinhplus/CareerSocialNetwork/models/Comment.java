@@ -32,7 +32,7 @@ public class Comment {
   @OneToMany(mappedBy = "comments")
   private Collection<CommentLike> commentLikes;
   @JsonIgnore
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User user;
   @JsonIgnore
@@ -42,9 +42,6 @@ public class Comment {
 
   @Transient
   List<Comment> children = new ArrayList<>();
-  public User getUsers() {
-    return user;
-  }
   public void setUsers(User newUser) {
     if (this.user == null || !this.user.equals(newUser))
     {

@@ -5,8 +5,8 @@ $(()=>{
   $btnLogout.on("click", (event)=>{
     $.ajax({
       type: "POST",
-      url: "/auth/logout",
-      dataType: "json",
+      url: "/api/auth/logout",
+      contentType: "application/json",
       success: function (response) {
         window.location = "/";
       }
@@ -22,15 +22,13 @@ $(()=>{
       },
       dataType: "json",
       success: function (response) {
-        if(response.status == "success"){
-          $autocompleteSearchPosts.html("");
-          let posts = response.posts;
-          console.log(posts)
-          posts = posts.map(post=>{
-            return `<a href="/post/${post.slug}" class="list-group-item list-group-item-action">${post.title}</a>`;
-          })
-          $autocompleteSearchPosts.html(posts.join("")); 
-        }
+        $autocompleteSearchPosts.html("");
+        let posts = response.posts;
+        console.log(posts)
+        posts = posts.map(post=>{
+          return `<a href="/post/${post.slug}" class="list-group-item list-group-item-action">${post.title}</a>`;
+        })
+        $autocompleteSearchPosts.html(posts.join(""));
       }
     });
 

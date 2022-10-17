@@ -2,18 +2,15 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.TypeLike;
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentLikeDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.job_action.LikeDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CommentLikeMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.CommentLike;
 import com.hoanglinhplus.CareerSocialNetwork.models.CommentLike_;
-import com.hoanglinhplus.CareerSocialNetwork.models.Like;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CommentLikeRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CommentLikeSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
-import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -58,19 +55,23 @@ public class CommentLikeService {
     CommentLike savedLike = commentLikeRepository.save(commentLike);
     Map<String, Object> responseData = new HashMap<>();
     responseData.put("like", savedLike);
+    responseData.put("statistics", getNumberOfLikes(commentLike.getCommentId()));
     return ResponseEntity.ok(new ResponseObjectDTO(commentLikeDTO.getTypeLike().name()+" job successfully ",responseData));
   }
-  public ResponseEntity<ResponseObjectDTO> getNumberOfLikes(Long commentId){
+  public ResponseEntity<ResponseObjectDTO> responseGetNumberOfLikes(Long commentId){
+    return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of CommentLike Successfully",getNumberOfLikes(commentId)));
+  }
+  public Map<String,Object> getNumberOfLikes(Long commentId){
     List<CommentLike> likes = getLikes(CommentLikeDTO.builder().commentId(commentId).typeLike(TypeLike.LIKE).build());
     int numberOfCommentLike = likes.size();
     List<CommentLike> unlikes = getLikes(CommentLikeDTO.builder().commentId(commentId).typeLike(TypeLike.UNLIKE).build());
     int numberOfCommentUnlike = unlikes.size();
     int total = numberOfCommentLike + numberOfCommentUnlike;
     Map<String, Object> responseData = new HashMap<>();
-    responseData.put("numberOfLike", numberOfCommentLike);
-    responseData.put("numberOfUnlike", numberOfCommentUnlike);
+    responseData.put("numberOfLikes", numberOfCommentLike);
+    responseData.put("numberOfUnlikes", numberOfCommentUnlike);
     responseData.put("total", total);
-    return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of CommentLike Successfully",responseData));
+    return responseData;
   }
   public ResponseEntity<ResponseObjectDTO> haveReaction(Long commentId){
     Long userId = myUserDetailsService.getCurrentUserId();

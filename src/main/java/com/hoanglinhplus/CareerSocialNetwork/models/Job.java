@@ -25,6 +25,7 @@ public class Job {
   private Long jobId;
   @Column(nullable = false, length = 255)
   private String title;
+  @Column(columnDefinition = "TEXT")
   private String jobDescription;
   @Column(length = 1000)
   private String image;
@@ -119,11 +120,6 @@ public class Job {
         oldTag.removeJobTags(this);
       }
     }
-  }
-  public List<Comment> getComments() {
-    if (comments == null)
-      comments = new ArrayList<>();
-    return comments;
   }
   public Iterator<Comment> getIteratorComments() {
     if (comments == null)

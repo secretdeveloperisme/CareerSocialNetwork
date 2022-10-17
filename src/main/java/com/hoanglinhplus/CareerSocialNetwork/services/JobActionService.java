@@ -51,18 +51,36 @@ public class JobActionService {
     return likeRepository.findAll(likeSpecification);
   }
   public ResponseEntity<ResponseObjectDTO> likeJob(LikeDTO likeDTO){
+    likeDTO.setUserId(myUserDetailsService.getCurrentUserId());
+    TypeLike typeLike = likeDTO.getTypeLike();
     Like like = LikeMapper.toEntity(likeDTO);
-    List<Like> likes = getLikes(likeDTO);
+    List<Like> likes = getLikes(LikeDTO.builder().userId(likeDTO.getUserId()).jobId(likeDTO.getJobId()).build());
+    Map<String, Object> responseData = new HashMap<>();
     if(likes != null && !likes.isEmpty()){
-      likeRepository.delete(likes.get(0));
-      return ResponseEntity.ok(new ResponseObjectDTO("Delete Like Successfully", null));
+      Like existedLike = likes.get(0);
+      if(existedLike.getTypeLike().equals(typeLike)){
+        likeRepository.delete(likes.get(0));
+        responseData.put("statistics", getNumberOfLikes(likeDTO.getJobId()));
+        responseData.put("action", "DELETE");
+        return ResponseEntity.ok(new ResponseObjectDTO("Delete "+typeLike +" Successfully", responseData));
+      }else {
+        likeRepository.delete(existedLike);
+        existedLike.setTypeLike(typeLike);
+        Like savedLike = likeRepository.save(existedLike);
+        responseData.put("like", savedLike);
+        responseData.put("statistics", getNumberOfLikes(likeDTO.getJobId()));
+        responseData.put("action", "UPDATE");
+        return ResponseEntity.ok(new ResponseObjectDTO("Update: "+likeDTO.getTypeLike().name()+" job successfully ",responseData));
+      }
+
     }
     Like savedLike = likeRepository.save(like);
-    Map<String, Object> responseData = new HashMap<>();
     responseData.put("like", savedLike);
+    responseData.put("statistics", getNumberOfLikes(likeDTO.getJobId()));
+    responseData.put("action", "CREATE");
     return ResponseEntity.ok(new ResponseObjectDTO(likeDTO.getTypeLike().name()+" job successfully ",responseData));
   }
-  public ResponseEntity<ResponseObjectDTO> getNumberOfLikes(Long jobId){
+  public ResponseEntity<ResponseObjectDTO> responseGetNumberOfLikes(Long jobId){
     List<Like> likes = getLikes(LikeDTO.builder().jobId(jobId).typeLike(TypeLike.LIKE).build());
     int numberOfLike = likes.size();
     List<Like> unlikes = getLikes(LikeDTO.builder().jobId(jobId).typeLike(TypeLike.UNLIKE).build());
@@ -74,6 +92,18 @@ public class JobActionService {
     responseData.put("total", total);
     return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of Like Successfully",responseData));
   }
+  public Map<String, Long> getNumberOfLikes(Long jobId){
+    List<Like> likes = getLikes(LikeDTO.builder().jobId(jobId).typeLike(TypeLike.LIKE).build());
+    long numberOfLike = likes.size();
+    List<Like> unlikes = getLikes(LikeDTO.builder().jobId(jobId).typeLike(TypeLike.UNLIKE).build());
+    long numberOfUnlike = unlikes.size();
+    long total = numberOfLike + numberOfUnlike;
+    Map<String, Long> data = new HashMap<>();
+    data.put("numberOfLikes", numberOfLike);
+    data.put("numberOfUnlikes", numberOfUnlike);
+    data.put("total", total);
+    return data;
+  }
   public ResponseEntity<ResponseObjectDTO> haveReactionJob(Long jobId){
     Long userId = myUserDetailsService.getCurrentUserId();
     List<Like> likes = getLikes(LikeDTO.builder().jobId(jobId).userId(userId).build());
@@ -83,7 +113,13 @@ public class JobActionService {
     }
     return ResponseEntity.ok(new ResponseObjectDTO("Get Having Reaction Successfully",responseData));
   }
-
+  public Like getReactionJob(Long userId,Long jobId){
+    List<Like> likes = getLikes(LikeDTO.builder().jobId(jobId).userId(userId).build());
+    if(likes!= null &&!likes.isEmpty()){
+     return likes.get(0);
+    }
+    return null;
+  }
   public ResponseEntity<ResponseObjectDTO> bookmark(BookmarkDTO bookmarkDTO){
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     User user = userService.getUser(currentUserId);
@@ -126,11 +162,37 @@ public class JobActionService {
     }
     return ResponseEntity.ok(new ResponseObjectDTO("Get Have Bookmark Successfully",responseData));
   }
-  public ResponseEntity<ResponseObjectDTO> getNumberOfBookmarks(Long jobId){
-    Job job = jobService.getJob(jobId);
+  public boolean getBookmarkJob(Long jobId){
+    Long currentUserId = myUserDetailsService.getCurrentUserId();
+    User user = userService.getUser(currentUserId);
+    List<Job> bookmarkJobs = user.getBookmarks();
+    Job bookmarkJob = null;
+    for (Job job : bookmarkJobs) {
+      if(job.getJobId().equals(jobId)){
+        bookmarkJob = job;
+      }
+    }
+    return bookmarkJob != null;
+  }
+  public boolean getBookmarkJob(Long userId,Long jobId){
+    User user = userService.getUser(userId);
+    List<Job> bookmarkJobs = user.getBookmarks();
+    Job bookmarkJob = null;
+    for (Job job : bookmarkJobs) {
+      if(job.getJobId().equals(jobId)){
+        bookmarkJob = job;
+      }
+    }
+    return bookmarkJob != null;
+  }
+  public ResponseEntity<ResponseObjectDTO> responseGetNumberOfBookmarks(Long jobId){
     Map<String, Object> responseData = new HashMap<>();
-    responseData.put("numberOfBookmark", job.getBookmarks().size());
+    responseData.put("numberOfBookmark", getNumberOfBookmarks(jobId));
     return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of Bookmarks Successfully",responseData));
+  }
+  public long getNumberOfBookmarks(Long jobId){
+    Job job = jobService.getJob(jobId);
+    return job.getBookmarks().size();
   }
 
 }

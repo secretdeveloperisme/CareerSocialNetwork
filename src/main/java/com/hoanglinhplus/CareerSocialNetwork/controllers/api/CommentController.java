@@ -36,7 +36,7 @@ public class CommentController {
   }
   @GetMapping("/get-all-comments")
   public ResponseEntity<ResponseObjectDTO> getAllComments(@RequestParam Long jobId){
-    return commentService.getAllComments(jobId);
+    return commentService.responseGetAllComments(jobId);
   }
 
   @PostMapping("/like")
@@ -49,7 +49,7 @@ public class CommentController {
   }
   @GetMapping("/like/get-number-of-likes")
   public ResponseEntity<ResponseObjectDTO> getNumberOfLikes(@RequestParam Long commentId){
-    return commentLikeService.getNumberOfLikes(commentId);
+    return commentLikeService.responseGetNumberOfLikes(commentId);
   }
 
 }

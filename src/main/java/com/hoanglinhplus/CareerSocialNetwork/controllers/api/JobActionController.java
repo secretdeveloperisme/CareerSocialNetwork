@@ -21,7 +21,7 @@ public class JobActionController {
   }
   @GetMapping("/like-count")
   public ResponseEntity<ResponseObjectDTO> getNumberOfLikes(Long jobId){
-    return jobActionService.getNumberOfLikes(jobId);
+    return jobActionService.responseGetNumberOfLikes(jobId);
   }
   @GetMapping("/have-reaction-job")
   public ResponseEntity<ResponseObjectDTO> haveReactionJob(Long jobId){
@@ -37,6 +37,6 @@ public class JobActionController {
   }
   @GetMapping("/count-bookmark")
   public ResponseEntity<ResponseObjectDTO> getNumberOfBookmarks(Long jobId){
-    return jobActionService.getNumberOfBookmarks(jobId);
+    return jobActionService.responseGetNumberOfBookmarks(jobId);
   }
 }

@@ -1,0 +1,36 @@
+.post-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.tags {
+  font-size: 0.9rem;
+}
+
+.tags:empty::before {
+  font-size: 0.7rem;
+  content: attr(placeholder);
+}
+
+.tags:empty:focus:before {
+  content: "";
+}
+
+#editor {
+  z-index: 2;
+}
+
+.ql-toolbar {
+  position: sticky;
+  top: 90px;
+  background: gainsboro;
+  color: white;
+  z-index: 3;
+}
+
+.btn-upload-wrapper {
+  z-index: 3;
+  position: fixed;
+  bottom: 0;
+}
