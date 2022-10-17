@@ -19,12 +19,12 @@ public class ApplicationController {
 
   @PostMapping
   public ResponseEntity<ResponseObjectDTO> apply(@RequestBody ApplicationDTO applicationDTO){
-    return applicationService.apply(applicationDTO);
+    return applicationService.responseApply(applicationDTO);
   }
 
   @GetMapping("/get-number-of-applications")
   public ResponseEntity<ResponseObjectDTO> getNumberOfApplications(Long jobId){
-    return applicationService.getNumberOfApplications(jobId);
+    return applicationService.responseGetNumberOfApplications(jobId);
   }
 
   @GetMapping("/have-application")

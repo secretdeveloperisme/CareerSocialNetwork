@@ -46,9 +46,15 @@ group by c.company_id
 order by number_of_follows desc
 limit 10;
 
+-- query job answer
+select jq.job_id, a.user_id, a.answer, q.question_id, jq.job_que_id, q.content from
+    questions q
+    inner join job_question jq on q.question_id = jq.question_id
+    left join
+        (select * from answers a where user_id = 22) a on a.job_que_id = jq.job_que_id
+where job_id = 12;
 
 
- 
 INSERT INTO `companies` VALUES (8,'2022-09-07 06:01:14',NULL,'hello','hoanglinhplus','life is riding a bicycle','2022-09-07 06:01:14','https://hoanglinhplus.com',2,2,1)
                              ,(17,'2022-09-10 16:48:27',NULL,'hello','hoanglinhplus','life is riding a bicycle','2022-09-10 16:48:27','https://hoanglinhplus.com',20,2,1),
                               (18,'2022-09-10 16:48:50',NULL,'minhman logo 123321','minhmanhaha','that is a good idea yeah','2022-09-10 16:48:50','https://minhmanhaha.com.vn',20,3,5),

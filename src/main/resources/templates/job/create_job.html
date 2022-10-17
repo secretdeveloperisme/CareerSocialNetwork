@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Create Job</title>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/create_job.css}">
+  <link rel="stylesheet" th:href="@{/css/custom_quill.css}">
+</head>
+
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+      <div th:if="${user}">
+        <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+      </div>
+      <div th:unless="${user}">
+        <div th:replace="/fragments/navigation"></div>
+      </div>
+    </header>
+    <form method="post" id="createJobForm">
+      <input type="hidden" name="company.companyId" th:value="${company.getCompanyId()}">
+      <div class="sidebar overflow-auto p-2">
+        <div class="mb-3" id="jobImageWrapper">
+          <h4>Image</h4>
+          <input type="file" name="postImage" hidden accept="image/*" id="postImage">
+          <input type="hidden" name="image" id="imagePath">
+          <label class="d-flex flex-column text-center" for="postImage" style="width: fit-content;">
+            <img class="border-danger img-thumbnail post-image" id="displayJobImage" th:src="@{/images/icons/upload.jpg}">
+          </label>
+        </div>
+        <div class="mb-3">
+          <h4 for="title">Tags</h4>
+          <div type="text" name="tags" contenteditable="true" id="tags" class="form-control tags"
+               placeholder="separate tags by space"></div>
+        </div>
+        <div class="mb-3">
+          <h4 class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#categories" aria-expanded="true">
+            Skills</h4>
+          <div class="categories collpasing show" id="categories">
+            <!--/*@thymesVar id="skills" type="com.hoanglinhplus.CareerSocialNetwork.models.Skill"*/-->
+            <div th:each="skill : ${skills}" class="mb-2">
+              <input type="checkbox" class="form-check-input" name="skill.skillId" th:id="'skill'+${skill.getSkillId()} " th:value="${skill.getSkillId()} ">
+              <label th:for="'skill'+${skill.getSkillId()}" class="form-check-label" th:text="${skill.getName()}"> </label>
+            </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <h4 class="btn-toggle" data-bs-toggle="collapse" data-bs-target="#location" aria-expanded="true">
+            Location</h4>
+          <div class="locations collpasing show" id="location">
+            <!--/*@thymesVar id="skills" type="com.hoanglinhplus.CareerSocialNetwork.models.Skill"*/-->
+            <div class="form-group">
+              <input list="locationData" class="form-control" name="location" autocomplete="off" />
+              <datalist id="locationData">
+                <option value="ho chi minh">Ho Chi Minh</option>
+                <option value="ha noi">Ha Noi</option>
+                <option value="can tho">Can Tho</option>
+                <option value="da nang">Da Nang</option>
+                <option value="other">other</option>
+              </datalist>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="p-2">
+          <div class="mb-3">
+            <label for="title">
+              <h4>Title: </h4>
+            </label>
+            <input type="text" name="title" id="title" class="form-control" required placeholder="input your title ...">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" >Salary Min and Max: </span>
+            </div>
+            <input  type="number" name="salaryMin" id="salaryMin" min="0" class="form-control col-6" placeholder="input your min salary ...">
+            <input type="number" name="salaryMax" id="salaryMax" max="99999999" class="form-control col-6" placeholder="input your max salary ...">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Amount: </span>
+            </div>
+            <input  type="number" name="amount" id="amount" min="0" class="form-control col-6" placeholder="input your min salary ...">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Experience:</span>
+            </div>
+            <input type="number" name="experience" id="experience" min="0" max="99999999" class="form-control col-6" placeholder="input your max salary ...">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text">Position: </span>
+            </div>
+            <select name="position.positionId" id="position.positionId" class="form-control col-6">
+              <!--/*@thymesVar id="positions" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Position>"*/-->
+              <option th:each="position: ${positions}" th:value="${position.getPositionId()}" th:text="${position.getName()}"></option>
+            </select>
+            <div class="input-group-prepend">
+              <span class="input-group-text">WorkPlace:</span>
+            </div>
+            <select name="workPlace.workPlaceId" id="workPlace.workPlaceId" class="form-control col-6">
+              <!--/*@thymesVar id="workPlaces" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.WorkPlace>"*/-->
+              <option th:each="workPlace: ${workPlaces}" th:value="${workPlace.getWorkPlaceId()}" th:text="${workPlace.getPlace()}"></option>
+            </select>
+          </div>
+          <div class="mb-3 ">
+            <h4>Job Description:</h4>
+            <div class="post-content bg-white">
+              <div id="toolbar" class="ql-toolbar ql-snow">
+                <span class="ql-formats">
+                  <select class="ql-font"></select>
+                  <select class="ql-size"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-bold"></button>
+                  <button class="ql-italic"></button>
+                  <button class="ql-underline"></button>
+                  <button class="ql-strike"></button>
+                </span>
+                <span class="ql-formats">
+                  <select class="ql-color"></select>
+                  <select class="ql-background"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-script" value="sub"></button>
+                  <button class="ql-script" value="super"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-header" value="1"></button>
+                  <button class="ql-header" value="2"></button>
+                  <button class="ql-blockquote"></button>
+                  <button class="ql-code-block"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-list" value="ordered"></button>
+                  <button class="ql-list" value="bullet"></button>
+                  <button class="ql-indent" value="-1"></button>
+                  <button class="ql-indent" value="+1"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-direction" value="rtl"></button>
+                  <select class="ql-align"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-link"></button>
+                  <button class="ql-image"></button>
+                  <button class="ql-video"></button>
+                  <button class="ql-formula"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-clean"></button>
+                </span>
+              </div>
+              <div id="editor" class="pb-3"></div>
+              <input type="hidden" name="jobDescription" id="content">
+            </div>
+            <div class="btn-upload-wrapper p-2 bg-white w-100">
+              <button class="btn btn-primary" id="btnUpload">Upload</button>
+            </div>
+          </div>
+          <div th:replace="~{/fragments/footer}"></div>
+        </div>
+     </div>
+    </form>
+  </div>
+  <ul class="nav-mobile list-style-none">
+    <li class="top-link">
+      <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </div>
+    </li>
+  </ul>
+  </div>
+  <div th:replace="~{/fragments/components/toast::toast}"></div>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
+  <script type="module" th:src="@{/js/job/CreateJob.js}"></script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">-->
+<div th:fragment="jobs(jobs)">
+  <div class="post-list row g-3">
+<!--/*@thymesVar id="jobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Job>"*/-->
+    <div class="col-xl-12" th:each="job: ${jobs}">
+      <div class="post-item container-fluid d-flex shadow rounded py-2">
+        <div class="post-item-thumbnail me-3">
+          <a th:href="${job.getTitle()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
+          </a>
+        </div>
+        <div class="post-content">
+          <div class="post-tag">
+            <a th:each="tag: ${job.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}">
+            </a>
+          </div>
+          <h6 class="post-title">
+            <a th:href="'/job/'+${job.getJobId()} " class="text-decoration-none text-dark" th:text="${job.getTitle()}">  </a>
+          </h6>
+          <div class="post-info ">
+            <div class="post-author">
+              <a th:href="'/company/'+${job.getCompany().getCompanyId()}" class="text-decoration-none text-secondary">
+                <i class="fa-solid fa-building"></i>
+                <span th:text="${job.getCompany().getName()}"></span>
+              </a>
+            </div>
+            <div class="post-published">
+              <i class="fa-solid fa-calendar-days"></i>
+              <span th:text="${#dates.format(job.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
+            </div>
+            <div class="post-location">
+              <i class="fa fa-location-dot"></i>
+              <span th:text="${job.getLocation()}"></span>
+              (<span th:text="${job.getWorkPlace().getPlace()}"></span>)
+            </div>
+          </div>
+        </div>
+        <form class="post-action" action="/application" method="post">
+          <input type="hidden" name="jobId" th:value="${job.getJobId()}">
+          <button class="btn btn-success">Apply</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -114,6 +114,5 @@ public class JobQuestionService {
       return ResponseEntity.ok(responseObjectDTO);
     }
     throw new PermissionDeniedException("you dont have permission to delete job question.");
-
   }
 }

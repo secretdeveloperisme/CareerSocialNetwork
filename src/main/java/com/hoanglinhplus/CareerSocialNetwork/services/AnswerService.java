@@ -8,6 +8,7 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedExceptio
 import com.hoanglinhplus.CareerSocialNetwork.mappers.AnswerMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.Answer;
 import com.hoanglinhplus.CareerSocialNetwork.models.Answer_;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.AnswerQuestionInfo;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.AnswerRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.AnswerSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -53,6 +54,10 @@ public class AnswerService {
     responseData.put("answers", answerDTOS);
     return ResponseEntity.ok(new ResponseObjectDTO("Get answers by JobId successfully", responseData));
   }
+  public List<AnswerQuestionInfo> getAnswerQuestions(Long userId, Long jobId){
+    System.out.println("hello");
+    return answerRepository.getAnswerQuestions(userId,jobId);
+  }
   public Answer getAnswer(AnswerDTO answerDTO) {
     AnswerSpecification answerSpecification = new AnswerSpecification();
     if(answerDTO.getUserId() != null){
@@ -76,6 +81,16 @@ public class AnswerService {
     AnswerDTO newAnswerDTO = AnswerMapper.toDTO(newAnswer);
     responseData.put("answer", newAnswerDTO);
     return ResponseEntity.ok(new ResponseObjectDTO("Create Answer Successfully", responseData));
+  }
+  public ResponseEntity<ResponseObjectDTO> create(List<AnswerDTO> answerDTOS){
+    Long currentUserId = myUserDetailsService.getCurrentUserId();
+    answerDTOS.forEach(answerDTO -> answerDTO.setUserId(currentUserId));
+    List<Answer> answers = answerDTOS.stream().map(AnswerMapper::toEntity).toList();
+    List<Answer> newAnswers = answerRepository.saveAll(answers);
+    Map<String, Object> responseData = new HashMap<>();
+    List<AnswerDTO> newAnswerDTOS = newAnswers.stream().map(AnswerMapper::toDTO).toList();
+    responseData.put("answers", newAnswerDTOS);
+    return ResponseEntity.ok(new ResponseObjectDTO("Create Answers Successfully", responseData));
   }
   public ResponseEntity<ResponseObjectDTO> update(AnswerDTO answerDTO) {
     Long currentUserId = myUserDetailsService.getCurrentUserId();

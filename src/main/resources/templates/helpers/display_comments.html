@@ -1,0 +1,50 @@
+<div lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+  <!--/*@thymesVar id="comments" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentDTO>"*/-->
+  <div th:fragment="displayComments(comments,user)">
+    <!--/*@thymesVar id="comment" type="com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentDTO"*/-->
+    <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+    <div th:each="comment : ${comments}" class="comment mt-2" data-comment-node="0">
+      <div class="d-flex comment-wrapper--deep-= deep++ ">
+        <div class="icon-32 me-2"
+             th:style="'background-image: url(\''+${comment.getUser().getAvatar()}+'\');'"></div>
+        <div class="w-100 comment-inner">
+          <div class="comment-detail p-3 border border-bold w-100 ">
+            <div class="comment-header d-flex">
+              <h5 class="comment__author-name me-2" th:text="${comment.getUser().getUsername()}">
+              </h5>
+              <div class="comment-createdAt" th:text="${#dates.format(comment.getCreatedAt(), 'dd/MM/yyyy HH:mm')}">
+              </div>
+              <div th:if="(${user != null} and ${comment.getUser().getUserId().equals(user.getUserId())}) ">
+                <div class="comment-action dropdown ms-auto">
+                  <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i>
+                  </button>
+                  <div class="dropdown-menu">
+                    <li class="dropdown-item btn-edit-comment" th:data-comment-id="${comment.getCommentId()}">Edit</li>
+                    <li class="dropdown-item btn-delete-comment" th:data-comment-id="${comment.getCommentId()}">Delete
+                    </li>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="comment-content ql-snow">
+              <div class="ql-editor p-0" style="white-space: normal" th:utext="${comment.getContent()}">
+              </div>
+            </div>
+            <div class="comment-action">
+              <button class="btn comment-like-btn" th:classappend="${comment.getTypeLike()}?'active':' '"
+                      th:data-comment-id="${comment.getCommentId()}"><i class="far fa-heart"></i>
+                <span th:text="${comment.getNumberOfLikes()}"></span> Likes
+              </button>
+              <button class="btn comment-reply-btn" th:data-comment-id="${comment.getCommentId()}"
+                      th:data-job-id="${comment.getJobId()} "><i
+                  class="far fa-comment"></i> Reply
+              </button>
+            </div>
+          </div>
+          <div th:replace="~{/helpers/display_comments::displayComments(${comment.getChildren()},${user})}"></div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

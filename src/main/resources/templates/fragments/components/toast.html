@@ -1,0 +1,28 @@
+<div th:fragment="toast">
+  <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 2000">
+    <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <i class="toast-icon fas fa-check text-primary" ></i>
+        <strong class="me-auto toast-title ms-3">Bootstrap</strong>
+        <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+      </div>
+      <div class="toast-body">
+        Hello, world! This is a toast message.
+      </div>
+    </div>
+  </div>
+  <script>
+    let $toast = $("#toast")
+    function showToast(type, title, content){
+      if(type === "success"){
+        $toast.find(".toast-icon").attr("class","toast-icon fas fa-check text-primary")
+      }
+      else if(type === "failed"){
+        $toast.find(".toast-icon").attr("class","toast-icon fas fa-exclamation-circle text-danger");
+      }
+      $toast.find(".toast-title").text(title);
+      $toast.find(".toast-body").text(content);
+      $toast.toast("show");
+    }
+  </script>
+</div>

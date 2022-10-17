@@ -1,0 +1,112 @@
+<!DOCTYPE >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>CreateCompany</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body style="background-color: #f3f2ef">
+<header class="sticky-top">
+  <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+  <div th:if="${user}">
+    <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+  </div>
+  <div th:unless="${user}">
+    <div th:replace="/fragments/navigation"></div>
+  </div>
+</header>
+<div class="">
+  <header class="container-fluid shadow p-lg-4  bg-white">
+    <div class="container">
+      <h4>
+        <i class="fa-solid fa-arrow-left"></i>
+        <span>back</span>
+      </h4>
+      <div class="d-flex align-items-center">
+        <img class="icon-32 rounded-0" th:src="@{/images/icons/company_icon.png}" alt="company">
+        <h5>
+          Let's get started with a few questions about your job.
+        </h5>
+      </div>
+    </div>
+  </header>
+  <div class="container">
+    <div class="row gx-5">
+      <div class="col-lg-6 p-3 bg-white mt-3 rounded">
+        <ul class="list-group" id="questionList">
+          <li class="list-group-item d-flex justify-content-between align-items-center questionList"
+              th:each="jobQuestion : ${jobQuestions} " th:id="'questionList'+${jobQuestion.getQuestion().getQuestionId()}">
+            <span th:text="${jobQuestion.getQuestion().getContent()}"></span>
+            <button class="btn badge bg-danger rounded-pill" th:data-question-id="${jobQuestion.getQuestion().getQuestionId()}"><i class="fas fa-multiply"></i></button>
+          </li>
+        </ul>
+        <button class="btn btn-primary mt-3" id="btnAddQuestion"  data-bs-toggle="modal" data-bs-target="#questionModal">+ Add Question</button>
+      </div>
+      <div class="col-lg-6 px-3 mt-3 ">
+        <div class="position-sticky bg-white p-3 rounded" style="top: 10px;">
+          <h4>Job Review</h4>
+          <div class="">
+            <img id="jobImage" style="width: 128px;height: 128px" class="img-thumbnail" th:src="${job.getImage()}" alt="">
+            <h3 id="jobTitle" th:text="${job.getTitle()}">Company Name</h3>
+            <h6 id="companyNamePreview" ><i class="fas fa-building"></i>
+              <span th:text="${company.getName()}"></span>
+            </h6>
+            <p id="jobWorkPlace" th:text="${job.getWorkPlace().getPlace()}">Tag Line</p>
+            <h5 id="jobLocation" th:text="${job.getLocation()}">Industry</h5>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="questionsModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Do you want to delete job question </h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+            <p id="previewQuestionDelete">Preview Question Delete</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger btn-confirm-delete">DELETE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionsModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="questionsModalLabel">Job Questions</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div>
+            <form id="jobQuestionForm">
+              <input type="hidden" name="jobId" th:value="${job.getJobId()}">
+              <label for="questionInput" class="form-label">Question</label>
+              <input type="text" name="question.content" class="form-control" id="questionInput" placeholder="Add your job question ">
+            </form>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-success btn-confirm-create">CREATE</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div th:replace="~{/fragments/components/toast}"></div>
+<div th:replace="/auth/login"></div>
+<script type="module" th:src="@{/js/home.js}"></script>
+<script type="module" src="/js/login.js"></script>
+<script type="module" src="/js/common/common.js"></script>
+<script type="module" th:src="@{/js/question_answer/CreateQuestions.js}"></script>
+</body>
+</html>

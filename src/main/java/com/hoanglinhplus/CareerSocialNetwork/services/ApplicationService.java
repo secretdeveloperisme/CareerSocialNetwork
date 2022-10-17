@@ -44,22 +44,34 @@ public class ApplicationService {
     }
     return applicationRepository.findAll(applicationSpecification);
   }
-  public ResponseEntity<ResponseObjectDTO> apply(ApplicationDTO applicationDTO){
+  public ResponseEntity<ResponseObjectDTO> responseApply(ApplicationDTO applicationDTO){
+    Map<String, Object> data = apply(applicationDTO);
+    if(data.get("action").equals("CREATE")){
+      return ResponseEntity.ok(new ResponseObjectDTO("Application " +applicationDTO.getStatus().name()+" job successfully ",data));
+    }
+    return ResponseEntity.ok(new ResponseObjectDTO("Delete Application Successfully", null));
+  }
+  public Map<String, Object> apply(ApplicationDTO applicationDTO){
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     applicationDTO.setUserId(currentUserId);
     applicationDTO.setStatus(ApplicationStatus.PENDING);
     Application application = ApplicationMapper.toEntity(applicationDTO);
     List<Application> applications = getApplications(applicationDTO);
+    Map<String, Object> responseData = new HashMap<>();
     if(applications != null && !applications.isEmpty()){
       applicationRepository.delete(applications.get(0));
-      return ResponseEntity.ok(new ResponseObjectDTO("Delete Application Successfully", null));
+      responseData.put("action", "DELETE");
+      return responseData;
     }
     Application savedApplication = applicationRepository.save(application);
-    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("action", "CREATE");
     responseData.put("application", savedApplication);
-    return ResponseEntity.ok(new ResponseObjectDTO(applicationDTO.getStatus().name()+" job successfully ",responseData));
+    return responseData;
   }
-  public ResponseEntity<ResponseObjectDTO> getNumberOfApplications(Long jobId){
+  public ResponseEntity<ResponseObjectDTO> responseGetNumberOfApplications(Long jobId){
+    return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of Application Successfully",getNumberOfApplications(jobId)));
+  }
+  public Map<String, Object> getNumberOfApplications(Long jobId){
     List<Application> pendingApplications = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.PENDING).build());
     int numberOfPendingApplication = pendingApplications.size();
     List<Application> approvedApplications = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.APPROVED).build());
@@ -67,12 +79,12 @@ public class ApplicationService {
     List<Application> completedApplication = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.COMPLETED).build());
     int numberOfCompletedApplication = completedApplication.size();
     int total = numberOfPendingApplication + numberOfApprovedApplication + numberOfCompletedApplication;
-    Map<String, Object> responseData = new HashMap<>();
-    responseData.put("numberOfPendingApplications", numberOfPendingApplication);
-    responseData.put("numberOfApprovedApplications", numberOfApprovedApplication);
-    responseData.put("numberOfCompletedApplications", numberOfCompletedApplication);
-    responseData.put("totalApplications", total);
-    return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of Application Successfully",responseData));
+    Map<String, Object> data = new HashMap<>();
+    data.put("numberOfPendingApplications", numberOfPendingApplication);
+    data.put("numberOfApprovedApplications", numberOfApprovedApplication);
+    data.put("numberOfCompletedApplications", numberOfCompletedApplication);
+    data.put("totalApplications", total);
+    return data;
   }
   public ResponseEntity<ResponseObjectDTO> haveApplication(Long jobId){
     Long userId = myUserDetailsService.getCurrentUserId();

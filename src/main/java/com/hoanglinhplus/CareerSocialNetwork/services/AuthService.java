@@ -2,6 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseErrorDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUser;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
@@ -12,6 +13,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -63,6 +67,19 @@ public class AuthService {
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     if(!(currentUserId.longValue() == targetUserId.longValue()))
       throw new PermissionDeniedException("You don't have permission");
+  }
+  public ResponseEntity<ResponseObjectDTO> logout(HttpServletResponse response){
+    Cookie accessToken = new Cookie("accessToken", null);
+    accessToken.setPath("/");
+    accessToken.setHttpOnly(true);
+    accessToken.setMaxAge(0);
+    response.addCookie(accessToken);
+    Cookie refreshToken = new Cookie("refreshToken", null);
+    refreshToken.setPath("/");
+    refreshToken.setHttpOnly(true);
+    refreshToken.setMaxAge(0);
+    response.addCookie(refreshToken);
+    return ResponseEntity.ok(new ResponseObjectDTO("Logout successfully !", null));
   }
 }
 

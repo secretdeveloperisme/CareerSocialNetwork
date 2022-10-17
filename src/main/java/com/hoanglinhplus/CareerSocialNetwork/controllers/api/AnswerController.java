@@ -7,6 +7,8 @@ import com.hoanglinhplus.CareerSocialNetwork.services.AnswerService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/answer")
 public class AnswerController {
@@ -18,6 +20,10 @@ public class AnswerController {
   @PostMapping
   public ResponseEntity<ResponseObjectDTO> answer(@RequestBody AnswerDTO answerDTO){
     return answerService.create(answerDTO);
+  }
+  @PostMapping("/many")
+  public ResponseEntity<ResponseObjectDTO> answer(@RequestBody List<AnswerDTO> answerDTOS){
+    return answerService.create(answerDTOS);
   }
   @PutMapping
   public ResponseEntity<ResponseObjectDTO> update(@RequestBody AnswerDTO answerDTO){

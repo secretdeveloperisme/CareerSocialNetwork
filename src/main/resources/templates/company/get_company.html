@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Company View</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/user.css}">
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+      <div th:if="${user}">
+        <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+      </div>
+      <div th:unless="${user}">
+        <div th:replace="/fragments/navigation"></div>
+      </div>
+    </header>
+    <div class="main">
+      <div class="profile-wrapper">
+        <!--/*@thymesVar id="company" type="com.hoanglinhplus.CareerSocialNetwork.models.Company"*/-->
+        <div class="profile">
+          <div class="profile-header rounded p-3 shadow">
+            <div class="profile-header__top">
+              <div class="p-2 profile-header__avatar rounded-circle">
+                <div class="icon-128" th:style="'background-image: url(\''+${company.getLogo()}+'\')'"></div>
+              </div>
+            </div>
+            <div class="profile-header__actions d-flex">
+              <!--/*@thymesVar id="isFollowed" type="java.lang.Boolean"*/-->
+              <button th:classappend="'btn ms-auto'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'" id="btnFollow" th:data-action="${isFollowed}?
+              'unfollow':'follow'" th:data-company-id="${company.getCompanyId()}" th:text="${isFollowed}?'unfollow':'follow'"></button>
+            </div>
+            <div class="profile-header__detail">
+              <h1 class="text-center" th:text="${company.getName()}"></h1>
+              <h5 class="text-center" th:text="${company.getTagLine()}">
+              </h5>
+              <div class="row">
+                <div class="col-3 text-center">
+                  <i class="fas fa-map-marker-alt"></i>
+                  <span th:text="${company.getWebsite()}"></span>
+                </div>
+                <div class="col-3 text-center">
+                  <i class="fas fa-industry"></i>
+                  <th:block th:text="${company.getIndustry().getName()}"></th:block>
+                </div>
+                <div class="col-3 text-center">
+                  <i class="fas fa-building"></i>
+                   <th:block th:text="${company.getOrganizationSize().getName()}"></th:block>
+                </div>
+                <div class="col-3 text-center">
+                  <i class="far fa-calendar-plus"></i>
+                  Joined -  <th:block th:text="${#dates.format(company.getCreatedAt(), 'dd/MM/yyyy HH:mm')}"></th:block>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2">
+            <div class="row g-2">
+              <div class="col-3">
+                <div class="p-2 shadow bg-white rounded">
+                  <h3 class="text-center">Statistics</h3>
+                  <div>
+                    <i class="fas fa-file-alt"></i>
+                    <span th:text="${companyStatistics.getAmountOfPublishedJobs()}"> </span>
+                    Jobs published
+                  </div>
+                  <div>
+                    <i class="fas fa-comment"></i>
+                    <span th:text="${companyStatistics.getAmountOfFollowers()}"></span>
+                    Amount Of Followers
+                  </div>
+                </div>
+              </div>
+              <div class="col-9">
+                <div th:replace="~{/fragments/jobs::jobs(${jobs})}"></div>
+              </div>
+              <div class="btn-more-wrapper my-2 d-flex">
+                <button type="button" id='btnMore' data-type='"user?"user":"guest"' class="btn btn-outline-primary m-auto">Thêm</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div th:replace="~{/auth/login}"></div>
+  <script type="module" th:src="@{/js/home.js}"></script>
+  <script type="module" th:src="@{/js/login.js}"></script>
+  <script type="module" th:src="@{/js/company/GetCompany.js}"></script>
+</body>
+</html>
