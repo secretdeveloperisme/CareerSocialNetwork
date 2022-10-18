@@ -33,7 +33,7 @@ public class CompanyViewController {
     this.userService = userService;
   }
 
-  @GetMapping("/create-company")
+  @GetMapping("/create")
   public String createCompany(HttpServletRequest request, Model model){
     List<OrganizationSize> organizationSizeList = companyService.getOrganizationSizes();
     List<Industry> industries = companyService.getIndustries();

@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyFilterDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.CompanyService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,14 +31,14 @@ public class CompanyController {
   }
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   @GetMapping("/get-all-companies")
-  public ResponseEntity<ResponseObjectDTO> getAllCompanies(
+  public  ResponseEntity<ResponseDataDTO<CompanyCreationDTO>> getAllCompanies(
     @Valid CompanyFilterDTO companyFilterDTO, @Valid PageableDTO pageableDTO
   ){
     return companyService.responseGetAllCompanies(companyFilterDTO, pageableDTO);
   }
   @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
   @GetMapping("/get-own-companies")
-  public ResponseEntity<ResponseObjectDTO> getOwnCompanies(
+  public ResponseEntity<ResponseDataDTO<CompanyCreationDTO>> getOwnCompanies(
     @Valid CompanyFilterDTO companyFilterDTO, @Valid PageableDTO pageableDTO
   ){
     return companyService.responseGetOwnCompanies(companyFilterDTO, pageableDTO);
@@ -67,7 +68,12 @@ public class CompanyController {
   @PreAuthorize("hasAuthority('ADMIN')")
   @DeleteMapping(path = "/many",produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> deleteCompanies(@RequestBody List<Long> ids) {
-    return companyService.deleteCompanies(ids);
+    return companyService.deleteCompanies(ids,true,true);
+  }
+  @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
+  @DeleteMapping(path = "/user-many",produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResponseObjectDTO> deleteOwnCompanies(@RequestBody List<Long> ids) {
+    return companyService.deleteCompanies(ids,false, false);
   }
 
 }

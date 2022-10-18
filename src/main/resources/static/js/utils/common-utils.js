@@ -31,6 +31,14 @@ function objectifyForm(formArray) {
   }
   return returnArray;
 }
+function filterArrToParams(filters){
+  let filterObj = {}
+  filters.forEach(filter=>{
+    filterObj[filter.field] = filter.value;
+  })
+  console.log(filterObj)
+  return $.param(filterObj);
+}
 // #back up
 // function objectifyForm(formArray) {
 //   let duplicateArray = countDuplicateArray(formArray);
@@ -69,4 +77,4 @@ function countDuplicateArray(arr){
   return counts
 }
 
-export {objectifyForm}
+export {objectifyForm, filterArrToParams}

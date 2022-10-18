@@ -301,6 +301,13 @@ public class JobService {
       throw inputNotValidException;
     }
   }
+  public long getAmountOfPosts(Long companyId){
+    JobSpecification jobSpecification = new JobSpecification();
+    SearchCriteria<Job,Company> searchCriteria =
+      new SearchCriteria<>(Job_.company, Company.builder().companyId(companyId).build(), SearchOperator.EQUAL);
+    jobSpecification.getConditions().add(searchCriteria);
+    return jobRepository.count(jobSpecification);
+  }
   public void deleteJob(Job job) {
     job.removeAllRelationShip();
     jobRepository.delete(job);
@@ -322,4 +329,5 @@ public class JobService {
   public List<WorkPlace> getAllWorkPlaces() {
     return workPlaceRepository.findAll();
   }
+
 }

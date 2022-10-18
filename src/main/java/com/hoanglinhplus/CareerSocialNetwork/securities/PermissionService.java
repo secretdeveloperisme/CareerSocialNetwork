@@ -35,6 +35,12 @@ public class PermissionService {
     Company company = companyService.getCompany(companyId);
     return company.getCreatedUser().getUserId().equals(userId);
   }
+  public boolean isOwnerCompany(Long companyId) {
+    Long userId = myUserDetailsService.getCurrentUserId();
+    Company company = companyService.getCompany(companyId);
+    return company.getCreatedUser().getUserId().equals(userId);
+  }
+
 
   public boolean isOwnerJob(Long userId, Long jobId) {
     Job job = jobService.getJob(jobId);

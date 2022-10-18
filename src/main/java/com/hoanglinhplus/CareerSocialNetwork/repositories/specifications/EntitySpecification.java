@@ -40,6 +40,10 @@ public class EntitySpecification<T> implements Specification<T> {
         predicates.add(criteriaBuilder.lessThan(root.get((SingularAttribute)condition.getColumn()),(Comparable)condition.getValue()));
       } else if (condition.getOperator().equals(SearchOperator.GREATER)){
         predicates.add(criteriaBuilder.greaterThan(root.get((SingularAttribute)condition.getColumn()),(Comparable)condition.getValue()));
+      }else if (condition.getOperator().equals(SearchOperator.NOT_NULL)){
+        predicates.add(criteriaBuilder.isNotNull(root.get((SingularAttribute)condition.getColumn())));
+      }else if (condition.getOperator().equals(SearchOperator.NULL)){
+        predicates.add(criteriaBuilder.isNull(root.get((SingularAttribute)condition.getColumn())));
       }
 
     });

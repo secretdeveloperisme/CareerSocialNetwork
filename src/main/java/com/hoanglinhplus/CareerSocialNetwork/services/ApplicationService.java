@@ -6,6 +6,7 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ApplicationMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.Application;
 import com.hoanglinhplus.CareerSocialNetwork.models.Application_;
+import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.ApplicationRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.ApplicationSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -23,10 +24,12 @@ import java.util.Map;
 public class ApplicationService {
   private final ApplicationRepository applicationRepository ;
   private final MyUserDetailsService myUserDetailsService;
+  private final UserService userService;
   @Autowired
-  public ApplicationService(ApplicationRepository applicationRepository, MyUserDetailsService myUserDetailsService) {
+  public ApplicationService(ApplicationRepository applicationRepository, MyUserDetailsService myUserDetailsService, UserService userService) {
     this.applicationRepository = applicationRepository;
     this.myUserDetailsService = myUserDetailsService;
+    this.userService = userService;
   }
   List<Application> getApplications(ApplicationDTO applicationDTO) {
     ApplicationSpecification applicationSpecification = new ApplicationSpecification();
@@ -85,6 +88,11 @@ public class ApplicationService {
     data.put("numberOfCompletedApplications", numberOfCompletedApplication);
     data.put("totalApplications", total);
     return data;
+  }
+  public long getNumberOfUserApplications(Long userId){
+    User user = userService.getUser(userId);
+    return user.getApplications().size();
+
   }
   public ResponseEntity<ResponseObjectDTO> haveApplication(Long jobId){
     Long userId = myUserDetailsService.getCurrentUserId();

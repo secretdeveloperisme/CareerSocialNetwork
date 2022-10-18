@@ -18,4 +18,5 @@ public class CompanyFilterDTO {
   private Long organizationId;
   private Long industryId;
   private Long userId;
+  private Boolean isDeleted = null;
 }

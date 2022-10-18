@@ -53,4 +53,11 @@ public class TagService {
     List<TagDTO> tagDTOs = tags.stream().map(TagMapper::toDTO).toList();
     return tagDTOs;
   }
+  public List<Tag> getFollowedTags(Long userId){
+    Specification<Tag> followedUserJoin = TagSpecification.joinUsers(userId);
+    return tagRepository.findAll(followedUserJoin);
+  }
+  public long getAmountOfTagFollow(Long userId){
+    return getFollowedTags(userId).size();
+  }
 }

@@ -4,14 +4,15 @@ import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyFilterDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.CompanyStatistics;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
-import com.hoanglinhplus.CareerSocialNetwork.models.Company_;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.IndustryRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.OrganizationSizeRepository;
@@ -25,10 +26,12 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import javax.xml.crypto.Data;
 import java.util.*;
 
 
@@ -57,6 +60,7 @@ public class CompanyService {
     responseData.put("company", companyCreationDTO);
     return ResponseEntity.ok(new ResponseObjectDTO("get company successfully ",responseData));
   }
+
   public Company getCompany(Long companyId){
     Optional<Company> companyOptional = companyRepository.findById(companyId);
     if(companyOptional.isPresent()){
@@ -66,14 +70,13 @@ public class CompanyService {
   }
   public Page<Company> getOwnCompanies(CompanyFilterDTO companyFilterDTO,PageableDTO pageableDTO){
     companyFilterDTO.setUserId(myUserDetailsService.getCurrentUserId());
-
     return getAllCompanies(companyFilterDTO, pageableDTO);
   }
-  public ResponseEntity<ResponseObjectDTO> responseGetOwnCompanies(CompanyFilterDTO companyFilterDTO, PageableDTO pageableDTO){
+  public ResponseEntity<ResponseDataDTO<CompanyCreationDTO>> responseGetOwnCompanies(CompanyFilterDTO companyFilterDTO, PageableDTO pageableDTO){
     Page<Company> companyPage = getOwnCompanies(companyFilterDTO, pageableDTO);
     return ResponseEntity.ok(ResponseCompanyMapper.toDTO(companyPage));
   }
-  public ResponseEntity<ResponseObjectDTO> responseGetAllCompanies(CompanyFilterDTO companyFilterDTO,PageableDTO pageableDTO){
+  public ResponseEntity<ResponseDataDTO<CompanyCreationDTO>> responseGetAllCompanies(CompanyFilterDTO companyFilterDTO,PageableDTO pageableDTO){
     Page<Company> allCompanyPage =  getAllCompanies(companyFilterDTO, pageableDTO);
     return ResponseEntity.ok(ResponseCompanyMapper.toDTO(allCompanyPage));
   }
@@ -83,6 +86,7 @@ public class CompanyService {
     Long industryId = companyFilterDTO.getIndustryId();
     Long organizationId = companyFilterDTO.getOrganizationId();
     Long createdUser = companyFilterDTO.getUserId();
+    Boolean isDeleted = companyFilterDTO.getIsDeleted();
     if( companyName != null && !companyName.isEmpty()){
       SearchCriteria<Company, String> criteria = new SearchCriteria<>(Company_.name, companyName, SearchOperator.LIKE);
       companySpecification.getConditions().add(criteria);
@@ -102,6 +106,13 @@ public class CompanyService {
       SearchCriteria<Company, User> criteria = new SearchCriteria<>(Company_.createdUser, user, SearchOperator.EQUAL);
       companySpecification.getConditions().add(criteria);
     }
+    SearchCriteria<Company, Date> criteria;
+    if(isDeleted != null){
+      criteria = new SearchCriteria<>(Company_.deletedAt, null, SearchOperator.NOT_NULL);
+    }else {
+      criteria = new SearchCriteria<>(Company_.deletedAt, null, SearchOperator.NULL);
+    }
+    companySpecification.getConditions().add(criteria);
     List<Sort.Order> orders = new ArrayList<>();
     if(pageableDTO.getSort() != null){
       pageableDTO.getSort().forEach(s->{
@@ -118,7 +129,7 @@ public class CompanyService {
       });
     }
     Page<Company> companyPage;
-    Pageable pageable = PageRequest.of(pageableDTO.getPage(),pageableDTO.getSize(),Sort.by(orders));
+    Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1 ,pageableDTO.getSize(),Sort.by(orders));
     if(!companySpecification.getConditions().isEmpty()){
       companyPage = companyRepository.findAll(companySpecification, pageable);
     }
@@ -185,15 +196,24 @@ public class CompanyService {
     }
   }
   @Transactional
-  public ResponseEntity<ResponseObjectDTO> deleteCompanies(List<Long> ids) {
+  public ResponseEntity<ResponseObjectDTO> deleteCompanies(List<Long> ids, boolean isAdmin,boolean isDestroy) {
     List<Long> notExistIds = new ArrayList<>();
     List<Long> existedIds = companyRepository.findExistedIds(ids);
     ids.forEach(id->{
       if(!existedIds.contains(id))
         notExistIds.add(id);
     });
+
     if(notExistIds.size() == 0){
-      ids.forEach(this::deleteCompanyById);
+      if(!isAdmin){
+        if(ids.stream().noneMatch(this::isOwnerCompany)){
+          throw new PermissionDeniedException("you do not have permission");
+        }
+      }
+      if(isDestroy)
+        ids.forEach(this::destroyCompanyById);
+      else
+        ids.forEach(this::deleteCompanyById);
       Map<String, Object> responseData = new HashMap<>();
       responseData.put("deletedIds", ids);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
@@ -229,16 +249,30 @@ public class CompanyService {
       throw inputNotValidException;
     }
   }
+
   public void deleteCompany(Company company) {
     company.removeAllRelationShip();
     companyRepository.delete(company);
   }
-  public void deleteCompanyById(Long id) {
+  public boolean isOwnerCompany(Long companyId) {
+    Long userId = myUserDetailsService.getCurrentUserId();
+    Company company = getCompany(companyId);
+    return company.getCreatedUser().getUserId().equals(userId);
+  }
+  public void destroyCompanyById(Long id) {
     Optional<Company> companyOptional = companyRepository.findById(id);
     if(companyOptional.isPresent()){
       Company company = companyOptional.get();
       company.removeAllRelationShip();
       companyRepository.delete(company);
+    }
+  }
+  public void deleteCompanyById(Long id) {
+    Optional<Company> companyOptional = companyRepository.findById(id);
+    if(companyOptional.isPresent()){
+      Company company = companyOptional.get();
+      company.setDeletedAt(new Date());
+      companyRepository.save(company);
     }
   }
   public List<CompanyCreationDTO> getPopularCompanies(){
@@ -267,5 +301,28 @@ public class CompanyService {
     companyStatistics.setAmountOfFollowers((long) company.getFollow_companies().size());
     companyStatistics.setAmountOfPublishedJobs((long) company.getJobs().size());
     return companyStatistics;
+  }
+  public long getAmountOfCompanies(Long userId, boolean isDeleted){
+    CompanySpecification companySpecification = new CompanySpecification();
+    SearchCriteria<Company, User> searchCriteria =
+      new SearchCriteria<>(Company_.createdUser, User.builder().userId(userId).build(), SearchOperator.EQUAL);
+    companySpecification.getConditions().add(searchCriteria);
+    SearchCriteria<Company, Date> searchDeletedCriteria;
+    if(isDeleted){
+      searchDeletedCriteria =
+        new SearchCriteria<>(Company_.deletedAt, null, SearchOperator.NOT_NULL);
+    }else{
+      searchDeletedCriteria =
+        new SearchCriteria<>(Company_.deletedAt, null, SearchOperator.NULL);
+    }
+    companySpecification.getConditions().add(searchDeletedCriteria);
+    return companyRepository.count(companySpecification);
+  }
+  public long getAmountOfFollowedCompanies(Long userId){
+    return getFollowedCompanies(userId).size();
+  }
+  public List<Company> getFollowedCompanies(Long userId){
+    Specification<Company> specification = CompanySpecification.joinFollowedUsers(userId);
+    return companyRepository.findAll(specification);
   }
 }
