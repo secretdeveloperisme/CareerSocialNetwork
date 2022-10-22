@@ -18,18 +18,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.*;
 
 @Service
 @DynamicUpdate
 public class CommentService {
   private final CommentRepository commentRepository;
+  private final CommentLikeService commentLikeService;
   private final PermissionService permissionService;
   private final MyUserDetailsService myUserDetailsService;
   private final UserService userService;
   @Autowired
-  public CommentService(CommentRepository commentRepository, PermissionService permissionService, MyUserDetailsService myUserDetailsService, UserService userService) {
+  public CommentService(CommentRepository commentRepository, CommentLikeService commentLikeService, PermissionService permissionService, MyUserDetailsService myUserDetailsService, UserService userService) {
     this.commentRepository = commentRepository;
+    this.commentLikeService = commentLikeService;
     this.permissionService = permissionService;
     this.myUserDetailsService = myUserDetailsService;
     this.userService = userService;
@@ -77,7 +80,7 @@ public class CommentService {
     if(permissionService.isAdmin() || (permissionService.isUser() && permissionService.isOwnerComment(targetComment)))
     {
 
-      commentRepository.delete(targetComment);
+      deleteCommentRecursive(targetComment);
       Map<String, Object> responseData = new HashMap<>();
       CommentDTO commentDTO = CommentMapper.toDTO(targetComment);
       responseData.put("comment", commentDTO);
@@ -85,6 +88,7 @@ public class CommentService {
     }
     throw new PermissionDeniedException("You dont have permission to delete this comment [%s]".formatted(commentId));
   }
+
   public ResponseEntity<ResponseObjectDTO> responseGetAllComments(Long jobId){
     return ResponseEntity.ok(new ResponseObjectDTO("Get All Comments Successfully", getAllComments(jobId)));
   }
@@ -127,5 +131,16 @@ public class CommentService {
     data.put("comments", commentDTOS);
     data.put("numberOfComments", (long)allComments.size());
     return data;
+  }
+  @Transactional
+  public void deleteCommentRecursive(Comment comment) {
+    CommentSpecification commentSpecification  = new CommentSpecification();
+    SearchCriteria<Comment, Comment> commentChildrenSearch = new SearchCriteria<>(Comment_.parentComment,comment, SearchOperator.EQUAL);
+    commentSpecification.getConditions().add(commentChildrenSearch);
+    List<Comment> childrenComments = commentRepository.findAll(commentSpecification);
+    if (childrenComments.size() > 0)
+      childrenComments.forEach(this::deleteCommentRecursive);
+    commentLikeService.removeCommentLikes((List<CommentLike>) comment.getCommentLikes());
+    commentRepository.delete(comment);
   }
 }

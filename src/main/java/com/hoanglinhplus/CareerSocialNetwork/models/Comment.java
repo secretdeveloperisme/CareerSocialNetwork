@@ -5,10 +5,7 @@ import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Builder
 @NoArgsConstructor
@@ -29,7 +26,7 @@ public class Comment {
   @OneToOne
   @JoinColumn(name = "parent_id", referencedColumnName = "comment_id")
   private Comment parentComment;
-  @OneToMany(mappedBy = "comments")
+  @OneToMany(mappedBy = "comments", orphanRemoval = true,cascade = CascadeType.REMOVE)
   private Collection<CommentLike> commentLikes;
   @JsonIgnore
   @ManyToOne(fetch = FetchType.EAGER)
@@ -76,6 +73,10 @@ public class Comment {
         this.job.addComments(this);
       }
     }
+  }
+  public void removeCommentLikes(){
+    this.setCommentLikes(new ArrayList<>());
+
   }
 
 }

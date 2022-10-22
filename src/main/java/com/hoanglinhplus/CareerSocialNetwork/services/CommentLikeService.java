@@ -82,4 +82,7 @@ public class CommentLikeService {
     }
     return ResponseEntity.ok(new ResponseObjectDTO("Get Having Reaction Successfully",responseData));
   }
+  public void removeCommentLikes(List<CommentLike> commentLikes){
+    commentLikeRepository.deleteAll(commentLikes);
+  }
 }
