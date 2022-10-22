@@ -53,4 +53,25 @@ public class MeViewController {
     model.addAttribute("amountOfApplications", amountOfApplications);
     return "me/companies";
   }
+  @GetMapping("/application")
+  public String applications(HttpServletRequest request, Model model){
+    User user = null;
+    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
+    if (principal == null) {
+      throw new PermissionDeniedException("You don't have permission to create job question");
+    }
+    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+    long amountOfCompanies = companyService.getAmountOfCompanies(user.getUserId(),false);
+    long amountOfDeletedCompanies = companyService.getAmountOfCompanies(user.getUserId(),true);
+    long amountOfFollowedCompanies = companyService.getAmountOfFollowedCompanies(user.getUserId());
+    long amountOfFollowedTags = tagService.getAmountOfTagFollow(user.getUserId());
+    long amountOfApplications = applicationService.getNumberOfUserApplications(user.getUserId());
+    model.addAttribute("user", user);
+    model.addAttribute("amountOfCompanies", amountOfCompanies);
+    model.addAttribute("amountOfFollowedTags", amountOfFollowedTags);
+    model.addAttribute("amountOfFollowedCompanies", amountOfFollowedCompanies);
+    model.addAttribute("amountOfDeletedCompanies", amountOfDeletedCompanies);
+    model.addAttribute("amountOfApplications", amountOfApplications);
+    return "me/my_applications";
+  }
 }

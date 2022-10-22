@@ -111,7 +111,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-success btn-confirm-delete">Apply Now</button>
+                    <button type="button" class="btn btn-success" th:classappend="btn-apply" th:data-job-id="${job.getJobId()}">Apply Now</button>
                   </div>
                 </div>
               </div>

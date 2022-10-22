@@ -1,12 +1,15 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.ApplicationStatus;
+import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationInfoDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ApplicationMapper;
+import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseApplicationMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.Application;
 import com.hoanglinhplus.CareerSocialNetwork.models.ApplicationId;
 import com.hoanglinhplus.CareerSocialNetwork.models.Application_;
@@ -18,6 +21,9 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchO
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
 import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +45,7 @@ public class ApplicationService {
     this.permissionService = permissionService;
     this.userService = userService;
   }
-  List<Application> getApplications(ApplicationDTO applicationDTO) {
+  Page<Application> getApplicationPage(ApplicationDTO applicationDTO, PageableDTO pageableDTO) {
     ApplicationSpecification applicationSpecification = new ApplicationSpecification();
     if(applicationDTO.getUserId() != null) {
       SearchCriteria<Application, Long> userIdCriteria = new SearchCriteria<>(Application_.userId, applicationDTO.getUserId(), SearchOperator.EQUAL);
@@ -53,7 +59,13 @@ public class ApplicationService {
       SearchCriteria<Application, ApplicationStatus> statusSearchCriteria = new SearchCriteria<>(Application_.status, applicationDTO.getStatus(), SearchOperator.EQUAL);
       applicationSpecification.getConditions().add(statusSearchCriteria);
     }
-    return applicationRepository.findAll(applicationSpecification);
+    Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1,pageableDTO.getSize());
+    return applicationRepository.findAll(applicationSpecification, pageable);
+
+  }
+  List<Application> getApplications(ApplicationDTO applicationDTO, PageableDTO pageableDTO) {
+    Page<Application> applicationPage = getApplicationPage(applicationDTO, pageableDTO);
+    return applicationPage.getContent();
   }
   public ResponseEntity<ResponseObjectDTO> responseUpdateStatus(ApplicationDTO applicationDTO){
     Optional<Application> applicationOptional = applicationRepository.findById(new ApplicationId(applicationDTO.getUserId(), applicationDTO.getJobId()));
@@ -69,10 +81,10 @@ public class ApplicationService {
     responseData.put("application", applicationDTO);
     return ResponseEntity.ok(new ResponseObjectDTO("Update application Status Successfully", responseData));
   }
-  public ResponseEntity<List<ApplicationInfoDTO>> responseGetJobApplication(ApplicationDTO applicationDTO){
-    List<Application> applications = getApplications(applicationDTO);
-    List<ApplicationInfoDTO> applicationInfoDTOS = applications.stream().map(ApplicationMapper::toInfoDTO).toList();
-    return ResponseEntity.ok(applicationInfoDTOS);
+  public ResponseEntity<ResponseDataDTO<ApplicationInfoDTO>> responseGetJobApplication(ApplicationDTO applicationDTO, PageableDTO pageableDTO){
+    Page<Application> applicationPage = getApplicationPage(applicationDTO, pageableDTO);
+    ResponseDataDTO<ApplicationInfoDTO> responseDataDTO = ResponseApplicationMapper.toDTO(applicationPage);
+    return ResponseEntity.ok(responseDataDTO);
   }
   public ResponseEntity<ResponseObjectDTO> responseApply(ApplicationDTO applicationDTO){
     Map<String, Object> data = apply(applicationDTO);
@@ -86,7 +98,7 @@ public class ApplicationService {
     applicationDTO.setUserId(currentUserId);
     applicationDTO.setStatus(ApplicationStatus.PENDING);
     Application application = ApplicationMapper.toEntity(applicationDTO);
-    List<Application> applications = getApplications(applicationDTO);
+    List<Application> applications = getApplications(applicationDTO,PageableDTO.builder().build());
     Map<String, Object> responseData = new HashMap<>();
     if(applications != null && !applications.isEmpty()){
       applicationRepository.delete(applications.get(0));
@@ -102,11 +114,11 @@ public class ApplicationService {
     return ResponseEntity.ok(new ResponseObjectDTO("Get Number Of Application Successfully",getNumberOfApplications(jobId)));
   }
   public Map<String, Object> getNumberOfApplications(Long jobId){
-    List<Application> pendingApplications = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.PENDING).build());
+    List<Application> pendingApplications = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.PENDING).build(), PageableDTO.builder().build());
     int numberOfPendingApplication = pendingApplications.size();
-    List<Application> approvedApplications = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.APPROVED).build());
+    List<Application> approvedApplications = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.APPROVED).build(),PageableDTO.builder().build());
     int numberOfApprovedApplication = approvedApplications.size();
-    List<Application> completedApplication = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.COMPLETED).build());
+    List<Application> completedApplication = getApplications(ApplicationDTO.builder().jobId(jobId).status(ApplicationStatus.COMPLETED).build(),PageableDTO.builder().build());
     int numberOfCompletedApplication = completedApplication.size();
     int total = numberOfPendingApplication + numberOfApprovedApplication + numberOfCompletedApplication;
     Map<String, Object> data = new HashMap<>();
@@ -123,7 +135,7 @@ public class ApplicationService {
   }
   public ResponseEntity<ResponseObjectDTO> haveApplication(Long jobId){
     Long userId = myUserDetailsService.getCurrentUserId();
-    List<Application> applications = getApplications(ApplicationDTO.builder().jobId(jobId).userId(userId).build());
+    List<Application> applications = getApplications(ApplicationDTO.builder().jobId(jobId).userId(userId).build(),PageableDTO.builder().build());
     Map<String, Object> responseData = new HashMap<>();
     if(applications != null && !applications.isEmpty()){
       responseData.put("typeApplication", applications.get(0).getStatus());

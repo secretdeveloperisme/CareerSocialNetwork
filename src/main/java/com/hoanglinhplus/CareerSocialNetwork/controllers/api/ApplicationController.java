@@ -1,7 +1,9 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
+import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationInfoDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.ApplicationService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,8 +36,8 @@ public class ApplicationController {
   }
 
   @GetMapping("/get-job-applications")
-  public ResponseEntity<List<ApplicationInfoDTO>> getJobApplications(ApplicationDTO applicationDTO){
-    return applicationService.responseGetJobApplication(applicationDTO);
+  public ResponseEntity<ResponseDataDTO<ApplicationInfoDTO>> getJobApplications(ApplicationDTO applicationDTO, PageableDTO pageableDTO){
+    return applicationService.responseGetJobApplication(applicationDTO, pageableDTO);
   }
   @GetMapping("/have-application")
   public ResponseEntity<ResponseObjectDTO> haveApplication(Long jobId){

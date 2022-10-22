@@ -29,11 +29,11 @@ $(function () {
       {title: "Change Status", formatter: formatterChangeStatus,headerHozAlign:"center"},
     ],
     pagination:true,
-    paginationMode:"local", //enable remote pagination
+    paginationMode:"remote", //enable remote pagination
     paginationSize:5, //optional parameter to request a certain number of rows per page
     paginationInitialPage:1, //optional parameter to request a certain number of rows per page
     paginationSizeSelector:true,
-    filterMode:"filter",
+    filterMode:"remote",
     layout: "fitDataStretch",
     ajaxURL: "/api/application/get-job-applications",
     ajaxContentType:"json",
@@ -44,7 +44,8 @@ $(function () {
       console.log(params)
       let filter = params.filter;
       //return request url
-      return url + "?"+"jobId="+jobId+"&"+filterArrToParams(filter)
+      return url + "?"+"jobId="+jobId+"&"+$.param(params)+"&"+filterArrToParams(filter)
+
 
     },
   });
@@ -57,10 +58,10 @@ $(function () {
     return `<span class="badge ${style}">${status}</span>`
   }
   function formatterEmploymentType(cell){
-    return `<span>${cell.getData().employmentType.name}</span>`
+    return `<span>${cell.getData().job.employmentType.name}</span>`
   }
   function formatterCompany(cell){
-    return `<span><a href="/company/${cell.getData().company.companyId}">${cell.getData().company.name}</a></span>`
+    return `<span><a href="/company/${cell.getData().job.company.companyId}">${cell.getData().job.company.name}</a></span>`
   }
   function formatterUsername(cell){
     return `<span><a href="/user/${cell.getData().user.userId}">${cell.getData().user.username}</a></span>`
@@ -85,7 +86,7 @@ $(function () {
               <div class="card-body">
                 <input type="hidden" th:name="answerQuestionGroup${answerQuestion.jobQueId}jobQueId" value="${answerQuestion.jobQueId}">
                 <div class="form-control">
-                       ${answerQuestion.content}
+                       ${answerQuestion.answer!=null?answerQuestion.answer:"No Answer"}
                  </div>
               </div>
             </div>`
