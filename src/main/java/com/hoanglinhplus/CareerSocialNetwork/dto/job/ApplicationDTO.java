@@ -10,6 +10,5 @@ import lombok.*;
 public class ApplicationDTO {
   private Long userId;
   private Long jobId;
-  @Builder.Default
-  private ApplicationStatus status = ApplicationStatus.PENDING;
+  private ApplicationStatus status ;
 }

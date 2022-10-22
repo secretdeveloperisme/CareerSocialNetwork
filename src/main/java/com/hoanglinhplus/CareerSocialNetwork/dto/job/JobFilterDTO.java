@@ -24,4 +24,5 @@ public class JobFilterDTO {
   private Long companyId;
   private Long positionId;
   private Long workPlaceId;
+  private Boolean isDeleted;
 }

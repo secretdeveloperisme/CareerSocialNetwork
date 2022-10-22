@@ -2,6 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.mappers;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Company;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job;
@@ -13,15 +14,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ResponseJobMapper {
-  public static ResponseObjectDTO toDTO(Page<Job> jobPage){
+  public static ResponseDataDTO<JobCreationDTO> toDTO(Page<Job> jobPage){
     List<JobCreationDTO> jobCreationDTOS = jobPage.getContent().stream().map(JobMapper::toDTO).collect(Collectors.toList());
-    Map<String, Object> responseData = new HashMap<>();
-    responseData.put("jobs", jobCreationDTOS);
-    responseData.put("totalPages", jobPage.getTotalPages());
-    responseData.put("size", jobPage.getSize());
-    responseData.put("totalElements", jobPage.getTotalElements());
-    responseData.put("page", jobPage.getNumber());
-    responseData.put("numberOfElements", jobPage.getNumberOfElements());
-    return new ResponseObjectDTO("get all jobs successfully",responseData);
+    ResponseDataDTO<JobCreationDTO> responseData =
+      new ResponseDataDTO<>("get all jobs successfully", jobCreationDTOS,(long) jobPage.getTotalPages());
+    return responseData;
   }
 }

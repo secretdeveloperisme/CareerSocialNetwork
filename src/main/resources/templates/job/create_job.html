@@ -95,16 +95,23 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Position: </span>
             </div>
-            <select name="position.positionId" id="position.positionId" class="form-control col-6">
+            <select name="position.positionId" id="position.positionId" class="form-control col-4">
               <!--/*@thymesVar id="positions" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Position>"*/-->
               <option th:each="position: ${positions}" th:value="${position.getPositionId()}" th:text="${position.getName()}"></option>
             </select>
             <div class="input-group-prepend">
               <span class="input-group-text">WorkPlace:</span>
             </div>
-            <select name="workPlace.workPlaceId" id="workPlace.workPlaceId" class="form-control col-6">
+            <select name="workPlace.workPlaceId" id="workPlace.workPlaceId" class="form-control col-4">
               <!--/*@thymesVar id="workPlaces" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.WorkPlace>"*/-->
               <option th:each="workPlace: ${workPlaces}" th:value="${workPlace.getWorkPlaceId()}" th:text="${workPlace.getPlace()}"></option>
+            </select>
+            <div class="input-group-prepend">
+              <span class="input-group-text">EmploymentType:</span>
+            </div>
+            <select name="employmentType.employmentTypeId" id="employmentType.employmentTypeId" class="form-control col-4">
+              <!--/*@thymesVar id="workPlaces" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.EmploymentType>"*/-->
+              <option th:each="employmentType: ${employmentTypes}" th:value="${employmentType.getEmploymentTypeId()}" th:text="${employmentType.getName()}"></option>
             </select>
           </div>
           <div class="mb-3 ">

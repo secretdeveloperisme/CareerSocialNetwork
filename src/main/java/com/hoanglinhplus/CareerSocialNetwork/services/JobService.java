@@ -6,9 +6,11 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.JobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseJobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
@@ -37,6 +39,7 @@ import java.util.stream.Collectors;
 public class JobService {
   private final UserRepository userRepository;
   private final JobRepository jobRepository;
+  private final CompanyService companyService;
   private final CompanyRepository companyRepository;
   private final MyUserDetailsService myUserDetailsService;
   private final AuthService authService;
@@ -44,13 +47,15 @@ public class JobService {
   private final SkillRepository skillRepository;
   private final WorkPlaceRepository workPlaceRepository;
   private final PositionRepository positionRepository;
+  private final EmploymentTypeRepository employmentTypeRepository;
 
   @Autowired
   public JobService(UserRepository userRepository, JobRepository jobRepository
-    , CompanyRepository companyRepository
-    , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository){
+    , CompanyService companyService, CompanyRepository companyRepository
+    , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository, EmploymentTypeRepository employmentTypeRepository){
     this.userRepository = userRepository;
     this.jobRepository = jobRepository;
+    this.companyService = companyService;
     this.companyRepository = companyRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.authService = authService;
@@ -58,6 +63,7 @@ public class JobService {
     this.skillRepository = skillRepository;
     this.workPlaceRepository = workPlaceRepository;
     this.positionRepository = positionRepository;
+    this.employmentTypeRepository = employmentTypeRepository;
   }
   public ResponseEntity<ResponseObjectDTO> responseGetJob(Long jobId){
     Job job = getJob(jobId);
@@ -85,6 +91,7 @@ public class JobService {
     Long companyId = jobFilterDTO.getCompanyId();
     Long positionId = jobFilterDTO.getPositionId();
     Long workPlaceId = jobFilterDTO.getWorkPlaceId();
+    Boolean isDeleted = jobFilterDTO.getIsDeleted();
     if( title != null && !title.isEmpty()){
       SearchCriteria<Job, String> criteria = new SearchCriteria<>(Job_.title, title, SearchOperator.LIKE);
       jobSpecification.getConditions().add(criteria);
@@ -124,6 +131,13 @@ public class JobService {
       SearchCriteria<Job, Position> criteria = new SearchCriteria<>(Job_.position, position, SearchOperator.EQUAL);
       jobSpecification.getConditions().add(criteria);
     }
+    SearchCriteria<Job, Date> deletedCriteria;
+    if(isDeleted != null){
+      deletedCriteria = new SearchCriteria<>(Job_.deletedAt, null, SearchOperator.NOT_NULL);
+    }else {
+      deletedCriteria = new SearchCriteria<>(Job_.deletedAt, null, SearchOperator.NULL);
+    }
+    jobSpecification.getConditions().add(deletedCriteria);
     Specification<Job> resultSpecification = jobSpecification;
     if(tagIds != null){
        Specification<Job> tagSpecification = JobSpecification.joinTags(tagIds);
@@ -150,14 +164,14 @@ public class JobService {
       });
     }
     Page<Job> jobPage;
-    Pageable pageable = PageRequest.of(pageableDTO.getPage(),pageableDTO.getSize(),Sort.by(orders));
+    Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1,pageableDTO.getSize(),Sort.by(orders));
     jobPage = jobRepository.findAll(resultSpecification, pageable);
     return jobPage;
   }
   public List<Job> getPopularJobs(){
     return jobRepository.getPopularJobs();
   }
-  public ResponseEntity<ResponseObjectDTO> responseGetJobs(JobFilterDTO jobFilterDTO, PageableDTO pageableDTO){
+  public ResponseEntity<ResponseDataDTO<JobCreationDTO>> responseGetJobs(JobFilterDTO jobFilterDTO, PageableDTO pageableDTO){
     Page<Job> jobPage = getJobs(jobFilterDTO, pageableDTO);
     return  ResponseEntity.ok(ResponseJobMapper.toDTO(jobPage));
   }
@@ -257,7 +271,7 @@ public class JobService {
     }
   }
   @Transactional
-  public ResponseEntity<ResponseObjectDTO> deleteJobs(List<Long> ids) {
+  public ResponseEntity<ResponseObjectDTO> deleteJobs(List<Long> ids,Long companyId, boolean isAdmin,boolean isDestroy) {
     List<Long> notExistIds = new ArrayList<>();
     List<Long> existedIds = jobRepository.findExistedIds(ids);
     ids.forEach(id->{
@@ -265,7 +279,15 @@ public class JobService {
         notExistIds.add(id);
     });
     if(notExistIds.size() == 0){
-      ids.forEach(this::deleteJobById);
+      if(!isAdmin){
+        if(ids.stream().noneMatch(id->isOwnerJob(companyId,id))){
+          throw new PermissionDeniedException("you do not have permission");
+        }
+      }
+      if(isDestroy)
+        ids.forEach(this::destroyJobById);
+      else
+        ids.forEach(this::deleteJobById);
       Map<String, Object> responseData = new HashMap<>();
       responseData.put("deletedIds", ids);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
@@ -278,6 +300,10 @@ public class JobService {
       inputNotValidException.getCauses().put("invalidIds", notExistIds);
       throw inputNotValidException;
     }
+  }
+  public boolean isOwnerJob(Long companyId,Long jobId) {
+    Job job = getJob(jobId);
+    return job.getCompany().getCompanyId().equals(companyId);
   }
   @Transactional
   public ResponseEntity<ResponseObjectDTO> deleteJob(Long id) {
@@ -320,6 +346,14 @@ public class JobService {
       jobRepository.delete(job);
     }
   }
+  public void destroyJobById(Long id) {
+    Optional<Job> jobOptional = jobRepository.findById(id);
+    if(jobOptional.isPresent()){
+      Job job = jobOptional.get();
+      job.setDeletedAt(new Date());
+      jobRepository.save(job);
+    }
+  }
   public List<Skill> getAllSkills() {
     return skillRepository.findAll();
   }
@@ -329,5 +363,9 @@ public class JobService {
   public List<WorkPlace> getAllWorkPlaces() {
     return workPlaceRepository.findAll();
   }
+  public List<EmploymentType> getAllEmploymentType() {
+    return employmentTypeRepository.findAll();
+  }
+
 
 }

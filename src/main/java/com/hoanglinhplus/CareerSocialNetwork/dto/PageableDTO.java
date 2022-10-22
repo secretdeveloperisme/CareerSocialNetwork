@@ -15,9 +15,11 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PageableDTO{
-  @Min(value = 0, message = "page must be greater or equal than 0")
+  @Builder.Default
+  @Min(value = 1, message = "page must be greater or equal than 0")
   private Integer page = PageConstant.DEFAULT_CURRENT_PAGE;
   @Min(value = 1,message = "size of page must be greater than 0")
+  @Builder.Default
   private Integer size = PageConstant.DEFAULT_MAX_ELEMENT;
   private List<
     @Pattern(regexp = "(?=.{3,255})(\\w+(-_\\.)?\\w+)"

@@ -39,6 +39,7 @@ public class JobViewController {
     List<Skill> skills = jobService.getAllSkills();
     List<Position> positions = jobService.getAllPositions();
     List<WorkPlace> workPlaces = jobService.getAllWorkPlaces();
+    List<EmploymentType> employmentTypes = jobService.getAllEmploymentType();
     Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
     User user = null;
     if (principal != null) {
@@ -53,6 +54,7 @@ public class JobViewController {
     model.addAttribute("skills", skills);
     model.addAttribute("positions", positions);
     model.addAttribute("workPlaces", workPlaces);
+    model.addAttribute("employmentTypes", employmentTypes);
     return "job/create_job";
   }
   @RequestMapping("/{jobId}")

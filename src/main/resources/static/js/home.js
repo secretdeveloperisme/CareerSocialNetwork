@@ -35,7 +35,7 @@ $(()=>{
       dataType: "json",
       success: function (response) {
         console.log(response)
-        let jobs = response.data.jobs;
+        let jobs = response.data;
         let lengthOfPosts = jobs.length - 1;
         if(jobs.length <= amountOfPostsPerPage){
           lengthOfPosts = jobs.length;

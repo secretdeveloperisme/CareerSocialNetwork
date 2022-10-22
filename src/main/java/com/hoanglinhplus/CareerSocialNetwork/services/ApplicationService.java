@@ -2,9 +2,13 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.ApplicationStatus;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.job.ApplicationInfoDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ApplicationMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.Application;
+import com.hoanglinhplus.CareerSocialNetwork.models.ApplicationId;
 import com.hoanglinhplus.CareerSocialNetwork.models.Application_;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.ApplicationRepository;
@@ -12,6 +16,7 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.Applica
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
+import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -19,16 +24,19 @@ import org.springframework.stereotype.Service;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 public class ApplicationService {
   private final ApplicationRepository applicationRepository ;
   private final MyUserDetailsService myUserDetailsService;
+  private final PermissionService permissionService;
   private final UserService userService;
   @Autowired
-  public ApplicationService(ApplicationRepository applicationRepository, MyUserDetailsService myUserDetailsService, UserService userService) {
+  public ApplicationService(ApplicationRepository applicationRepository, MyUserDetailsService myUserDetailsService, PermissionService permissionService, UserService userService) {
     this.applicationRepository = applicationRepository;
     this.myUserDetailsService = myUserDetailsService;
+    this.permissionService = permissionService;
     this.userService = userService;
   }
   List<Application> getApplications(ApplicationDTO applicationDTO) {
@@ -46,6 +54,25 @@ public class ApplicationService {
       applicationSpecification.getConditions().add(statusSearchCriteria);
     }
     return applicationRepository.findAll(applicationSpecification);
+  }
+  public ResponseEntity<ResponseObjectDTO> responseUpdateStatus(ApplicationDTO applicationDTO){
+    Optional<Application> applicationOptional = applicationRepository.findById(new ApplicationId(applicationDTO.getUserId(), applicationDTO.getJobId()));
+    if(applicationOptional.isEmpty())
+      throw new NotFoundException("Application is not found", applicationDTO.toString(), "ID");
+    if (!permissionService.isOwnerJob(myUserDetailsService.getCurrentUserId(), applicationDTO.getJobId())){
+      throw new PermissionDeniedException("You do not have permission to change status application");
+    }
+    Application targetApplication = applicationOptional.get();
+    targetApplication.setStatus(applicationDTO.getStatus());
+    applicationRepository.save(targetApplication);
+    Map<String, Object > responseData = new HashMap<>();
+    responseData.put("application", applicationDTO);
+    return ResponseEntity.ok(new ResponseObjectDTO("Update application Status Successfully", responseData));
+  }
+  public ResponseEntity<List<ApplicationInfoDTO>> responseGetJobApplication(ApplicationDTO applicationDTO){
+    List<Application> applications = getApplications(applicationDTO);
+    List<ApplicationInfoDTO> applicationInfoDTOS = applications.stream().map(ApplicationMapper::toInfoDTO).toList();
+    return ResponseEntity.ok(applicationInfoDTOS);
   }
   public ResponseEntity<ResponseObjectDTO> responseApply(ApplicationDTO applicationDTO){
     Map<String, Object> data = apply(applicationDTO);
