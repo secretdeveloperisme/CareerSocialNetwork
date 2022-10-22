@@ -55,8 +55,10 @@ public class AnswerService {
     return ResponseEntity.ok(new ResponseObjectDTO("Get answers by JobId successfully", responseData));
   }
   public List<AnswerQuestionInfo> getAnswerQuestions(Long userId, Long jobId){
-    System.out.println("hello");
     return answerRepository.getAnswerQuestions(userId,jobId);
+  }
+  public ResponseEntity<List<AnswerQuestionInfo>> responseGetAnswerQuestions(Long userId, Long jobId){
+    return ResponseEntity.ok(answerRepository.getAnswerQuestions(userId,jobId));
   }
   public Answer getAnswer(AnswerDTO answerDTO) {
     AnswerSpecification answerSpecification = new AnswerSpecification();
