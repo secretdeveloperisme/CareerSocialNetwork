@@ -3,7 +3,9 @@ package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.CompanyStatistics;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
+import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import com.hoanglinhplus.CareerSocialNetwork.services.CompanyService;
 import com.hoanglinhplus.CareerSocialNetwork.services.JobService;
 import com.hoanglinhplus.CareerSocialNetwork.services.UserService;
@@ -25,12 +27,14 @@ public class CompanyViewController {
   private final AuthenticationTokenUtil authenticationTokenUtil;
   private final JobService jobService;
   private final UserService userService;
+  private final PermissionService permissionService;
 
-  public CompanyViewController(CompanyService companyService, AuthenticationTokenUtil authenticationTokenUtil, JobService jobService, UserService userService) {
+  public CompanyViewController(CompanyService companyService, AuthenticationTokenUtil authenticationTokenUtil, JobService jobService, UserService userService, PermissionService permissionService) {
     this.companyService = companyService;
     this.authenticationTokenUtil = authenticationTokenUtil;
     this.jobService = jobService;
     this.userService = userService;
+    this.permissionService = permissionService;
   }
 
   @GetMapping("/create")
@@ -66,6 +70,22 @@ public class CompanyViewController {
     model.addAttribute("isFollowed", companyService.isCurrentUserFollowed(companyId));
     model.addAttribute("companyStatistics", companyStatistics);
     return "company/get_company";
+  }
+  @GetMapping("/{companyId}/jobs")
+  public String companies(@PathVariable("companyId") Long companyId,HttpServletRequest request, Model model){
+    User user = null;
+    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
+    if (principal == null) {
+      throw new PermissionDeniedException("You don't have permission to create job question");
+    }
+    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+    Company company = companyService.getCompany(companyId);
+    if(!permissionService.isOwnerCompany(companyId))
+      throw new PermissionDeniedException("You do not have permission to manage company");
+
+    model.addAttribute("user", user);
+    model.addAttribute("company", company);
+    return "company/get_jobs";
   }
 
 }

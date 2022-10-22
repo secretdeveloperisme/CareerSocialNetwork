@@ -60,6 +60,9 @@ $(()=>{
           success: function (response) {
             toast($loginToast, "success","success", response.message);
             console.log(response);
+            setTimeout(()=>{
+              window.location = "/me/company"
+            },3000)
           },
           error: function(xhr){
             const response = xhr.responseJSON

@@ -32,6 +32,9 @@ function objectifyForm(formArray) {
   return returnArray;
 }
 function filterArrToParams(filters){
+
+  if(filters === undefined)
+    return "";
   let filterObj = {}
   filters.forEach(filter=>{
     filterObj[filter.field] = filter.value;
