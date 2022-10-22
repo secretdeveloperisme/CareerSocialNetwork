@@ -19,7 +19,7 @@ $(()=>{
       success: function (response) {
         showToast("success", "Answer Successfully", response.message)
         setTimeout(function () {
-          window.location = "/"
+          window.location = "/me/application"
         },3000)
       },
       error: function(xhr){

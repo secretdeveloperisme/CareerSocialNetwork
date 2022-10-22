@@ -129,7 +129,7 @@ $(()=>{
         success: function (response) {
           showToast("success", "Job Created", response.message)
           setTimeout(function () {
-            window.location = "/"
+            window.location = "/question-answer/questions/create/"+response.data.createdJob.jobId;
           },3000)
         },
         error: function(xhr){

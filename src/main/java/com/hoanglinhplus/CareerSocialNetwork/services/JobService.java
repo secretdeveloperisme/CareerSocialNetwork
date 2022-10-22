@@ -189,8 +189,8 @@ public class JobService {
         job.setTags(tags);
         Job savedJob = jobRepository.save(job);
         Map<String, Object> responseData = new HashMap<>();
-        JobCreationDTO savedCompanyDTO = JobMapper.toDTO(savedJob);
-        responseData.put("createdCompany", savedCompanyDTO);
+        JobCreationDTO jobCreationDTO = JobMapper.toDTO(savedJob);
+        responseData.put("createdJob", jobCreationDTO);
         ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
           "create job successfully"
           , responseData);

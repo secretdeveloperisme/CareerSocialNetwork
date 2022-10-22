@@ -22,7 +22,7 @@ $(()=>{
       $btnChangeListMode.find("i").attr("class","fas fa-th-large");
     }
   })
-  let currentPage = 0;
+  let currentPage = 1;
   $btnMore.on("click", (event)=>{
     const amountOfPostsPerPage = 10;
     $btnMore.text("Loading ....");
@@ -84,7 +84,7 @@ $(()=>{
                   </div>
                 </div>
                 <div class="post-action">
-                  <button class="btn btn-primary" >apply</button>
+                  <button class="btn btn-success" >apply</button>
                 </div>
               </div>
             </div>
