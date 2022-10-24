@@ -36,23 +36,11 @@ public class Conversation {
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id", nullable = false)
   private User user;
-  public Collection<User> getParticipants() {
-    if (participants == null)
-      participants = new ArrayList<>();
-    return participants;
-  }
 
   public Iterator<User> getIteratorParticipants() {
     if (participants == null)
       participants = new ArrayList<>();
     return participants.iterator();
-  }
-
-  public void setParticipants(Collection<User> newPaticipants) {
-    removeAllParticipants();
-    for (User newParticipant : newPaticipants) {
-      addParticipants(newParticipant);
-    }
   }
 
   public void addParticipants(User newUser) {

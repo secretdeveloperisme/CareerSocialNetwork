@@ -18,7 +18,7 @@ public class ConversationController {
   @GetMapping("/get-user-conversations")
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   public ResponseEntity<ResponseObjectDTO> getConversations (){
-    return conversationService.getConversations();
+    return conversationService.responseGetConversations();
   }
   @GetMapping("/get-all-conversations")
   @PreAuthorize("hasAuthority('ADMIN')")

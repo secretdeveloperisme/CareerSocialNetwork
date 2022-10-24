@@ -1,12 +1,11 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 
-import com.hoanglinhplus.CareerSocialNetwork.dto.chat.MessageDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.chat.MessageTransfer;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ChatSocketController {
@@ -18,13 +17,8 @@ public class ChatSocketController {
 
 
   @MessageMapping("/send-message/{conversationId}")
-  public void createMessage(@DestinationVariable String conversationId, MessageDTO messageDTO) {
-    System.out.println(messageDTO.toString());
-    simpMessagingTemplate.convertAndSend("/topic/"+conversationId, messageDTO);
+  public void createMessage(@DestinationVariable String conversationId, @Payload MessageTransfer messageTransfer) {
+    simpMessagingTemplate.convertAndSend("/topic/"+conversationId, messageTransfer);
   }
 
-  @GetMapping("/chat")
-  public String chat(){
-    return "chat/chat";
-  }
 }

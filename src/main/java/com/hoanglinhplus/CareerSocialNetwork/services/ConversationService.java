@@ -2,7 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.chat.ConversationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserIDDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ConversationMapper;
@@ -43,7 +43,7 @@ public class ConversationService {
   }
 
   public ResponseEntity<ResponseObjectDTO> create(ConversationDTO conversationDTO){
-    conversationDTO.setUser(new UserIDDTO(myUserDetailsService.getCurrentUserId()));
+    conversationDTO.setUser(UserCreationDTO.builder().userId(myUserDetailsService.getCurrentUserId()).build());
     Conversation conversation = ConversationMapper.toEntity(conversationDTO);
     conversation.getParticipants().add(User.builder().userId(myUserDetailsService.getCurrentUserId()).build());
     Conversation savedConversation = conversationRepository.save(conversation);
@@ -72,12 +72,22 @@ public class ConversationService {
     return ResponseEntity.ok(new ResponseObjectDTO("Get All Conversations Successfully", responseData));
   }
 
-  public ResponseEntity<ResponseObjectDTO> getConversations(){
+  public List<Conversation> getConversations(){
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     Specification<Conversation> conversationSpecification = ConversationSpecification
       .joinParticipants(User.builder().userId(currentUserId).build());
     List<Conversation> userConversations = conversationRepository.findAll(conversationSpecification);
-    List<ConversationDTO>  userConversationDTOs = userConversations.stream().map(ConversationMapper::toDTO).toList();
+    return userConversations;
+  }
+  public List<Conversation> getUserConversation(Long userId){
+    Specification<Conversation> conversationSpecification = ConversationSpecification
+      .joinParticipants(User.builder().userId(userId).build());
+    List<Conversation> userConversations = conversationRepository.findAll(conversationSpecification);
+    return userConversations;
+  }
+  public ResponseEntity<ResponseObjectDTO> responseGetConversations(){
+    List<Conversation> conversations = getConversations();
+    List<ConversationDTO>  userConversationDTOs = conversations.stream().map(ConversationMapper::toDTO).toList();
     Map<String,Object> responseData = new HashMap<>();
     responseData.put("userConversations", userConversationDTOs);
     return ResponseEntity.ok(new ResponseObjectDTO("Get User Conversations Successfully", responseData));

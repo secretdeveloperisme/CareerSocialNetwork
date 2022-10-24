@@ -4,6 +4,8 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.chat.ConversationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Conversation;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
 
+import java.util.ArrayList;
+
 public class ConversationMapper extends ModelMapperConfig{
   public static Conversation toEntity(ConversationDTO conversationDTO){
     Conversation conversation = modelMapper.map(conversationDTO, Conversation.class);

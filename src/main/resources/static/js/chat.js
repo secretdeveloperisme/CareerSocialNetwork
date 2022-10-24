@@ -1,5 +1,7 @@
 $(()=>{
-  let stompClient = null;
+
+  console.log($conversations)
+
   function setConnected(connected) {
     $("#connect").prop("disabled", connected);
     $("#disconnect").prop("disabled", !connected);
@@ -37,29 +39,11 @@ $(()=>{
     console.log("Disconnected");
   }
 
-  function sendName() {
+  function sendMessage() {
     let message = JSON.parse($("#message0").val());
     console.log(message);
     stompClient.send("/chat/send-message/"+$("#conversationId0").val(), {}
         , JSON.stringify(message));
   }
-  function sendName1() {
-    let message = JSON.parse($("#message1").val());
-    stompClient.send("/chat/send-message/"+$("#conversationId1").val(), {}
-        , JSON.stringify(message));
-  }
 
-  function showGreeting(message) {
-    $("#messages").append("<tr><td>" + message + "</td></tr>");
-  }
-
-  $(function () {
-    $("form").on('submit', function (e) {
-      e.preventDefault();
-    });
-    $( "#connect" ).click(function() { connect(); });
-    $( "#disconnect" ).click(function() { disconnect(); });
-    $( "#send0" ).click(function() { sendName(); });
-    $( "#send1" ).click(function() { sendName1(); });
-  });
 })

@@ -2,15 +2,17 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.MessageType;
 import lombok.*;
+import org.hibernate.annotations.Fetch;
+import org.hibernate.annotations.FetchMode;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.util.List;
-import java.util.Date;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @Builder
 @NoArgsConstructor
@@ -33,7 +35,8 @@ public class Message {
   @LastModifiedDate
   private Date updatedAt;
   private Date deletedAt;
-  @OneToMany(mappedBy = "message", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "message", orphanRemoval = true)
+  @Fetch(FetchMode.SUBSELECT)
   private List<Attachment> attachments;
   @ManyToOne
   @JoinColumn(name = "conversation_id", referencedColumnName = "conversation_id", nullable = false)

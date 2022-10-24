@@ -58,8 +58,8 @@ public class MessageService {
       SearchCriteria<Message, Conversation> searchCriteria = new SearchCriteria<>(Message_.conversation, conversation, SearchOperator.EQUAL);
       MessageSpecification messageSpecification = new MessageSpecification();
       messageSpecification.getConditions().add(searchCriteria);
-      PageRequest pageRequest =PageRequest.of(pageableDTO.getPage()
-        , pageableDTO.getSize(), Sort.by(Sort.Order.by("createdAt").with(Sort.Direction.ASC)));
+      PageRequest pageRequest =PageRequest.of(pageableDTO.getPage() - 1
+        , pageableDTO.getSize(), Sort.by(Sort.Order.by("createdAt").with(Sort.Direction.DESC)));
       Page<Message> messagePage = messageRepository.findAll(messageSpecification,pageRequest);
       ResponseObjectDTO responseObjectDTO = ResponseMessageMapper.toDTO(messagePage);
       return ResponseEntity.ok(responseObjectDTO);
@@ -146,6 +146,7 @@ public class MessageService {
     Message message = getMessage(id);
     Map<String, Object> responseData = new HashMap<>();
     if(permissionService.isOwnerMessage(message)){
+      messageRepository.delete(message);
       responseData.put("deletedId", message.getMessageId());
       return ResponseEntity.ok(new ResponseObjectDTO("Remove message successfully", responseData));
     }

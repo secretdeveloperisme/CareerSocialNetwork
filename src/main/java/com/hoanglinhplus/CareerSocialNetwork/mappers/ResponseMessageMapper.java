@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @Component
 public class ResponseMessageMapper {
   public static ResponseObjectDTO toDTO(Page<Message> messagePage){
-    List<MessageDTO> usersDTO = messagePage.getContent().stream().map(MessageMapper::toDTO).collect(Collectors.toList());
+    List<MessageDTO> messageDTOS = messagePage.getContent().stream().map(MessageMapper::toDTO).collect(Collectors.toList());
     Map<String, Object> responseData = new HashMap<>();
-    responseData.put("message", usersDTO);
+    responseData.put("messages", messageDTOS);
     responseData.put("totalPages", messagePage.getTotalPages());
     responseData.put("size", messagePage.getSize());
     responseData.put("totalElements", messagePage.getTotalElements());

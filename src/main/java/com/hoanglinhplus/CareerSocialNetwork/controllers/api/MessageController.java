@@ -28,9 +28,10 @@ public class MessageController {
   public ResponseEntity<ResponseObjectDTO> update(@RequestBody MessageDTO messageDTO){
     return messageService.update(messageDTO);
   }
-  @DeleteMapping("/")
-  public ResponseEntity<ResponseObjectDTO> delete(@RequestBody MessageDTO messageD){
-    return messageService.deleteMessage(messageD.getMessageId());
+  @DeleteMapping
+  @PreAuthorize("hasAnyAuthority('USER')")
+  public ResponseEntity<ResponseObjectDTO> delete(@RequestBody MessageDTO messageDTO){
+    return messageService.deleteMessage(messageDTO.getMessageId());
   }
   @DeleteMapping("/many")
   @PreAuthorize("hasAuthority('ADMIN')")

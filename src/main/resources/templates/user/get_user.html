@@ -32,7 +32,7 @@
               <!--/*@thymesVar id="isFollowed" type="java.lang.Boolean"*/-->
 <!--              <button th:classappend="'btn ms-auto'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'" id="btnFollow" th:data-action="${isFollowed}?-->
 <!--              'unfollow':'follow'" th:data-company-id="${company.getCompanyId()}" th:text="${isFollowed}?'unfollow':'follow'"></button>-->
-              <button  class="btn btn-success ms-auto">Connect</button>
+              <button  class="btn btn-success ms-auto btn-chat" th:data-user-id="${targetUser.getUserId()}">Chat</button>
             </div>
             <div class="profile-header__detail">
               <h1 class="text-center" th:text="${targetUser.getUsername()}"></h1>
@@ -136,9 +136,11 @@
       </li>
     </ul>
   </div>
+  <div th:replace="~{/fragments/components/toast.html}"></div>
   <div th:replace="~{/auth/login}"></div>
   <script type="module" th:src="@{/js/home.js}"></script>
   <script type="module" th:src="@{/js/login.js}"></script>
+  <script type="module" th:src="@{/js/common/common.js}"></script>
   <script type="module" th:src="@{/js/user/GetUser.js}"></script>
 </body>
 </html>
