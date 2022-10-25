@@ -1,0 +1,67 @@
+.sidebar {
+  width: 120px;
+  overflow: visible;
+}
+
+.content {
+  padding: 0px 5px 0 120px;
+}
+
+.connect-me {
+  background-color: white;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 120px;
+}
+
+#btnLike:hover, #btnLike.active {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+
+#btnDislike:hover, #btnDislike.active {
+  color: #059669;
+  background-color: rgba(5, 150, 105, 0.1);
+}
+
+#btnBookmark:hover, #btnBookmark.active {
+  color: #4f46e5;
+  background-color: rgba(79, 70, 229, 0.1);
+}
+
+.post-avatar {
+  width: 100%;
+  padding-top: 42%;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+}
+
+.post-author__avatar {
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.post-tag {
+  padding: 3px 5px;
+  color: blue;
+}
+
+.post-tag:hover {
+  cursor: pointer;
+  text-decoration: underline;
+  background-color: rgba(0, 0, 255, 0.1);
+  border-radius: 2px;
+}
+
+.author {
+  position: sticky;
+  top: 90px;
+}
+
+.comment-like-btn.active, .comment-like-btn:hover {
+  color: #dc2626;
+  background-color: rgba(220, 38, 38, 0.1);
+}
+

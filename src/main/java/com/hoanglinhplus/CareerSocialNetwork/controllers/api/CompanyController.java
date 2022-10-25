@@ -71,6 +71,16 @@ public class CompanyController {
     return companyService.deleteCompanies(ids,true,true);
   }
   @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
+  @DeleteMapping(path = "/many/destroy",produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResponseObjectDTO> destroyCompanies(@RequestBody List<Long> ids) {
+    return companyService.deleteCompanies(ids,true,true);
+  }
+  @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
+  @PostMapping(path = "/many/restore",produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResponseObjectDTO>restoreCompanies(@RequestBody List<Long> ids) {
+    return companyService.restoreCompanies(ids);
+  }
+  @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
   @DeleteMapping(path = "/user-many",produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> deleteOwnCompanies(@RequestBody List<Long> ids) {
     return companyService.deleteCompanies(ids,false, false);

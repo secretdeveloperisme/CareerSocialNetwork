@@ -325,4 +325,16 @@ public class CompanyService {
     Specification<Company> specification = CompanySpecification.joinFollowedUsers(userId);
     return companyRepository.findAll(specification);
   }
+
+  public ResponseEntity<ResponseObjectDTO> restoreCompanies(List<Long> ids) {
+    List<Company> companies = companyRepository.findAllById(ids);
+    for (Company company : companies) {
+      company.setDeletedAt(null);
+    }
+    List<Company> savedCompanies = companyRepository.saveAll(companies);
+    List<CompanyCreationDTO> savedCompanyDTOS = savedCompanies.stream().map(CompanyMapper::toDTO).toList();
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("deletedCompanies", savedCompanyDTOS);
+    return ResponseEntity.ok(new ResponseObjectDTO("Restore Companies Successfully", responseData));
+  }
 }
