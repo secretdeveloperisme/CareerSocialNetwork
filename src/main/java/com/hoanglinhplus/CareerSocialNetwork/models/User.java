@@ -232,21 +232,11 @@ public class User {
       }
     }
   }
-  public List<Tag> getTags() {
-    if (tags == null)
-      tags = new ArrayList<>();
-    return tags;
-  }
 
   public Iterator<Tag> getIteratorFollowTags() {
     if (tags == null)
       tags = new ArrayList<>();
     return tags.iterator();
-  }
-
-  public void setTags(List<Tag> newFollowTags) {
-    removeAllFollow_tags();
-    for (Tag newFollow_tag : newFollowTags) addFollow_tags(newFollow_tag);
   }
 
   public void addFollow_tags(Tag newTag) {

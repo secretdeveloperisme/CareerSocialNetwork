@@ -2,10 +2,9 @@ package com.hoanglinhplus.CareerSocialNetwork.dto.job;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.NumberConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.SkillDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job_question.JobQuestionDTO;
-import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import lombok.*;
 
 import java.util.Date;

@@ -1,3 +1,4 @@
+
 function uploadFile($inputFile){
   const xmlHttpRequest = new XMLHttpRequest();
   xmlHttpRequest.open("POST","/api/file/upload",false);
@@ -59,6 +60,7 @@ $(()=>{
     });
   })
 })
+
 
 
 export {uploadFile, toast}

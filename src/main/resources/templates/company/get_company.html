@@ -93,8 +93,9 @@
       </li>
     </ul>
   </div>
+  <div id="companyIdWrapper" th:data-company-id="${company.getCompanyId()}"></div>
+  <div th:replace="/fragments/components/toast"></div>
   <div th:replace="~{/auth/login}"></div>
-  <script type="module" th:src="@{/js/home.js}"></script>
   <script type="module" th:src="@{/js/login.js}"></script>
   <script type="module" th:src="@{/js/company/GetCompany.js}"></script>
 </body>

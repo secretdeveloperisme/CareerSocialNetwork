@@ -34,11 +34,13 @@
             </div>
           </div>
         </div>
-        <form class="post-action" action="/application" method="post">
+        <div class="post-action" action="/application" onsubmit="return;" method="post">
           <input type="hidden" name="jobId" th:value="${job.getJobId()}">
-          <button class="btn btn-success">Apply</button>
-        </form>
+          <button th:data-job-id="${job.getJobId()}" class="btn btn-success btn-apply">Apply</button>
+        </div>
       </div>
     </div>
   </div>
+  <script type="module" th:src="@{/js/common/JobCommon.js}"></script>
+  <script type="module" th:src="@{/js/application/Application.js}"></script>
 </div>

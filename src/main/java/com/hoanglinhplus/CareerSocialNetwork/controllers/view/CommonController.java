@@ -1,7 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job;

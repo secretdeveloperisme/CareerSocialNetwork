@@ -1,4 +1,4 @@
-package com.hoanglinhplus.CareerSocialNetwork.dto;
+package com.hoanglinhplus.CareerSocialNetwork.dto.tag;
 
 import lombok.*;
 

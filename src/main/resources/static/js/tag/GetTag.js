@@ -1,14 +1,17 @@
 import {loadJobs} from "../common/JobCommon.js";
 
-$(()=>{
+$(() => {
   const $btnFollow = $("#btnFollow");
   $btnFollow.on("click", event => {
     let action = $btnFollow.attr("data-action");
-    let companyId = $btnFollow.data("company-id");
+    let tagId = $btnFollow.data("tag-id");
+    console.log(tagId);
     $.ajax({
       type: "POST",
-      url: "/api/follow-company",
-      data:JSON.stringify({companyId}),
+      url: "/api/follow-tag",
+      data: JSON.stringify({
+        tagId
+      }),
       contentType: "application/json",
       success: function (response) {
         if (action === "follow") {
@@ -25,15 +28,15 @@ $(()=>{
       }
     });
   })
-  let $companyIdWrapper = $("#companyIdWrapper");
-  let currentPage = 0;
-  const amountOfPostsPerPage = 1;
+  let $tagIdWrapper = $("#tagIdWrapper");
+  let currentPage = 1;
+  const amountOfPostsPerPage = 10;
   let $btnMore = $("#btnMore");
   $btnMore.on("click", async (event)=>{
     let result =  loadJobs({
-          companyId: $companyIdWrapper.data("company-id")
+          tagIds: [$tagIdWrapper.data("tag-id")]
         }
-        , currentPage + 1, amountOfPostsPerPage);
+          , currentPage + 1, amountOfPostsPerPage);
     if (result != null)
       currentPage++;
   })

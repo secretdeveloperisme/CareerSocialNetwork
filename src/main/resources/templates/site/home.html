@@ -58,7 +58,7 @@
               <i class="fa fa-tags" aria-hidden="true"></i>
               Tag
             </a>
-            <!--/*@thymesVar id="tags" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO>"*/-->
+            <!--/*@thymesVar id="tags" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO>"*/-->
             <ul th:ìf="${tags}" class="collapse show list-style-none list-group list-group-flush" id="tagList" >
               <li th:each="tag : ${tags}" class="list-group-item list-group-item-action">
                 <a th:href="'/tag/'+${tag.getName()}" class="text-decoration-none" th:text="${tag.getName()}"> </a>

@@ -72,11 +72,6 @@ public class Tag {
       }
     }
   }
-  public Collection<User> getFollowTagUsers() {
-    if (followTagUsers == null)
-      followTagUsers = new ArrayList<>();
-    return followTagUsers;
-  }
 
   public Iterator<User> getIteratorFollowTags() {
     if (followTagUsers == null)

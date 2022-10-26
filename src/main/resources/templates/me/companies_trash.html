@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Jobs</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link th:href="@{/css/tabulator_bootstrap5.css}" rel="stylesheet">
+  <link href="https://unpkg.com/tabulator-tables@5.4.2/dist/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.2/dist/js/tabulator.min.js"></script>
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+      <div th:if="${user}">
+        <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+      </div>
+      <div th:unless="${user}">
+        <div th:replace="/fragments/navigation"></div>
+      </div>
+    </header>
+    <div class="main px-4">
+      <div class="sidebar overflow-auto pt-2 pb-5">
+        <ul class="nav nav-pills flex-column mb-auto">
+          <li class="nav-item">
+            <a href="/" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-home" aria-hidden="true"></i>
+                Home
+              </div>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/me/company" class="nav-link link-dark d-flex " aria-current="page">
+              <div>
+                <i class="fas fa-file-alt" aria-hidden="true"></i>
+                Companies
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill" id="companyAmount" th:text="${amountOfCompanies}"></span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/me/tags" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-tag" aria-hidden="true"></i>
+                Tags
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfFollowedTags}"> </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/me/application" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-user" aria-hidden="true"></i>
+                My Applications
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfApplications}"> </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/me/following_companies" class="nav-link link-dark d-flex" aria-current="page">
+              <div>
+                <i class="fas fa-user" aria-hidden="true"></i>
+                Following Companies
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfFollowedCompanies}"> </span>
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/me/company/trash" class="nav-link link-dark d-flex active" aria-current="page">
+              <div>
+                <i class="fas fa-trash" aria-hidden="true"></i>
+                Trash
+              </div>
+              <span class="badge ms-auto bg-primary rounded-pill" id="trashCompanyAmount" th:text="${amountOfDeletedCompanies}"></span>
+            </a>
+          </li>
+          <li class="nav-connect">
+            <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+              <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+              <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <div class="content">
+        <div class="posts px-4">
+          <div class="text-center">
+            <h1 class="mb-4">My Trash Companies</h1>
+            <a href="/me/company" class="btn btn-warning">My Company</a>
+            <a href="/company/create" class="btn btn-primary">New Company</a>
+          </div>
+          <div class="mt-4 mx-1 d-flex align-items-center">
+<!--            <select class="form-select-sm mx-2" aria-label="Select Action" id="selectAction">-->
+<!--              <option selected value="">&#45;&#45;Select Action&#45;&#45;</option>-->
+<!--              <option value="delete">Delete</option>-->
+<!--            </select>-->
+            <button class="btn btn-sm btn-primary btn-success mx-2" id="btnRestoreAll">Restore</button>
+            <button class="btn btn-sm btn-primary btn-danger" id="btnDestroyAll" >Destroy</button>
+          </div>
+          <div class="p-2">
+            <div id="companyTable"></div>
+          </div>
+          <!-- modal delete -->
+          <div class="modal fade" id="deleteCompanyModal" tabindex="-1" aria-labelledby="deleteCompanyModal">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">Destroy</h5>
+                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                  <p>Do you sure want to destroy ?</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                  <button type="button" class="btn btn-danger" id="btnDestroy">Destroy</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!--  modal valid form  -->
+          <div class="modal" tabindex="-1" id="modalValidForm">
+            <div class="modal-dialog">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h5 class="modal-title">No Valid</h5>
+                </div>
+                <div class="modal-body">
+                  <p> you should input all form</p>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <footer class="col-xl-12">
+          <div th:replace="/fragments/footer"></div>
+        </footer>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div th:replace="/fragments/components/toast"></div>
+  <div th:replace="/auth/login"></div>
+  <script type="module" src="/js/home.js"></script>
+  <script type="module"  src="/js/login.js"></script>
+  <script type="module" src="/js/me/TrashCompanies.js"></script>
+</body>
+</html>

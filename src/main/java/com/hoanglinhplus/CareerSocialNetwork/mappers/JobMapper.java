@@ -1,7 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.mappers;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.SkillDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.EmploymentTypeDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO;

@@ -3,7 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 import com.hoanglinhplus.CareerSocialNetwork.constants.NumberConstant;
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.TagDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;

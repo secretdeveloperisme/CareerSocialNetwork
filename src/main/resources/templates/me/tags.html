@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Jobs</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link th:href="@{/css/tabulator_bootstrap5.css}" rel="stylesheet">
+  <link href="https://unpkg.com/tabulator-tables@5.4.2/dist/css/tabulator.min.css" rel="stylesheet">
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.2/dist/js/tabulator.min.js"></script>
+</head>
+<body>
+<div class="app">
+  <header class="sticky-top">
+    <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+    <div th:if="${user}">
+      <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+    </div>
+    <div th:unless="${user}">
+      <div th:replace="/fragments/navigation"></div>
+    </div>
+  </header>
+  <div class="main px-4">
+    <div class="sidebar overflow-auto pt-2 pb-5">
+      <ul class="nav nav-pills flex-column mb-auto">
+        <li class="nav-item">
+          <a href="/" class="nav-link link-dark d-flex" aria-current="page">
+            <div>
+              <i class="fas fa-home" aria-hidden="true"></i>
+              Home
+            </div>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/me/company" class="nav-link link-dark d-flex" aria-current="page">
+            <div>
+              <i class="fas fa-file-alt" aria-hidden="true"></i>
+              Companies
+            </div>
+            <span class="badge ms-auto bg-primary rounded-pill" id="companyAmount" th:text="${amountOfCompanies}"></span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/me/tags" class="nav-link link-dark d-flex active" aria-current="page">
+            <div>
+              <i class="fas fa-tag" aria-hidden="true"></i>
+              Tags
+            </div>
+            <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfFollowedTags}"> </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/me/application" class="nav-link link-dark d-flex" aria-current="page">
+            <div>
+              <i class="fas fa-user" aria-hidden="true"></i>
+              My Applications
+            </div>
+            <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfApplications}"> </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/me/following_companies" class="nav-link link-dark d-flex" aria-current="page">
+            <div>
+              <i class="fas fa-user" aria-hidden="true"></i>
+              Following Companies
+            </div>
+            <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfFollowedCompanies}"> </span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="/me/company/trash" class="nav-link link-dark d-flex" aria-current="page">
+            <div>
+              <i class="fas fa-trash" aria-hidden="true"></i>
+              Trash
+            </div>
+            <span class="badge ms-auto bg-primary rounded-pill" id="trashPostAmount" th:text="${amountOfDeletedCompanies}"></span>
+          </a>
+        </li>
+        <li class="nav-connect">
+          <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+            <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+            <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+            <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+            <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+    <div class="content">
+      <div class="posts px-4">
+        <div class="text-center">
+          <h1 class="mb-4">Tags</h1>
+        </div>
+        <div class="row g-3">
+          <div class="col-xl-4" th:each="tag : ${followedTags}">
+            <a th:href="'/tag/'+${tag.getTagId()}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
+              <h3 th:text="'#'+${tag.getName()}">tag</h3>
+            </a>
+          </div>
+        </div>
+      </div>
+      <footer class="col-xl-12">
+        <div th:replace="/fragments/footer"></div>
+      </footer>
+    </div>
+  </div>
+  <ul class="nav-mobile list-style-none">
+    <li class="top-link">
+      <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </div>
+    </li>
+  </ul>
+</div>
+<div id="userIdWrapper" th:data-user-id="${user.getUserId()}"></div>
+<div th:replace="/fragments/components/toast"></div>
+<div th:replace="/auth/login"></div>
+<script type="module" src="/js/home.js"></script>
+<script type="module"  src="/js/login.js"></script>
+<script type="module" src="/js/application/MyApplications.js"></script>
+</body>
+</html>
