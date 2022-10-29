@@ -42,16 +42,16 @@
           </li>
           <!--/*@thymesVar id="companies" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO>"*/-->
             <li th:if="${companies}" class="nav-item">
-            <a  th:href="@{/company}" class="nav-link link-dark" data-bs-toggle="collapse" href="#companyList" aria-expanded="true">
+            <a class="nav-link link-dark" data-bs-toggle="collapse" href="#companyList" aria-expanded="true">
               <i class="fa-solid fa-building"></i>
               Companies
             </a>
-              <ul  id="companyList" class="collapse show mr-2 list-group list-group-flush">
-              <!--/*@thymesVar id="companies" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO>"*/-->
-              <li th:each="company: ${companies}" class="list-group-item list-group-item-action">
-                <a class="text-decoration-none" th:href="@{'/company/'+${company.getCompanyId()}}" th:text="${company.getName()}"></a>
-              </li>
-            </ul>
+              <ul id="companyList" class="collapse show mr-2 list-group list-group-flush">
+                <!--/*@thymesVar id="companies" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO>"*/-->
+                <li th:each="company: ${companies}" class="list-group-item list-group-item-action">
+                  <a class="text-decoration-none" th:href="@{'/company/'+${company.getCompanyId()}}" th:text="${company.getName()}"></a>
+                </li>
+              </ul>
           </li>
           <li class="nav-item">
             <a href="#tagList" class="nav-link link-dark" data-bs-toggle="collapse" >
@@ -59,7 +59,7 @@
               Tag
             </a>
             <!--/*@thymesVar id="tags" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO>"*/-->
-            <ul th:ìf="${tags}" class="collapse show list-style-none list-group list-group-flush" id="tagList" >
+            <ul th:if="${tags}" class="collapse show list-style-none list-group list-group-flush" id="tagList" >
               <li th:each="tag : ${tags}" class="list-group-item list-group-item-action">
                 <a th:href="'/tag/'+${tag.getName()}" class="text-decoration-none" th:text="${tag.getName()}"> </a>
               </li>
@@ -125,7 +125,7 @@
             </div>
           </div>
           <div class="btn-more-wrapper my-2 d-flex">
-            <button type="button" id='btnMore' data-type='"user?"user":"guest"' class="btn btn-outline-primary m-auto">Thêm</button>
+            <button type="button" id='btnMore' th:data-type="${user}?'user':'guest'" class="btn btn-outline-primary m-auto">Thêm</button>
           </div>
         </div>
         <div class="col-xl-3">
@@ -146,7 +146,7 @@
                       <a th:each="tag: ${popularJob.getTags()}" th:href="'/tag/'+${tag.name}" class="tag-link" th:text="'#'+${tag.getName()}"> </a></div>
                   <div class="post-info">
                     <div class="post-author">
-                      <a th:href="'/company/'+${popularJob.getCompany().getName()}" class="text-decoration-none text-secondary" th:text="${popularJob.getCompany().getName()}"></a>
+                      <a th:href="'/company/'+${popularJob.getCompany().getCompanyId()}" class="text-decoration-none text-secondary" th:text="${popularJob.getCompany().getName()}"></a>
                     </div>
                     <div class="post-published">
                       <span th:text="${#dates.format(popularJob.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>

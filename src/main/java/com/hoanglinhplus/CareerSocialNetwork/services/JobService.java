@@ -354,6 +354,18 @@ public class JobService {
       jobRepository.save(job);
     }
   }
+  public List<Job> getFollowedJobs(PageableDTO pageableDTO, Long userId){
+    int  start = (pageableDTO.getSize()* (pageableDTO.getPage())) - pageableDTO.getSize();
+    List<Job> jobs = jobRepository.getFollowedJobs(userId, start, pageableDTO.getSize()+1);
+    return jobs;
+  }
+
+  public ResponseEntity<ResponseDataDTO<JobCreationDTO>> responseGetFollowedJobs(PageableDTO pageableDTO){
+    Long userId = myUserDetailsService.getCurrentUserId();
+    List<Job> jobs = getFollowedJobs(pageableDTO, userId);
+    List<JobCreationDTO> jobDTOS = jobs.stream().map(JobMapper::toDTO).toList();
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Jobs Successfully", jobDTOS, null));
+  }
   public List<Skill> getAllSkills() {
     return skillRepository.findAll();
   }

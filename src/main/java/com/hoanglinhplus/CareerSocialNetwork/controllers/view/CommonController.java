@@ -17,6 +17,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -36,8 +37,8 @@ public class CommonController {
   }
   @GetMapping("/")
   public String getHome(HttpServletRequest request, Model model) {
-    Page<Job> jobPage = jobService.getJobs(new JobFilterDTO(), new PageableDTO());
-    List<Job> jobs = jobPage.getContent();
+
+    List<Job> jobs;
     List<Job> popularJobs = jobService.getPopularJobs();
     List<TagDTO> popTags = tagService.getPopularTags();
     List<CompanyCreationDTO> popCompanies = companyService.getPopularCompanies();
@@ -45,6 +46,11 @@ public class CommonController {
     User user = null;
     if (principal != null) {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+      jobs = jobService.getFollowedJobs(new PageableDTO(), user.getUserId());
+    }
+    else {
+      Page<Job> jobPage = jobService.getJobs(new JobFilterDTO(), new PageableDTO());
+      jobs = jobPage.getContent();
     }
     model.addAttribute("jobs", jobs);
     model.addAttribute("tags", popTags);

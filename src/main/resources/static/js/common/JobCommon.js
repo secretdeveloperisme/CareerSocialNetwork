@@ -11,7 +11,7 @@ async function loadJobs(jobFilter, page, size){
   }
   let typeOfLoad = $btnMore.data("type");
   let url = typeOfLoad ===`guest`?`/api/job/get-all-jobs?${$.param(queryObject)}`
-      :`/api/job/get-all-jobs?${$.param(queryObject)}`;
+      :`/api/job/get-followed-jobs?${$.param(queryObject)}`;
   try{
     let response = await $.ajax({
       type: "GET",

@@ -36,6 +36,12 @@ public class JobController {
   ){
     return jobService.responseGetJobs(jobFilterDTO, pageableDTO);
   }
+  @GetMapping("/get-followed-jobs")
+  public ResponseEntity<?> getFollowedJobs(
+    @Valid PageableDTO pageableDTO
+  ){
+    return jobService.responseGetFollowedJobs(pageableDTO);
+  }
 
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @GetMapping("/get-job")
