@@ -29,11 +29,8 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
   @Query(value = """
     select c.company_id as company_id, c.created_at,c.user_id
     ,c.industry_id, c.name, deleted_at, logo,organization_size_id
-    ,c.tag_line, updated_at, website, count(c.company_id) as number_of_follows
-    from companies c join follow_companies fc on c.company_id = fc.company_id
-    group by c.company_id
-    order by number_of_follows desc
-    limit 10
+    ,c.tag_line, updated_at, website
+    from companies c join popular_companies pc on c.company_id = pc.company_id;
     """, nativeQuery = true)
   List<Company> getPopularCompanies();
 }

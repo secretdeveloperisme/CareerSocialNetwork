@@ -80,7 +80,7 @@ public class CompanyViewController {
     }
     user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     Company company = companyService.getCompany(companyId);
-    if(!permissionService.isOwnerCompany(companyId))
+    if(!permissionService.isOwnerCompany(company))
       throw new PermissionDeniedException("You do not have permission to manage company");
 
     model.addAttribute("user", user);

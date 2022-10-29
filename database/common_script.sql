@@ -46,6 +46,15 @@ group by c.company_id
 order by number_of_follows desc
 limit 10;
 
+select c.company_id, job_id from companies c
+join jobs j on c.company_id = j.company_id;
+
+
+-- query job application
+select j.job_id, j.company_id,  count(a.job_id) as number_of_application
+from jobs j left join applications a on j.job_id = a.job_id
+group by j.job_id, j.company_id;
+
 -- query job answer
 select jq.job_id, a.user_id, a.answer, q.question_id, jq.job_que_id, q.content from
     questions q
