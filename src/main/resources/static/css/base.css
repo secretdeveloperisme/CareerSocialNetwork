@@ -85,22 +85,28 @@
 }
 
 datalist {
-  max-height: 20em;
+  z-index: 9999;
+  max-height: 15em;
   border: 0 none;
   overflow-x: hidden;
   overflow-y: auto;
+
+}
+datalist::-webkit-scrollbar{
+  display: none;
 }
 
 datalist option {
-  font-size: 0.8em;
+  font-size: 1em;
   padding: 0.3em 1em;
-  background-color: #ccc;
+  background-color: #0d6efd;
   cursor: pointer;
+  color: #fff;
 }
 
 /* option active styles */
 datalist option:hover, datalist option:focus {
-  color: #fff;
+
   background-color: #036;
   outline: 0 none;
 }

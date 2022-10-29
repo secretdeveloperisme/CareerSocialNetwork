@@ -542,12 +542,6 @@ public class User {
       }
     }
   }
-  public List<Education> getEducations() {
-    if (educations == null)
-      educations = new ArrayList<>();
-    return educations;
-  }
-
   public Iterator<Education> getIteratorEducations() {
     if (educations == null)
       educations = new ArrayList<>();

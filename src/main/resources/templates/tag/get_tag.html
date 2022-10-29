@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Tag View</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/tag.css}">
+</head>
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+      <div th:if="${user}">
+        <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+      </div>
+      <div th:unless="${user}">
+        <div th:replace="/fragments/navigation"></div>
+      </div>
+    </header>
+    <div class="main">
+      <header class="tag-header mt-3 rounded shadow d-flex align-items-center container p-3">
+        <h1 th:text="${tag.getName()}"></h1>
+        <button th:classappend="'btn ms-auto'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'" id="btnFollow" th:data-action="${isFollowed}?
+              'unfollow':'follow'" th:data-tag-id="${tag.getTagId()}" th:text="${isFollowed}?'unfollow':'follow'"></button>
+      </header>
+      <div class="mt-2 container p-0">
+        <div class="row g-2">
+          <div class="col-3">
+            <div class="p-2 shadow bg-white rounded">
+              <h3 class="text-center">Statistics</h3>
+              <div>
+                <i class="fas fa-file-alt"></i>
+                <span th:text="${tagStatistics.getAmountOfPublishedJobs()}"></span>
+                Jobs published
+              </div>
+              <div>
+                <i class="fas fa-user"></i>
+                <span th:text="${tagStatistics.getAmountOfFollowers()}"></span>
+                followers
+              </div>
+            </div>
+          </div>
+          <div class="col-9">
+            <div th:replace="~{/fragments/jobs::jobs(${jobs})}"></div>
+          </div>
+          <div class="btn-more-wrapper my-2 d-flex">
+            <button type="button" id='btnMore' data-type='"user?"user":"guest"' class="btn btn-outline-primary m-auto">More</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <div id="tagIdWrapper" th:data-tag-id="${tag.getTagId()}"></div>
+  <div th:replace="/fragments/components/toast"></div>
+  <div th:replace="~{/auth/login}"></div>
+  <script type="module" th:src="@{/js/login.js}"></script>
+  <script type="module" th:src="@{/js/tag/GetTag.js}"></script>
+</body>
+</html>

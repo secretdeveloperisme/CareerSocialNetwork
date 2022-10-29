@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.controllers.api;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserUpdateDTO;
 import com.hoanglinhplus.CareerSocialNetwork.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -47,9 +48,9 @@ public class UserController {
   public ResponseEntity<ResponseObjectDTO> createUser(@RequestBody @Valid UserCreationDTO userCreationDTO){
     return userService.createUser(userCreationDTO);
   }
-  @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER') and #userUpdateDTO.username = principal.username) ")
+  @PreAuthorize("hasAuthority('ADMIN') or (hasAuthority('USER'))")
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ResponseObjectDTO> updateUser(@RequestBody @Valid UserCreationDTO userUpdateDTO){
+  public ResponseEntity<ResponseObjectDTO> updateUser(@RequestBody @Valid UserUpdateDTO userUpdateDTO){
     return userService.updateUser(userUpdateDTO);
   }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
@@ -62,5 +63,4 @@ public class UserController {
   public ResponseEntity<ResponseObjectDTO> deleteUsers(@RequestBody List<Long> ids) {
     return userService.deleteUsers(ids);
   }
-
 }

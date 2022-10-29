@@ -11,12 +11,10 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PermissionService {
-  private final CompanyService companyService;
   private final JobService  jobService;
   private final MyUserDetailsService  myUserDetailsService;
   @Autowired
-  public PermissionService(CompanyService companyService, JobService jobService, MyUserDetailsService myUserDetailsService) {
-    this.companyService = companyService;
+  public PermissionService(JobService jobService, MyUserDetailsService myUserDetailsService) {
     this.jobService = jobService;
     this.myUserDetailsService = myUserDetailsService;
   }
@@ -31,13 +29,9 @@ public class PermissionService {
      .map(GrantedAuthority::getAuthority)
      .anyMatch(role -> role.equals("USER"));
   }
-  public boolean isOwnerCompany(Long userId, Long companyId) {
-    Company company = companyService.getCompany(companyId);
-    return company.getCreatedUser().getUserId().equals(userId);
-  }
-  public boolean isOwnerCompany(Long companyId) {
+
+  public boolean isOwnerCompany(Company company) {
     Long userId = myUserDetailsService.getCurrentUserId();
-    Company company = companyService.getCompany(companyId);
     return company.getCreatedUser().getUserId().equals(userId);
   }
 
@@ -62,5 +56,9 @@ public class PermissionService {
   public boolean isOwnerMessage(Message message) {
     Long userId = myUserDetailsService.getCurrentUserId();
     return message.getUser().getUserId().equals(userId);
+  }
+  public boolean isOwnerEducation(Education education) {
+    Long userId = myUserDetailsService.getCurrentUserId();
+    return education.getUser().getUserId().equals(userId);
   }
 }

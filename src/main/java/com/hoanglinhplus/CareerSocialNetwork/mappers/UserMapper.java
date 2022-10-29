@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.mappers;
 import com.hoanglinhplus.CareerSocialNetwork.dto.*;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserUpdateDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Education;
 import com.hoanglinhplus.CareerSocialNetwork.models.Role;
 import com.hoanglinhplus.CareerSocialNetwork.models.Skill;
@@ -42,6 +43,32 @@ public class UserMapper {
     }
     return user;
   }
+
+  static public User toEntity(UserUpdateDTO userCreationDTO) {
+    ModelMapper modelMapper = new ModelMapper();
+    modelMapper.getConfiguration()
+      .setMatchingStrategy(MatchingStrategies.STRICT)
+      .setDeepCopyEnabled(true)
+      .setPropertyCondition(Conditions.isNotNull());
+    User user = modelMapper.map(userCreationDTO, User.class);
+    List<Long> roleIds = userCreationDTO.getRoleIds();
+    if(roleIds != null)
+      user.setRoles(roleIds.stream().map(roleId->Role.builder().roleId(roleId).build()).toList());
+    List<Long> skillIds = userCreationDTO.getUserSkillIds();
+    if(skillIds != null)
+      user.setUserSkills(skillIds.stream().map(skillId-> Skill.builder().skillId(skillId).build()).toList());
+    List<EducationDTO> educationDTOS = userCreationDTO.getEducations();
+    if(educationDTOS != null){
+      user.setEducations(educationDTOS.stream().map(
+        educationDTO -> Education.builder().educationId(educationDTO.getEducationId()).schoolName(educationDTO.getSchoolName())
+          .startDate(educationDTO.getStartDate())
+          .endDate(educationDTO.getEndDate())
+          .grade(educationDTO.getGrade()).build()
+      ).toList());
+    }
+    return user;
+  }
+
   static public UserDTO toDTO(User user) {
     ModelMapper modelMapper = new ModelMapper();
     modelMapper.getConfiguration()

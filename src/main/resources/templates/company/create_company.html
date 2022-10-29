@@ -1,0 +1,107 @@
+<!DOCTYPE >
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>CreateCompany</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body style="background-color: #f3f2ef">
+  <header class="sticky-top">
+    <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+    <div th:if="${user}">
+      <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+    </div>
+    <div th:unless="${user}">
+      <div th:replace="/fragments/navigation"></div>
+    </div>
+  </header>
+  <div class="">
+    <header class="container-fluid shadow p-lg-4  bg-white">
+      <div class="container">
+        <h3>
+          <i class="fa-solid fa-arrow-left"></i> 
+          <span>back</span>
+        </h3>
+        <div class="d-flex align-items-center">
+          <img th:src="@{/images/icons/company_icon.png}" alt="company">
+          <h4>
+            Let's get started with a few details about your company.</h4>
+        </div>
+      </div>
+    </header>
+    <div class="container">
+      <div class="row gx-5">
+        <div class="col-lg-6 p-3 bg-white mt-3 rounded">
+          <form action="/company" id="companyForm" method="post">
+            <div>
+              <label for="companyName" class="form-label">Name</label>
+              <input type="text" name="name" class="form-control" id="companyName" placeholder="Add your company name">
+            </div>
+            <div>
+              <label for="companyWebsite" class="form-label">website</label>
+              <input type="url" name="website" class="form-control" id="companyWebsite" placeholder="https://example.com">
+            </div>
+            <div>
+              <label for="companyLogo" class="form-label">Logo</label>
+              <input type="file" class="form-control" id="companyLogo" accept="image/*">
+              <input type="hidden" name="logo" id="companyLogoPath">
+            </div>
+            <div>
+              <label for="companyIndustry" class="form-label">Industry</label>
+              <select class="form-select" id="companyIndustry" name="industry.industryId" aria-label="Choose Company Industry">
+
+                <option selected="">Choose Industry</option>
+                <!--/*@thymesVar id="organizationSizes" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Industry>"*/-->
+                <option th:each="industry : ${industries} "
+                        th:value="${industry.getIndustryId()}"
+                        th:text="${industry.getName()}">
+                </option>
+              </select>
+            </div>
+            <div>
+              <label for="companyOrganizationSize" class="form-label">Organization Size</label>
+              <select class="form-select" id="companyOrganizationSize" name="organizationSize.organizationId" aria-label="Choose Company Industry">
+                <option selected="">Choose Organization Size</option>
+                <!--/*@thymesVar id="organizationSizes" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.OrganizationSize>"*/-->
+                <option th:each="organizationSize : ${organizationSizes} "
+                        th:value="${organizationSize.getOrganizationId()}"
+                        th:text="${organizationSize.getName()}">
+                </option>
+              </select>
+            </div>
+            <div>
+              <label for="companyTagLine" class="form-label">TagLine</label>
+              <input type="text" name="tagLine" class="form-control" id="companyTagLine" placeholder="Create Your Company TagLine">
+            </div> 
+            <div class="form-check mt-3">
+              <input type="checkbox" required class="form-check-input" id="accept">
+              <span>I verify that I am an authorized representative of this organization and have the right to act on its behalf in the creation and management of this page. The organization and I agree to the additional terms for Pages.</span>
+            </div>
+            <div class="mt-4 d-flex justify-content-end">
+              <button class="btn btn-primary">Create Company</button>
+            </div>
+          </form>
+        </div>
+        <div class="col-lg-6 px-3 mt-3 ">
+          <div class="position-sticky bg-white p-3 rounded" style="top: 10px;">
+            <h4>Page Review</h4>
+            <div class="">
+              <img id="companyLogoPreview" style="width: 128px;height: 128px" class="img-thumbnail" th:src="@{/images/icons/company_icon.png}" alt="">
+              <h3 id="companyNamePreview">Company Name</h3>
+              <p id="companyTagLinePreview">Tag Line</p>
+              <h5 id="companyIndustryPreview">Industry</h5>
+              <button class="btn btn-primary">+ Follow </button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div th:replace="/auth/login"></div>
+  <script type="module" th:src="@{/js/home.js}"></script>
+  <script type="module" src="/js/login.js"></script>
+  <script type="module" src="/js/common/common.js"></script>
+  <script type="module" src="/js/company/CreateCompany.js"></script>
+</body>
+</html>

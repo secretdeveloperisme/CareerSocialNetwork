@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Edit User</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/user.css}">
+</head>
+<body>
+<div class="app">
+  <header class="sticky-top">
+    <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+    <div th:if="${user}">
+      <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+    </div>
+    <div th:unless="${user}">
+      <div th:replace="/fragments/navigation"></div>
+    </div>
+  </header>
+  <div class="main">
+    <div class="container mt-3">
+      <div class="row">
+        <div class="col-lg-8">
+          <div class="shadow rounded p-3 bg-white">
+            <h1>User</h1>
+            <form class="row g-3" id="updateInfoForm"  method="post"
+                  enctype="application/x-www-form-urlencoded">
+              <div class="col-6">
+                <div class="col-lg-12">
+                  <label for="signupUsername" class="form-label">Username</label>
+                  <input th:value="${user.getUsername()}" type="text" id="signupUsername" required name="username" class="form-control"
+                         placeholder="input your username....">
+                  <div class="valid-feedback">
+                    Look good!
+                  </div>
+                </div>
+                <div id="gender" class="p-2">
+                  <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" id="maleGender" class="form-check-input" value="m" th:checked="${user.getGender().equals('m')}">
+                    <label for="maleGender" class="form-check-label">Male</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input type="radio" name="gender" id="femaleGender" class="form-check-input" value="f" th:checked="${user.getGender().equals('f')}">
+                    <label for="femaleGender" class="form-check-label">Female</label>
+                  </div>
+                </div>
+                <div class="col-lg-12">
+                  <label for="email" class="form-label">Email</label>
+                  <input th:value="${user.getEmail()}" type="text" id="email" name="email" required class="form-control"
+                         placeholder="input your email....@gmail.com">
+                  <div class="valid-feedback">Look good!</div>
+                  <div class="invalid-feedback">email is wrong format</div>
+                </div>
+                <div class="col-lg-12 mt-2">
+                  <label for="dob" class="form-label">Date of birth</label>
+                  <input th:value="${#dates.format(user.getDob(), 'yyyy-MM-dd')}" type="date" name="dob" required class="dob" id="dob">
+                </div>
+                <div class="col-12">
+                  <label for="cvURL" class="form-label">CV URL</label>
+                  <input th:value="${user.getCvUrl()}" type="text" id="cvURL" name="cv" class="form-control"
+                         placeholder="input your phone number....">
+                </div>
+              </div>
+              <div class="col-6">
+                <div class="col-12">
+                  <label for="address" class="form-label">Address</label>
+                  <input th:value="${user.getAddress()}" type="text" id="address" name="address" class="form-control"
+                         placeholder="input your phone number....">
+                </div>
+                <div class="col-12">
+                  <label for="biography" class="form-label">Biography</label>
+                  <textarea type="text" id="biography" name="biography" rows="3" class="form-control"
+                            placeholder="input your biography...." th:text="${user.getBiography()}"></textarea>
+                </div>
+                <div class="col-12 m-3">
+                  <input type="file" name="avatar" hidden class="custom-file-input" accept="image/*" id="avatar">
+                  <label class="d-flex flex-column text-center" for="avatar" style="width: fit-content;">
+                    <img class="border-danger img-thumbnail" id="displayAvatar" th:src="${user.getAvatar()}"
+                         style="width: 128px; height: 128px; object-fit: contain;">
+                    Avatar
+                  </label>
+                  <input type="hidden" name="avatar" id="avatarPath">
+                </div>
+              </div>
+              <div>
+                <button id="btnUpdateProfile" class="btn btn-primary">Update</button>
+              </div>
+            </form>
+          </div>
+          <div class="mt-3 rounded shadow p-3 bg-white">
+            <h1>Change Password</h1>
+            <form action="/edit/change_password" id="changePasswordForm">
+              <input type="hidden" name="username" th:value="${user.getUsername()}">
+              <div class="">
+                <label for="oldPassword" class="form-label">Old Password</label>
+                <input type="password" autocomplete="on" id="oldPassword" required name="password"
+                       class="form-control" placeholder="input your old password....">
+                <div class="valid-feedback">Look good!</div>
+                <div class="invalid-feedback">Retype password does not match password</div>
+              </div>
+              <div class="mt-3">
+                <label for="signupPassword" class="form-label">New Password</label>
+                <input type="password" name="newPassword" autocomplete="on" id="signupPassword" required
+                       class="form-control newPassword" placeholder="input your new password....">
+                <span id="lower" class="check-valid invalid"><i class="fas fa-dot-circle"></i>A <b>lowercase</b> letter</span>
+                <span id="capital" class="check-valid invalid"><i
+                    class="fas fa-dot-circle"></i>A <b>capital (uppercase)</b> letter</span>
+                <span id="number" class="check-valid invalid"><i class="fas fa-dot-circle"></i>A <b>number</b></span>
+                <span id="length" class="check-valid invalid"><i
+                    class="fas fa-dot-circle"></i>Minimum <b>8 characters</b></span>
+                <span id="special" class="check-valid invalid"><i
+                    class="fas fa-dot-circle"></i>one or more <b>special</b> characters</span>
+              </div>
+              <button class="btn btn-primary mt-3" id="btnChangePassword">Change Password</button>
+            </form>
+          </div>
+        </div>
+        <div class="col-lg-4">
+          <div class="rounded shadow p-3 bg-white">
+            <h1>Skill</h1>
+            <form id="addSkillForm" action="#">
+              <div class="position-relative">
+                <div class="input-group">
+                  <input list="skillDataList" id="skillDataInputList" class="form-control" autocomplete="off" />
+                  <input type="hidden" name="skillId" id="skillDataInput">
+                  <button class="btn btn-outline-secondary"  id="btnAddSkill" type="submit">Add</button>
+                </div>
+                <datalist id="skillDataList" class="position-absolute">
+                  <option th:each="skill :${skills}" th:value="${skill.getName()}" th:data-value="${skill.getSkillId()}" th:text="${skill.getName()}"></option>
+                </datalist>
+              </div>
+              <div class="mt-3" id="skillList">
+                <span class="p-2 btn btn-outline-success m-2 skill-item" th:each="skill: ${user.getUserSkills()}"><span th:text="${skill.getName()}">C++</span>
+                  <button class="btn badge btn-outline-danger text-dark btn-delete-skill" th:data-skill-id="${skill.getSkillId()}">
+                    <i class="fas fa-multiply"></i>
+                  </button>
+                </span>
+              </div>
+            </form>
+          </div>
+          <div class="mt-3 rounded shadow p-3 bg-white">
+            <div class="d-flex justify-content-between align-items-center">
+              <h1>Education</h1>
+              <button class="btn btn-success" id="btnAddEducation"><i class="fas fa-plus"></i> Add</button>
+            </div>
+            <div id="educationList">
+              <form th:each="education :${user.getEducations()}" action="/edit/change_password" class="card mt-1 education-update-form" th:id="'changeEducationForm'+${education.getEducationId()}">
+                <div class="d-flex justify-content-between card-header p-1" >
+                  <input type="hidden" name="educationId" th:value="${education.getEducationId()}">
+                  <h5>Education</h5>
+                  <button class="btn btn-danger btn-delete-education" th:data-education-id="${education.getEducationId()}"><i class="fas fa-multiply"></i></button>
+                </div>
+                <div class="card-body">
+                  <div>
+                    <input type="text" class="form-control school-name" name="schoolName" placeholder="Input your school name" th:value="${education.getSchoolName()}">
+                  </div>
+                  <div class="row">
+                    <div class="col-6 ">
+                      <label>Start: </label>
+                      <input type="date" class="form-control-sm start-date" name="startDate" placeholder="Input start date" th:value="${#dates.format(education.getStartDate(), 'yyyy-MM-dd')}">
+                    </div>
+                    <div class="col-6 ">
+                      <label>End: </label>
+                      <input type="date" class="form-control-sm end-date" name="endDate" placeholder="Input end date" th:value="${#dates.format(education.getEndDate(), 'yyyy-MM-dd')}">
+                    </div>
+                  </div>
+                  <div class="mt-3">
+                    <input type="number" class="form-control gpa" name="grade" min="0" max="10" step="0.01" placeholder="Input your GPA" th:value="${education.getGrade()}">
+                  </div>
+                </div>
+                <button class="btn btn-primary mt-3 btn-sm btn-update-education">Update</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <ul class="nav-mobile list-style-none">
+    <li class="top-link">
+      <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </div>
+    </li>
+  </ul>
+</div>
+<div th:replace="/fragments/components/toast"></div>
+<div th:replace="~{/auth/login}"></div>
+<script type="module" th:src="@{/js/login.js}"></script>
+<script type="module" th:src="@{/js/user/UpdateUser.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
+</body>
+</html>
+
+
+
