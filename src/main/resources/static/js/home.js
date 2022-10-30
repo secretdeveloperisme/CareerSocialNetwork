@@ -1,4 +1,3 @@
-import {formatDate} from "./utils/format_date.js";
 import {loadJobs} from "./common/JobCommon.js";
 $(()=>{
   // handle change list mode 
@@ -24,10 +23,10 @@ $(()=>{
     }
   })
 
-  let currentPage = 1;
+  let currentPage = 2;
   const amountOfPostsPerPage = 10;
   $btnMore.on("click", async (event)=>{
-   let result =  loadJobs({}, ++currentPage, amountOfPostsPerPage);
+   let result =  loadJobs({}, currentPage, amountOfPostsPerPage);
    if (result != null)
      currentPage++;
   })

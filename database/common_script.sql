@@ -71,3 +71,7 @@ select * from
         ) uf
 order by uf.created_at desc
 limit ${start},${numberOfPostsPerPage}
+
+
+
+INSERT INTO career_social_network.jobs (amount, created_at, deleted_at, end_date, experience, image, job_description, location, salary_max, salary_min, start_date, title, updated_at, company_id, employment_type_id, position_id, work_place_id) VALUES ( 10, '2022-09-11 07:33:56', '2022-10-08 18:38:54', '2022-10-08 18:38:48', 0, '/api/file/images/upload/guest/1665448429796_1665448429796_designer_developer.png', 'tma want to hire a backend  developer', 'ho chi minh', 1000, 500, null, 'web backend developer', '2022-09-11 07:33:56', 18, 1, 1, 1);

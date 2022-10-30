@@ -19,8 +19,9 @@ public class JobFilterDTO {
   @Builder.Default
   private float experience = 0;
   private List<Long> tagIds;
-  private List<Long> jobSkillIds;
+  private List<Long> skillIds;
   private Long employmentTypeId;
+  private List<Long> employmentTypeIds;
   private Long companyId;
   private Long positionId;
   private Long workPlaceId;

@@ -167,7 +167,7 @@ public class UserService {
       });
     }
     Page<User> userPage;
-    Pageable pageable = PageRequest.of(pageableDTO.getPage(),pageableDTO.getSize(),Sort.by(orders));
+    Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1,pageableDTO.getSize(),Sort.by(orders));
     if(!userSpecification.getConditions().isEmpty()){
       userPage = userRepository.findAll(userSpecification, pageable);
     }

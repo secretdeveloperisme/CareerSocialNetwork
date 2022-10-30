@@ -13,10 +13,7 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedExceptio
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.IndustryRepository;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.OrganizationSizeRepository;
-import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CompanySpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
@@ -31,7 +28,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import javax.xml.crypto.Data;
 import java.util.*;
 
 
@@ -41,15 +37,17 @@ public class CompanyService {
   private final CompanyRepository companyRepository;
   private final MyUserDetailsService myUserDetailsService;
   private final IndustryRepository industryRepository;
+  private final EmploymentTypeRepository employmentTypeRepository;
   private final AuthService authService;
   private final OrganizationSizeRepository organizationSizeRepository;
 
   @Autowired
-  public CompanyService(UserRepository userRepository, CompanyRepository companyRepository, OrganizationSizeRepository organizationSizeRepository, MyUserDetailsService myUserDetailsService, IndustryRepository industryRepository, AuthService authService, OrganizationSizeRepository organizationSizeRepository1){
+  public CompanyService(UserRepository userRepository, CompanyRepository companyRepository, OrganizationSizeRepository organizationSizeRepository, MyUserDetailsService myUserDetailsService, IndustryRepository industryRepository, EmploymentTypeRepository employmentTypeRepository, AuthService authService, OrganizationSizeRepository organizationSizeRepository1){
     this.userRepository = userRepository;
     this.companyRepository = companyRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.industryRepository = industryRepository;
+    this.employmentTypeRepository = employmentTypeRepository;
     this.authService = authService;
     this.organizationSizeRepository = organizationSizeRepository1;
   }
@@ -137,6 +135,9 @@ public class CompanyService {
       companyPage = companyRepository.findAll(pageable);
     }
     return companyPage;
+  }
+  public List<Company> getAllCompanies(){
+    return companyRepository.findAll();
   }
   public ResponseEntity<ResponseObjectDTO> createCompany(CompanyCreationDTO companyCreationDTO){
     Company company = CompanyMapper.toEntity(companyCreationDTO);
@@ -286,6 +287,9 @@ public class CompanyService {
   }
   public List<OrganizationSize> getOrganizationSizes() {
     return organizationSizeRepository.findAll();
+  }
+  public List<EmploymentType> getAllEmploymentTypes(){
+    return employmentTypeRepository.findAll();
   }
   public boolean isUserFollowed(Long userId, Long companyId){
     Company company = getCompany(companyId);

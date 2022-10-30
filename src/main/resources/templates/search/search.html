@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Search Jobs</title>
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link href="https://unpkg.com/tabulator-tables@5.4.2/dist/css/tabulator.min.css" rel="stylesheet">
+<!--  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.2/dist/js/tabulator.min.js"></script>-->
+</head>
+<body>
+<div class="app">
+  <header class="sticky-top">
+    <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+    <div th:if="${user}">
+      <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+    </div>
+    <div th:unless="${user}">
+      <div th:replace="/fragments/navigation"></div>
+    </div>
+  </header>
+  <div class="main px-4">
+    <div class="sidebar search overflow-auto p-2 pb-5">
+      <div>
+        <h1 class="btn btn-primary"><i class="fas fa-filter"></i> Filtering</h1>
+      </div>
+      <form id="filterForm" onsubmit="return false;">
+        <div>
+          <div class="mb-3">
+            <label for="title" class="col-sm-2 form-label col-form-label">Title: </label>
+            <input type="text" name="title" class="form-control" id="title">
+          </div>
+          <div class="mb-3">
+            <label for="location" class="col-sm-2 col-form-label">Location: </label>
+            <div>
+              <input type="text" list="locationList" name="location" class="form-control" id="location">
+              <datalist id="locationList" class="position-absolute">
+                <option value="Ho Chi Minh">Ho Chi Minh</option>
+                <option value="Ha Noi">Ha Noi</option>
+                <option value="Can Tho">Can Tho</option>
+                <option value="Da Nang">Da Nang</option>
+                <option value="Binh Dinh">Binh Dinh</option>
+              </datalist>
+            </div>
+          </div>
+          <div class="mb-3 row">
+            <div class="flex-wrap btn-group-sm" role="group" aria-label="Basic radio toggle button group">
+              <th:block th:each="employmentType :${employmentTypes}">
+                <input type="checkbox" class="btn-check" name="employmentTypeIds"
+                       th:value="${employmentType.getEmploymentTypeId()}"
+                       th:id="|employment${employmentType.getEmploymentTypeId()}|" autocomplete="off">
+                <label class="btn mt-1 btn-outline-primary" th:for="|employment${employmentType.getEmploymentTypeId()}|"
+                       th:text="${employmentType.getName()}"></label>
+
+              </th:block>
+            </div>
+          </div>
+          <div class="mb-3">
+            <label for="salary" class="col-sm-2 form-label col-form-label">Salary: </label>
+            <input type="number" min="0" max="999999" name="salary" class="form-control" id="salary">
+          </div>
+          <div class="mb-3">
+            <label for="companies" class="col-sm-2 col-form-label">Company: </label>
+            <div>
+              <div>
+                <input type="text" list="companyList" data-target-list="#companyList" class="form-control input-list" id="companies"
+                       placeholder="Input Company">
+                <input type="hidden" id="companyIdInput" name="companyId" class="form-control">
+              </div>
+              <datalist id="companyList" class="position-absolute custom-datalist" data-target-input="#companyIdInput">
+                <option th:each="company :${companies}" th:value="${company.getName()}"
+                        th:data-value="${company.getCompanyId()}"
+                        th:text="${company.getName()}">
+                </option>
+              </datalist>
+            </div>
+          </div>
+          <div class="mt-3 d-flex gap-0">
+            <div>
+              <select name="positionId" class="form-select">
+                <option value="">Position</option>
+                <option th:each="position : ${positions}" th:value="${position.getPositionId()}"
+                        th:text="${position.getName()}"></option>
+              </select>
+            </div>
+            <div>
+              <select name="workPlaceId" class="form-select">
+                <option value="">WorkPlace</option>
+                <option th:each="workPlace : ${workPlaces}" th:value="${workPlace.getWorkPlaceId()}"
+                        th:text="${workPlace.getPlace()}"></option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="sidebar-right p-2">
+          <div class="bg-white mt-3">
+            <label>Skill: </label>
+            <form></form>
+            <form id="addSkillForm" onsubmit="return false;">
+              <div class="position-relative">
+                <div class="input-group">
+                  <input list="skillDataList" id="skillDataInputList" data-target-list="#skillDataInput" class="form-control name input-list"
+                         autocomplete="off"/>
+                  <input type="hidden" id="skillDataInput" class="id">
+                  <button class="btn btn-outline-secondary" id="btnAddSkill">Add</button>
+                </div>
+                <datalist id="skillDataList" class="position-absolute custom-datalist"
+                          data-target-input="#skillDataInput">
+                  <option th:each="skill :${skills}" th:value="${skill.getName()}" th:data-value="${skill.getSkillId()}"
+                          th:text="${skill.getName()}"></option>
+                </datalist>
+              </div>
+            </form>
+            <form class="mt-3 list" id="skillFilterList" >
+            </form>
+          </div>
+          <div class="bg-white mt-3">
+            <label>Tag:</label>
+            <form id="addTagForm" onsubmit="return false;">
+              <div class="position-relative">
+                <div class="input-group">
+                  <input list="tagDataList" id="tagDataInputList" data-target-list="#tagDataList" class="form-control name input-list" autocomplete="off"/>
+                  <input type="hidden" id="tagDataInput" class="id">
+                  <button class="btn btn-outline-secondary" id="tagAddSkill" type="submit">Add</button>
+                </div>
+                <datalist id="tagDataList" class="position-absolute custom-datalist" data-target-input="#tagDataInput">
+                  <option th:each="tag :${tags}" th:value="${tag.getName()}" th:data-value="${tag.getTagId()}"
+                          th:text="${tag.getName()}"></option>
+                </datalist>
+              </div>
+            </form>
+            <form class="mt-3 list" id="tagFilterList" >
+            </form>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="content search row">
+      <div class="main">
+        <div class="container mt-3">
+          <h1>search result for <span id="querySearch">None</span></h1>
+          <div class="row">
+            <div class="col-9">
+              <div class="nav  nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="horizontal">
+                <button class="nav-link active" id="v-pills-posts-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-posts" type="button" role="tab" aria-controls="v-pills-posts"
+                        aria-selected="true">Posts
+                </button>
+                <button class="nav-link" id="btnTabCompany" data-bs-toggle="pill"
+                        data-bs-target="#companyTabContent" type="button" role="tab" aria-controls="v-pills-companies"
+                        aria-selected="false">Companies
+                </button>
+                <button class="nav-link" id="btnTabUser" data-bs-toggle="pill" data-bs-target="#userTabContent"
+                        type="button" role="tab" aria-controls="userTabContent" aria-selected="false">user
+                </button>
+<!--                <button class="nav-link" id="btnTabTag" data-bs-toggle="pill" data-bs-target="#tagTabContent"-->
+<!--                        type="button" role="tab" aria-controls="tagTabContent" aria-selected="false">tags-->
+<!--                </button>-->
+              </div>
+              <div class="tab-content" id="v-pills-tabContent">
+                <div class="tab-pane fade show active" id="v-pills-posts" role="tabpanel"
+                     aria-labelledby="v-pills-home-tab">
+                  <div th:replace="~{/fragments/jobs::jobs(${jobs})}"></div>
+                  <div class="d-flex justify-content-center">
+                    <div id="btnMore" class="btn btn-primary">More</div>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="companyTabContent" role="tabpanel" aria-labelledby="btnTabCompay">
+                  <div class="companies row g-3">
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="userTabContent" role="tabpanel" aria-labelledby="btnTabUser">
+                  <div class="users row g-3">
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="tagTabContent" role="tabpanel" aria-labelledby="btnTabTag">
+                  <div class="tags row g-3">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+      <div class="col-xl-3">
+      </div>
+      <footer class="col-xl-12">
+        <div th:replace="/fragments/footer"></div>
+      </footer>
+    </div>
+  </div>
+  <ul class="nav-mobile list-style-none">
+    <li class="top-link">
+      <div class="btn btn-success shadow" id="btnFilter">
+        <i class="fa fa-filter" aria-hidden="true"></i> Filter
+      </div>
+    </li>
+  </ul>
+</div>
+<div th:replace="/fragments/components/toast"></div>
+<div th:replace="/auth/login"></div>
+<script type="module" src="/js/application/Application.js"></script>
+<script type="module" src="/js/common/common.js"></script>
+<script type="module" src="/js/login.js"></script>
+<script src="/js/utils/datalist.js"></script>
+<script type="module" src="/js/search/Search.js"></script>
+</body>
+</html>

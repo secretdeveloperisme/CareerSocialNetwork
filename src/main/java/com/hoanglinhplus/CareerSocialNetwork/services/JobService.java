@@ -86,7 +86,8 @@ public class JobService {
     int salary = jobFilterDTO.getSalary();
     Float experience = jobFilterDTO.getExperience();
     List<Long> tagIds = jobFilterDTO.getTagIds();
-    List<Long> jobSkillIds = jobFilterDTO.getJobSkillIds();
+    List<Long> jobSkillIds = jobFilterDTO.getSkillIds();
+    List<Long> employmentTypeIds = jobFilterDTO.getEmploymentTypeIds();
     Long employmentTypeId = jobFilterDTO.getEmploymentTypeId();
     Long companyId = jobFilterDTO.getCompanyId();
     Long positionId = jobFilterDTO.getPositionId();
@@ -97,7 +98,7 @@ public class JobService {
       jobSpecification.getConditions().add(criteria);
     }
     if( location != null && !location.isEmpty()){
-      SearchCriteria<Job, String> criteria = new SearchCriteria<>(Job_.location, title, SearchOperator.LIKE);
+      SearchCriteria<Job, String> criteria = new SearchCriteria<>(Job_.location, location, SearchOperator.LIKE);
       jobSpecification.getConditions().add(criteria);
     }
 
@@ -146,6 +147,10 @@ public class JobService {
     if(jobSkillIds!= null){
       Specification<Job> skillSpecification = JobSpecification.joinSkills(jobSkillIds);
       resultSpecification = resultSpecification.and(skillSpecification);
+    }
+    if(employmentTypeIds!= null){
+      Specification<Job> employmentTypeSpecification = JobSpecification.joinEmploymentType(employmentTypeIds);
+      resultSpecification = resultSpecification.and(employmentTypeSpecification);
     }
 
     List<Sort.Order> orders = new ArrayList<>();

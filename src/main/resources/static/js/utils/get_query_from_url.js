@@ -1,6 +1,5 @@
-function getQueryFromMUrl(key = "", searchUrl){
-  let querySearchURL = searchUrl;
-  let urlSearchParams = new URLSearchParams(querySearchURL);
+function getQueryFromUrl(key = "", searchUrl){
+  let urlSearchParams = new URLSearchParams(searchUrl);
   return urlSearchParams.get(key);
 }
-export default getQueryFromMUrl;
+export default getQueryFromUrl;

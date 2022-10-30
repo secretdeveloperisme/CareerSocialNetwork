@@ -15,8 +15,17 @@ function objectifyForm(formArray) {
         arr = [...returnArray[attributes[0]]];
         arr.push(object)
         returnArray[attributes[0]] = arr;
-        continue;
       }
+      else {
+        let attributeName = formArray[i]['name'];
+        let arr = []
+        if(returnArray[attributeName] === undefined)
+          returnArray[attributeName]=[]
+        arr = [...returnArray[attributeName]];
+        arr.push(formArray[i]['value'])
+        returnArray[attributeName] = arr;
+      }
+      continue;
     }
     if(formArray[i]['name'].includes(".")){
       let attributes = formArray[i]['name'].split(".");

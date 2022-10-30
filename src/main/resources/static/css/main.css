@@ -41,12 +41,30 @@ body {
   position: absolute;
   left: 0;
 }
+
+.sidebar-right {
+  z-index: 2;
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  margin-top: 90px;
+  width: 270px;
+  background-color: #fff;
+}
+
 .sidebar .nav-item:hover:before {
   background-color: red;
 }
-
+.sidebar.search {
+  width: 300px;
+}
 .content {
   padding: 0 5px 0 250px;
+}
+
+.content {
+  padding: 0 5px 0 300px;
 }
 
 .connect-me {

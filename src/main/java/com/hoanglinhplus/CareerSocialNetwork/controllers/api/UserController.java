@@ -27,7 +27,7 @@ public class UserController {
   UserController(UserService userService){
     this.userService = userService;
   }
-  @PreAuthorize("hasAuthority('ADMIN')")
+  @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('USER')")
   @GetMapping("/get-all-users")
   public ResponseEntity<?> getAllUsers(
     @RequestParam(required = false)  @Size(min = 1, max = 1, message = "gender's length must be 1 ")  String gender

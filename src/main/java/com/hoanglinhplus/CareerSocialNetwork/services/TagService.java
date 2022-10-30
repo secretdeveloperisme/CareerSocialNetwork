@@ -75,6 +75,9 @@ public class TagService {
     tagSpecification.getConditions().add(searchCriteria);
     return tagRepository.findAll(tagSpecification);
   }
+  public List<Tag> getAllTags(){
+    return tagRepository.findAll();
+  }
   public Page<Tag> getTagPage(TagFilterDTO tagFilterDTO, PageableDTO pageableDTO){
     TagSpecification tagSpecification = new TagSpecification();
     if(tagFilterDTO.getTagId() != null){
