@@ -34,8 +34,13 @@ public class Comment {
   private User user;
   @JsonIgnore
   @ManyToOne
-  @JoinColumn(name = "job_id", referencedColumnName = "JOB_ID")
+  @JoinColumn(name = "job_id", referencedColumnName = "job_id")
   private Job job;
+
+  @JsonIgnore
+  @ManyToOne
+  @JoinColumn(name = "post_id", referencedColumnName = "post_id")
+  private Post post;
 
   @Transient
   List<Comment> children = new ArrayList<>();

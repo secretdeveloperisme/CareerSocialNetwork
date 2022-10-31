@@ -23,6 +23,12 @@ public class Tag {
   @JoinTable(name = "job_tags",joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
       , inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "job_id"))
   public List<Job> jobTags;
+
+
+  @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @JoinTable(name = "post_tags",joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
+    , inverseJoinColumns = @JoinColumn(name = "post_id", referencedColumnName = "post_id"))
+  public List<Post> postTags;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "follow_tags",joinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))

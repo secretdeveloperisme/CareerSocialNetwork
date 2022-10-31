@@ -407,7 +407,7 @@ $(() => {
             url: "/api/comment/like",
             type: "POST",
             data: JSON.stringify({commentId, typeLike}),
-            contentType: "json",
+            contentType: "application/json",
             success: (response) => {
               console.log(response);
                 if (typeLike === "LIKE") {
