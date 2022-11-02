@@ -43,9 +43,9 @@ public class UserViewController {
     model.addAttribute("skills", skills);
     return "user/edit_user";
   }
-  @GetMapping("/{userId}")
-  public String getUser(HttpServletRequest request, Model model, @PathVariable("userId") Long userId) {
-    User targetUser = userService.getUser(userId);
+  @GetMapping("/{username}")
+  public String getUser(HttpServletRequest request, Model model, @PathVariable("username") String username) {
+    User targetUser = userService.getUser(username);
     Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
     User user = null;
     if (principal != null) {

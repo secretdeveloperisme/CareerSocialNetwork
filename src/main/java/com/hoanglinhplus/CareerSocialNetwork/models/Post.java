@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.PostStatus;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -27,6 +28,8 @@ public class Post {
   private String slug;
   @Column(length = 1000)
   private String description;
+  @Enumerated(EnumType.STRING)
+  private PostStatus postStatus;
   private String image;
   @Column(columnDefinition = "TEXT")
   private String content;

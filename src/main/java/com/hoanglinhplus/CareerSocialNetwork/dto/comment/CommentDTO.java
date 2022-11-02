@@ -21,6 +21,7 @@ public class CommentDTO implements Serializable {
   private Long userId;
   private UserCreationDTO user;
   private Long jobId;
+  private Long postId;
   List<CommentDTO> children;
   private Long numberOfLikes;
   private TypeLike typeLike;

@@ -105,12 +105,12 @@ public class User {
   @ManyToMany
   @JoinTable(name = "follow_users",joinColumns = @JoinColumn(name = "followed_id", referencedColumnName = "user_id")
     , inverseJoinColumns = @JoinColumn(name = "following_id", referencedColumnName = "user_id"))
-  public List<User> followed_users;
+  public List<User> following_users;
 
   @ManyToMany
   @JoinTable(name = "follow_users",joinColumns = @JoinColumn(name = "following_id", referencedColumnName = "user_id")
     , inverseJoinColumns = @JoinColumn(name = "followed_id", referencedColumnName = "user_id"))
-  public List<User> following_users;
+  public List<User> followed_users;
 
   public void addFollow_companies(Company newCompany) {
     if (newCompany == null)

@@ -42,7 +42,7 @@ public class UserController {
   @GetMapping("/get-user")
   public ResponseEntity<ResponseObjectDTO> getUser(
     @RequestParam @Size(min = 5, max = 255, message = "username's length must be from 5 to 255") String username){
-    return userService.getUser(username);
+    return userService.responseGetUserByUsername(username);
   }
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> createUser(@RequestBody @Valid UserCreationDTO userCreationDTO){

@@ -56,7 +56,7 @@ public class UserService {
     this.permissionService = permissionService;
     this.myUserDetailsService = myUserDetailsService;
   }
-  public ResponseEntity<ResponseObjectDTO> getUser(String username){
+  public ResponseEntity<ResponseObjectDTO> responseGetUserByUsername(String username){
     Optional<User> userOptional = userRepository.findByUsername(username);
     if(userOptional.isPresent()){
       UserDTO userDTO = UserMapper.toDTO(userOptional.get());
@@ -72,6 +72,13 @@ public class UserService {
       return userOptional.get();
     }
     throw new NotFoundException("User not found", userId.toString(), "UserID");
+  }
+  public User getUser(String username) {
+    Optional<User> userOptional = userRepository.findByUsername(username);
+    if (userOptional.isPresent()) {
+      return userOptional.get();
+    }
+    throw new NotFoundException("User not found", username, "username");
   }
   Skill getExistedSkill(Long skillId, User user) {
     Optional<Skill> foundSkill = user.getUserSkills().stream().filter(skill1 -> skill1.getSkillId() == skillId).findFirst();
