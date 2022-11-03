@@ -13,12 +13,10 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.EducationMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseUserMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.SkillMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.UserMapper;
-import com.hoanglinhplus.CareerSocialNetwork.models.Education;
-import com.hoanglinhplus.CareerSocialNetwork.models.Skill;
-import com.hoanglinhplus.CareerSocialNetwork.models.User;
-import com.hoanglinhplus.CareerSocialNetwork.models.User_;
+import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.SkillRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
+import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CompanySpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.UserSpecification;
@@ -30,6 +28,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -310,5 +309,22 @@ public class UserService {
       return user;
     }
     return null;
+  }
+
+  public boolean isCurrentUserFollowed(Long userId) {
+    return isUserFollowed(myUserDetailsService.getCurrentUserId(), userId);
+  }
+
+  public boolean isUserFollowed(Long userId, Long targetUserId){
+    User targetUser = getUser(targetUserId);
+    List<User> followingUsers = targetUser.getFollowing_users();
+    return followingUsers.stream().anyMatch(user -> user.getUserId().equals(userId));
+  }
+  public List<User> getFollowedUsers(Long userId){
+    User user = getUser(userId);
+    return user.getFollowed_users();
+  }
+  public long getAmountOfFollowedUsers(Long userId){
+    return getFollowedUsers(userId).size();
   }
 }

@@ -1,0 +1,49 @@
+<!--<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">-->
+<div th:fragment="posts(posts)">
+  <div class="post-list row g-3 grid-mode">
+<!--/*@thymesVar id="posts" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Post>"*/-->
+    <div class="col-xl-12" th:each=" post: ${posts}">
+      <!--/*@thymesVar id="post" type="com.hoanglinhplus.CareerSocialNetwork.models.Post"*/-->
+      <div class="post-item container-fluid d-flex shadow rounded py-2">
+        <div class="post-item-thumbnail me-3">
+          <a th:href="|/post/${post.getSlug()}|" class="text-decoration-none rounded post-image" th:style="'background-image :url(\''+${post.getImage()}+'\')'">
+          </a>
+        </div>
+        <div class="post-content">
+          <div class="post-tag">
+            <a th:each="tag: ${post.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}">
+            </a>
+          </div>
+          <h6 class="post-title">
+            <a th:href="'/post/'+${post.getSlug()} " class="text-decoration-none text-dark" th:text="${post.getTitle()}">  </a>
+          </h6>
+          <div class="post-info ">
+            <div class="post-author">
+              <a th:href="'/user/'+${post.getCreatedUser().getUsername()}" class="text-decoration-none text-secondary">
+                <i class="fa-solid fa-user"></i>
+                <span th:text="${post.getCreatedUser().getUsername()}"></span>
+              </a>
+            </div>
+            <div class="post-published">
+              <i class="fa-solid fa-calendar-days"></i>
+              <span th:text="${#dates.format(post.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
+            </div>
+            <div class="post-description">
+              <span th:text="${post.getDescription()}"></span>
+            </div>
+            <div class="">
+              <button class="btn btn-outline-danger btn-like" th:classappend="${post.getTypeLike() != null}?'active':''"
+                      th:data-post-id="${post.getPostId()}"><i class="fa-solid fa-heart"></i>
+                <span class="amount-of-likes" th:text="${post.getNumberOfLikes()}"></span> Likes</button>
+              <a th:href="|/post/${post.getSlug()}#discussion|" class="btn btn-outline-info btn-comment"  th:data-post-id="${post.getPostId()}">
+                <i class="fa-solid fa-message"></i>
+                <span th:text="${post.getComments().size()}"></span> Comments
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script type="module" th:src="@{/js/common/PostCommon.js}"></script>
+</div>

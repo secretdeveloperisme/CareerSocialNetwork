@@ -2,9 +2,10 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
 <head>
   <div th:replace="/fragments/head"></div>
-  <title>Home</title>
+  <title>Forum</title>
   <link rel="stylesheet" th:href="@{/css/base.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/posts.css}">
   <link href="https://unpkg.com/tabulator-tables@5.4.2/dist/css/tabulator.min.css" rel="stylesheet">
   <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.4.2/dist/js/tabulator.min.js"></script>
 </head>
@@ -23,9 +24,15 @@
       <div class="sidebar overflow-auto pt-2 pb-5">
         <ul class="nav nav-pills flex-column mb-auto">
           <li class="nav-item">
-            <a href="/" class="nav-link link-dark active" aria-current="page">
+            <a href="/" class="nav-link link-dark" aria-current="page">
               <i class="fa fa-home" aria-hidden="true"></i>
               Home
+            </a>
+          </li>
+          <li class="nav-item">
+            <a href="/job" class="nav-link link-dark" aria-current="page">
+              <i class="fa-solid fa-briefcase"></i>
+              Jobs
             </a>
           </li>
           <li class="nav-item">
@@ -35,7 +42,7 @@
             </a>
           </li>
           <li class="nav-item">
-            <a href="/forum" class="nav-link link-dark" aria-current="page">
+            <a href="/post" class="nav-link link-dark active" aria-current="page">
               <i class="fa-solid fa-file-invoice"></i>
               Career Forum
             </a>
@@ -78,52 +85,13 @@
       <div class="content row">
         <div class="posts px-4 col-xl-9">
           <div class="post-list-header d-flex my-2">
-            <h5>New Jobs</h5>
+            <h5>New Posts</h5>
             <div class="list-mode ms-auto btn btn-primary" id="btnChangeListMode">
               <span>Grid</span>
               <i class="fas fa-th-large"></i>
             </div>
           </div>
-          <div class="post-list row g-3">
-            <!--/*@thymesVar id="jobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO>"*/-->
-            <div class="col-xl-12" th:each="job: ${jobs}">
-              <div class="post-item container-fluid d-flex shadow rounded py-2">
-                <div class="post-item-thumbnail me-3">
-                  <a th:href="'/job/'+${job.getJobId()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
-                  </a>
-                </div>
-                <div class="post-content">
-                  <div class="post-tag">
-                    <a th:each="tag: ${job.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}">
-                    </a>
-                  </div>
-                  <h6 class="post-title">
-                    <a th:href="'/job/'+${job.getJobId()} " class="text-decoration-none text-dark" th:text="${job.getTitle()}">  </a>
-                  </h6>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a th:href="'/company/'+${job.getCompany().getCompanyId()}" class="text-decoration-none text-secondary">
-                        <i class="fa-solid fa-building"></i>
-                        <span th:text="${job.getCompany().getName()}"></span>
-                      </a>
-                    </div>
-                    <div class="post-published">
-                      <i class="fa-solid fa-calendar-days"></i>
-                      <span th:text="${#dates.format(job.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
-                    </div>
-                    <div class="post-location">
-                      <i class="fa fa-location-dot"></i>
-                      <span th:text="${job.getLocation()}"></span>
-                      (<span th:text="${job.getWorkPlace().getPlace()}"></span>)
-                    </div>
-                  </div>
-                </div>
-                <div class="post-action">
-                  <button class="btn btn-success btn-apply" th:data-job-id="${job.getJobId()}">Apply</button>
-                </div>
-              </div>
-            </div>
-          </div>
+         <div th:replace="~{/fragments/posts::posts(${posts})}"></div>
           <div class="btn-more-wrapper my-2 d-flex">
             <button type="button" id='btnMore' th:data-type="${user}?'user':'guest'" class="btn btn-outline-primary m-auto">More</button>
           </div>
@@ -131,25 +99,25 @@
         <div class="col-xl-3">
           <div class="popular-post">
             <div class="popular-post-header pt-2">
-              <h4>Popular Jobs</h4>
+              <h4>Popular Posts</h4>
             </div>
-            <!--/*@thymesVar id="popularJobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Job>"*/-->
-            <div th:if="${popularJobs}" class="popular-post-list">
-              <div th:each="popularJob : ${popularJobs}" class="popular-post-item d-flex p-2">
+            <!--/*@thymesVar id="popularPosts" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Post>"*/-->
+            <div th:if="${popularPosts}" class="popular-post-list">
+              <div th:each="popularPost : ${popularPosts}" class="popular-post-item d-flex p-2">
                 <div class="popular-post-item-order">
                 </div>
                 <div class="post-content">
                   <h6 class="post-title">
-                    <a th:href="'/job/'+${popularJob.getJobId()} " class="text-decoration-none text-dark" th:text="${popularJob.getTitle()}"></a>
+                    <a th:href="'/post/'+${popularPost.getSlug()} " class="text-decoration-none text-dark" th:text="${popularPost.getTitle()}"></a>
                   </h6>
                   <div class="post-tag">
-                      <a th:each="tag: ${popularJob.getTags()}" th:href="'/tag/'+${tag.name}" class="tag-link" th:text="'#'+${tag.getName()}"> </a></div>
+                      <a th:each="tag: ${popularPost.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}"></a></div>
                   <div class="post-info">
                     <div class="post-author">
-                      <a th:href="'/company/'+${popularJob.getCompany().getCompanyId()}" class="text-decoration-none text-secondary" th:text="${popularJob.getCompany().getName()}"></a>
+                      <a th:href="'/user/'+${popularPost.getCreatedUser().getUsername()}" class="text-decoration-none text-secondary" th:text="${popularPost.getCreatedUser().getUsername()}"></a>
                     </div>
                     <div class="post-published">
-                      <span th:text="${#dates.format(popularJob.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
+                      <span th:text="${#dates.format(popularPost.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
                     </div>
                   </div>
                 </div>
@@ -174,7 +142,7 @@
   <div th:replace="/auth/login"></div>
   <script type="module" src="/js/application/Application.js"></script>
   <script type="module" src="/js/common/common.js"></script>
-  <script type="module" src="/js/site/home.js"></script>
   <script type="module" src="/js/login.js"></script>
+  <script type="module" src="/js/site/forum.js"></script>
 </body>
 </html>

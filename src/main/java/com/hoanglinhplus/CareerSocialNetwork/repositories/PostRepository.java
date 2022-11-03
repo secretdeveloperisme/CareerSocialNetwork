@@ -10,9 +10,13 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificationExecutor<Post> {
+
+
+  Optional<Post> findPostBySlugIgnoreCase(String slug);
   @Transactional
   @Modifying
   @Query("DELETE FROM Post p WHERE p.postId in :ids")
@@ -25,10 +29,9 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
   List<Long> findExistedIds(List<Long> ids);
 
   @Query(value = """
-    select jobs.job_id, amount, created_at, deleted_at, end_date, experience,
-    image, job_description, location, salary_max, salary_min, start_date,
-    title, updated_at, company_id, employment_type_id, position_id, work_place_id from jobs
-    inner join popular_jobs pj on jobs.job_id = pj.job_id
+    select  posts.post_id, content, created_at, deleted_at, description
+    ,image, slug, title, updated_at, user_id, post_status, number_of_like from posts
+    inner join popular_posts pp on posts.post_id = pp.post_id
     limit 5
     """, nativeQuery = true)
   List<Post> getPopularPosts();

@@ -3,6 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.mappers;
 import com.hoanglinhplus.CareerSocialNetwork.dto.post.PostCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Post;
+import com.hoanglinhplus.CareerSocialNetwork.models.PostLike;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag;
 import com.hoanglinhplus.CareerSocialNetwork.utils.SlugUtil;
 import org.springframework.stereotype.Component;

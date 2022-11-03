@@ -1,4 +1,4 @@
-import {loadJobs} from "./common/JobCommon.js";
+import {loadJobs} from "../common/JobCommon.js";
 $(()=>{
   // handle change list mode 
   const $btnChangeListMode = $("#btnChangeListMode");

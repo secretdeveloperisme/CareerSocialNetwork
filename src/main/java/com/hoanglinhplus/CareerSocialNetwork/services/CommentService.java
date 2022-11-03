@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
@@ -90,13 +91,19 @@ public class CommentService {
   }
 
   public ResponseEntity<ResponseObjectDTO> responseGetAllComments(Long jobId){
-    return ResponseEntity.ok(new ResponseObjectDTO("Get All Comments Successfully", getAllComments(jobId)));
+    return ResponseEntity.ok(new ResponseObjectDTO("Get All Comments Successfully", getAllComments(CommentFilterDTO.builder().jobId(jobId).build())));
   }
-  public Map<String, Object> getAllComments(Long jobId) {
+  public Map<String, Object> getAllComments(CommentFilterDTO commentFilterDTO) {
     Long currentUserId = myUserDetailsService.getCurrentUserId();
+    Long jobId = commentFilterDTO.getJobId();
+    Long postId = commentFilterDTO.getPostId();
     CommentSpecification commentSpecification  = new CommentSpecification();
     if(jobId != null){
       SearchCriteria<Comment, Job> criteria = new SearchCriteria<>(Comment_.job,Job.builder().jobId(jobId).build(), SearchOperator.EQUAL );
+      commentSpecification.getConditions().add(criteria);
+    }
+    if(postId != null){
+      SearchCriteria<Comment, Post> criteria = new SearchCriteria<>(Comment_.post,Post.builder().postId(postId).build(), SearchOperator.EQUAL );
       commentSpecification.getConditions().add(criteria);
     }
     List<Comment> allComments = commentRepository.findAll(commentSpecification);

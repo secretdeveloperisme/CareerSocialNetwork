@@ -21,17 +21,17 @@
     </div>
   </header>
   <div class="main px-4">
-    <div th:replace="/fragments/me_navigation::me_navigation('FOLLOWING_COMPANIES', ${meStatistics})"></div>
+    <div th:replace="/fragments/me_navigation::me_navigation('FOLLOWING_USERS', ${meStatistics})"></div>
     <div class="content">
       <div class="posts px-4">
         <div class="text-center">
           <h1 class="mb-4">Following Companies</h1>
         </div>
         <div class="row g-3">
-          <div class="col-xl-4" th:each="company : ${followedCompanies}">
-            <a th:href="'/company/'+${company.getCompanyId()}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
-              <div class="icon-64" th:style="'background-image: url(\''+${company.getLogo()}+'\');'"></div>
-              <h3 th:text="${company.getName()}"></h3>
+          <div class="col-xl-4" th:each="followedUser : ${followedUsers}">
+            <a th:href="'/user/'+${followedUser.getUsername()}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
+              <div class="icon-64" th:style="'background-image: url(\''+${followedUser.getAvatar()}+'\');'"></div>
+              <h3 th:text="${followedUser.getUsername()}"></h3>
             </a>
           </div>
         </div>
@@ -51,6 +51,6 @@
 <div th:replace="/auth/login"></div>
 <script type="module" src="/js/site/home.js"></script>
 <script type="module"  src="/js/login.js"></script>
-<script type="module" src="/js/application/MyApplications.js"></script>
+
 </body>
 </html>

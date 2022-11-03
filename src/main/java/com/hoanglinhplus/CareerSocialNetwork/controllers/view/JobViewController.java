@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 
+import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.services.*;
 import com.hoanglinhplus.CareerSocialNetwork.utils.AuthenticationTokenUtil;
@@ -68,8 +69,8 @@ public class JobViewController {
     Map<String,Long> numberOfReactions = jobActionService.getNumberOfLikes(jobId);
     long amountOfBookmarks = jobActionService.getNumberOfBookmarks(jobId);
     Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-    Map<String,Object> commentsData = commentService.getAllComments(jobId);
-    long numberOfComments = (long) commentService.getAllComments(jobId).get("numberOfComments");
+    Map<String,Object> commentsData = commentService.getAllComments(CommentFilterDTO.builder().jobId(jobId).build());
+    long numberOfComments = (long) commentService.getAllComments(CommentFilterDTO.builder().jobId(jobId).build()).get("numberOfComments");
     Map<String, Object> numberOfApplications = applicatonService.getNumberOfApplications(jobId);
     User user = null;
     if (principal != null) {

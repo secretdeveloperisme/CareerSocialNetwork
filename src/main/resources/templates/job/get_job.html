@@ -143,12 +143,18 @@
                 (<span class="" th:text="${job.getWorkPlace().getPlace()}"></span>)
               </div>
             </h5>
+            <div class="post-main-skills d-flex my-3">
+              <h5>Skills: </h5>
+              <a th:each="skill: ${job.getJobSkills()}" class="post-skill" th:href="'/skill/'+${skill.getName()}"
+                 th:text="${skill.getName()}"></a>
+            </div>
             <h5 class="text-secondary"></h5>
             <div class="post-main-tags d-flex my-3">
+              <h5>Tags: </h5>
               <a th:each="tag: ${job.getTags()}" class="post-tag" th:href="'/tag/'+${tag.getName()}"
                  th:text="'#'+${tag.getName()}"></a>
             </div>
-            <h5 class="text-warning">/helpers/calculate_reading_time.ejs",{text : post.content}) min read</h5>
+
             <div class="ql-snow">
               <div class="post-content ql-editor" th:utext="${job.getJobDescription()}">
               </div>
@@ -242,7 +248,7 @@
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script type="module" th:src="@{/js/application/Application.js}"></script>
-<script type="module" th:src="@{/js/home.js}"></script>
+<script type="module" th:src="@{/js/site/home.js}"></script>
 <script type="module" th:src="@{/js/login.js}"></script>
 <script type="module" th:src="@{/js/job/GetJob.js}"></script>
 </body>

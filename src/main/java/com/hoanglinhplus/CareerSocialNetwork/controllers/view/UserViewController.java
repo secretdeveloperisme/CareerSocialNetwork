@@ -52,6 +52,7 @@ public class UserViewController {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     }
     model.addAttribute("user", user);
+    model.addAttribute("isFollowed", userService.isCurrentUserFollowed(targetUser.getUserId()));
     model.addAttribute("targetUser", targetUser);
     return "user/get_user";
   }

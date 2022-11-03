@@ -17,6 +17,7 @@ public class AllowedRequests {
     allowedRequests.add(new RequestInfo("GET","/api/file"));
     allowedRequests.add(new RequestInfo("POST","/api/file/upload"));
     allowedRequests.add(new RequestInfo("GET","/api/job/get-all-jobs"));
+    allowedRequests.add(new RequestInfo("GET","/api/post/get-all-posts"));
   }
   public static boolean isAllowed(RequestInfo targetRequestInfo) {
     return allowedRequests.stream().anyMatch(allowedRequests->allowedRequests.equals(targetRequestInfo));

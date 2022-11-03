@@ -65,14 +65,19 @@ public class PostController {
     return postService.deletePost(params.get("postId"));
   }
   @PreAuthorize("hasAuthority('ADMIN')")
-  @DeleteMapping(path = "/many",produces = MediaType.APPLICATION_JSON_VALUE)
+  @DeleteMapping(path = "/many/admin",produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> deletePosts(@RequestBody List<Long> ids) {
-    return postService.deletePosts(ids, null, true, false);
+    return postService.deletePosts(ids,  true, false);
   }
   @PreAuthorize("hasAuthority('USER')")
-  @DeleteMapping(path = "/many/{companyId}",produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ResponseObjectDTO> deleteCompanyPosts(@RequestBody List<Long> ids,@PathVariable("companyId") Long companyId) {
-    return postService.deletePosts(ids, companyId, true, false);
+  @DeleteMapping(path = "/many",produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResponseObjectDTO> deletePostsByUser(@RequestBody List<Long> ids) {
+    return postService.deletePosts(ids,  false, false);
+  }
+  @PreAuthorize("hasAuthority('USER')")
+  @DeleteMapping(path = "/many/destroy",produces = MediaType.APPLICATION_JSON_VALUE)
+  public ResponseEntity<ResponseObjectDTO> destroyPosts(@RequestBody List<Long> ids) {
+    return postService.deletePosts(ids,  false, true);
   }
 
 }

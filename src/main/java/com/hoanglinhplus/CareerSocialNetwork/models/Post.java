@@ -1,6 +1,8 @@
 package com.hoanglinhplus.CareerSocialNetwork.models;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.NumberConstant;
 import com.hoanglinhplus.CareerSocialNetwork.constants.PostStatus;
+import com.hoanglinhplus.CareerSocialNetwork.constants.TypeLike;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -51,4 +53,8 @@ public class Post {
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User createdUser;
 
+  @Transient
+  private long numberOfLikes = 0;
+  @Transient
+  private TypeLike typeLike;
 }

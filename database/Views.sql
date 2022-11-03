@@ -54,3 +54,25 @@ order by number_of_applications desc, number_of_likes desc
 limit 10;
 
 select * from popular_jobs;
+
+
+
+
+/*===========================================================
+  popular_posts
+===========================================================*/
+
+drop view if exists popular_posts;
+create view popular_posts
+as
+select post_id, coalesce(top_pf.number_of_likes, 0) as number_of_like from (
+    select l.post_id, count(l.post_id) as number_of_likes from posts
+    inner join post_likes l on posts.post_id = l.post_id
+    where type_like = 'LIKE'
+    group by l.post_id
+) top_pf
+order by number_of_like desc, number_of_likes desc
+limit 10;
+
+select * from popular_posts;
+

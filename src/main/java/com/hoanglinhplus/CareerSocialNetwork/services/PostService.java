@@ -2,6 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.constants.PostStatus;
+import com.hoanglinhplus.CareerSocialNetwork.constants.TypeLike;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.post.PostCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.post.PostFilterDTO;
@@ -76,13 +77,30 @@ public class PostService {
     }
     throw new NotFoundException("Post not found", "id", postId.toString());
   }
+  public Post getPost(String slug){
+    Optional<Post> postOptional = postRepository.findPostBySlugIgnoreCase(slug);
+    if(postOptional.isPresent()){
+      return postOptional.get();
+    }
+    throw new NotFoundException("Post not found", "slug", slug);
+  }
   public Page<Post> getPosts(PostFilterDTO postFilterDTO, PageableDTO pageableDTO){
     PostSpecification postSpecification = new PostSpecification();
+    Long createdUserId = postFilterDTO.getCreatedUserId();
     String title = postFilterDTO.getTitle();
     String slug = postFilterDTO.getSlug();
     PostStatus postStatus = postFilterDTO.getPostStatus();
     List<Long> tagIds = postFilterDTO.getTagIds();
     Boolean isDeleted = postFilterDTO.getIsDeleted();
+    if(createdUserId != null){
+      SearchCriteria<Post, User> criteria = new SearchCriteria<>(Post_.createdUser
+        , User.builder().userId(createdUserId).build(), SearchOperator.EQUAL);
+      postSpecification.getConditions().add(criteria);
+    }
+    if( title != null && !title.isEmpty()){
+      SearchCriteria<Post, String> criteria = new SearchCriteria<>(Post_.title, title, SearchOperator.LIKE);
+      postSpecification.getConditions().add(criteria);
+    }
     if( title != null && !title.isEmpty()){
       SearchCriteria<Post, String> criteria = new SearchCriteria<>(Post_.title, title, SearchOperator.LIKE);
       postSpecification.getConditions().add(criteria);
@@ -126,8 +144,11 @@ public class PostService {
     Page<Post> postPage;
     Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1,pageableDTO.getSize(),Sort.by(orders));
     postPage = postRepository.findAll(resultSpecification, pageable);
+    List<Post> posts = postPage.getContent();
+    addInfoForPost(posts);
     return postPage;
   }
+
   public List<Post> getPopularPosts(){
     return postRepository.getPopularPosts();
   }
@@ -189,8 +210,19 @@ public class PostService {
       throw new NotFoundException("Post not found", post.getPostId().toString(), "id");
     }
   }
+  List<Post> getNotOwnPosts(List<Long> ids, Long userId){
+    PostSpecification postSpecification = new PostSpecification();
+    SearchCriteria<Post, Long> criteriaPostIds = new SearchCriteria<>(Post_.postId, ids, SearchOperator.IN);
+    postSpecification.getConditions().add(criteriaPostIds);
+    SearchCriteria<Post, User> criteriaCreatedUser = new SearchCriteria<>(Post_.createdUser
+      , User.builder().userId(userId).build(), SearchOperator.NOT_EQUAL);
+    postSpecification.getConditions().add(criteriaCreatedUser);
+
+    List<Post> notOwnPosts = postRepository.findAll(postSpecification);
+    return notOwnPosts;
+  }
   @Transactional
-  public ResponseEntity<ResponseObjectDTO> deletePosts(List<Long> ids,Long companyId, boolean isAdmin,boolean isDestroy) {
+  public ResponseEntity<ResponseObjectDTO> deletePosts(List<Long> ids, boolean isAdmin,boolean isDestroy) {
     List<Long> notExistIds = new ArrayList<>();
     List<Long> existedIds = postRepository.findExistedIds(ids);
     ids.forEach(id->{
@@ -199,10 +231,9 @@ public class PostService {
     });
     if(notExistIds.size() == 0){
       if(!isAdmin){
-        if(ids.stream().noneMatch(id -> permissionService.isOwnerPost(Post.builder().postId(id).build()))){
+        if(getNotOwnPosts(ids,myUserDetailsService.getCurrentUserId()).size() > 0)
           throw new PermissionDeniedException("you do not have permission");
         }
-      }
       if(isDestroy)
         ids.forEach(this::destroyPostById);
       else
@@ -242,24 +273,31 @@ public class PostService {
       throw inputNotValidException;
     }
   }
-  public long getAmountOfPosts(Long userId){
+  public long getAmountOfPosts(Long userId, boolean isDeleted){
     PostSpecification postSpecification = new PostSpecification();
-    SearchCriteria<Post,User> searchCriteria =
-      new SearchCriteria<>(Post_.createdUser, User.builder().userId(userId).build(), SearchOperator.EQUAL);
+    SearchCriteria<Post, Date> searchCriteria;
+    if(isDeleted){
+      searchCriteria = new SearchCriteria<>(Post_.deletedAt, null, SearchOperator.NOT_NULL);
+    }else {
+      searchCriteria = new SearchCriteria<>(Post_.deletedAt, null, SearchOperator.NULL);
+    }
     postSpecification.getConditions().add(searchCriteria);
+    SearchCriteria<Post,User> searchCriteriaUser =
+      new SearchCriteria<>(Post_.createdUser, User.builder().userId(userId).build(), SearchOperator.EQUAL);
+    postSpecification.getConditions().add(searchCriteriaUser);
     return postRepository.count(postSpecification);
   }
   public void deletePost(Post post) {
     postRepository.delete(post);
   }
-  public void deletePostById(Long id) {
+  public void destroyPostById(Long id) {
     Optional<Post> postOptional = postRepository.findById(id);
     if(postOptional.isPresent()){
       Post post = postOptional.get();
       postRepository.delete(post);
     }
   }
-  public void destroyPostById(Long id) {
+  public void deletePostById(Long id) {
     Optional<Post> postOptional = postRepository.findById(id);
     if(postOptional.isPresent()){
       Post post = postOptional.get();
@@ -267,9 +305,21 @@ public class PostService {
       postRepository.save(post);
     }
   }
+  public void addInfoForPost(List<Post> posts){
+    Long currentUserId = myUserDetailsService.getCurrentUserId();
+    for(Post post: posts) {
+      post.setNumberOfLikes(post.getLikes().stream().filter(
+        postLike -> postLike.getTypeLike().equals(TypeLike.LIKE)
+      ).count());
+      if (post.getLikes().stream().anyMatch(postLike -> (postLike.getUser().getUserId()
+        .equals(currentUserId) && postLike.getTypeLike() == TypeLike.LIKE)))
+        post.setTypeLike(TypeLike.LIKE);
+    }
+  }
   public List<Post> getFollowedPosts(PageableDTO pageableDTO, Long userId){
     int  start = (pageableDTO.getSize()* (pageableDTO.getPage())) - pageableDTO.getSize();
-    List<Post> posts = postRepository.getFollowedPosts(userId, start, pageableDTO.getSize()+1);
+    List<Post> posts = postRepository.getFollowedPosts(userId, start, pageableDTO.getSize());
+    addInfoForPost(posts);
     return posts;
   }
 

@@ -14,6 +14,7 @@ import java.util.List;
 public class PostFilterDTO {
   private String title;
   private String slug;
+  private Long createdUserId;
   private PostStatus postStatus;
   private List<Long> tagIds;
   private Boolean isDeleted;

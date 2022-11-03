@@ -1,0 +1,86 @@
+<!--/*@thymesVar id="meStatistics" type="com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.MeStatistics"*/-->
+<div th:fragment="me_navigation(currentActiveTagret, meStatistics)">
+  <div class="sidebar overflow-auto pt-2 pb-5">
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="/" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('HOME')}?'active':''" aria-current="page">
+          <div>
+            <i class="fas fa-home" aria-hidden="true"></i>
+            Home
+          </div>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/company" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('COMPANIES')}?'active':''" aria-current="page">
+          <div>
+            <i class="fa-solid fa-building"></i>
+            Companies
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" id="companyAmount" th:text="${meStatistics.getAmountOfCompanies()}"></span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/tags" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('TAGS')}?'active':''" aria-current="page">
+          <div>
+            <i class="fa-solid fa-tag"></i>
+            Tags
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" th:text="${meStatistics.getAmountOfFollowedTags()}"> </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/application" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('APPLICATIONS')}?'active':''" aria-current="page">
+          <div>
+            <i class="fa-solid fa-briefcase"></i>
+            My Applications
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" th:text="${meStatistics.getAmountOfApplications()}"> </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/following_companies" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('FOLLOWING_COMPANIES')}?'active':''"  aria-current="page">
+          <div>
+            <i class="fa-solid fa-building"></i>
+            Following Companies
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" th:text="${meStatistics.getAmountOfFollowedCompanies()}"> </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/following_users" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('FOLLOWING_USERS')}?'active':''"  aria-current="page">
+          <div>
+            <i class="fa-solid fa-users"></i>
+            Following Users
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" th:text="${meStatistics.getAmountOfFollowedUsers()}"> </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/post" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('POSTS')}?'active':''"  aria-current="page">
+          <div>
+            <i class="fa-solid fa-file"></i>
+            Posts
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" th:text="${meStatistics.getAmountOfPosts()}"> </span>
+        </a>
+      </li>
+      <li class="nav-item">
+        <a href="/me/company/trash" class="nav-link link-dark d-flex" th:classappend="${currentActiveTagret.equals('TRASH_COMPANIES')}?'active':''"  aria-current="page">
+          <div>
+            <i class="fas fa-trash" aria-hidden="true"></i>
+            Trash Companies
+          </div>
+          <span class="badge ms-auto bg-primary rounded-pill" id="trashCompanyAmount" th:text="${meStatistics.getAmountOfDeletedCompanies()}"></span>
+        </a>
+      </li>
+      <li class="nav-connect">
+        <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+          <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+          <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
+          <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+          <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>

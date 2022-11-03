@@ -27,11 +27,15 @@ public class EntitySpecification<T> implements Specification<T> {
         predicates.add(criteriaBuilder.equal(
           root.get((SingularAttribute)condition.getColumn()),condition.getValue()
         ));
+      }else if (condition.getOperator().equals(SearchOperator.NOT_EQUAL)) {
+        predicates.add(criteriaBuilder.notEqual(
+          root.get((SingularAttribute)condition.getColumn()),condition.getValue()
+        ));
       } else if (condition.getOperator().equals(SearchOperator.LIKE)) {
         predicates.add(criteriaBuilder.like(criteriaBuilder.lower(root.get((SingularAttribute)condition.getColumn()))
           , "%"+condition.getValue().toString().toLowerCase()+"%"));
       } else if (condition.getOperator().equals(SearchOperator.IN)) {
-        predicates.add(root.get((SingularAttribute)condition.getColumn()).in(condition.getValue()));
+        predicates.add(root.get((SingularAttribute)condition.getColumn()).in((List)condition.getValue()));
       } else if (condition.getOperator().equals(SearchOperator.LESS_EQUAL)) {
         predicates.add(criteriaBuilder.lessThanOrEqualTo((root.get((SingularAttribute)condition.getColumn())),(Comparable)condition.getValue()));
       } else if(condition.getOperator().equals(SearchOperator.GREATER_EQUAL)){

@@ -21,71 +21,7 @@
     </div>
   </header>
   <div class="main px-4">
-    <div class="sidebar overflow-auto pt-2 pb-5">
-      <ul class="nav nav-pills flex-column mb-auto">
-        <li class="nav-item">
-          <a href="/" class="nav-link link-dark d-flex" aria-current="page">
-            <div>
-              <i class="fas fa-home" aria-hidden="true"></i>
-              Home
-            </div>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="/me/company" class="nav-link link-dark d-flex" aria-current="page">
-            <div>
-              <i class="fas fa-file-alt" aria-hidden="true"></i>
-              Companies
-            </div>
-            <span class="badge ms-auto bg-primary rounded-pill" id="companyAmount" th:text="${amountOfCompanies}"></span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="/me/tags" class="nav-link link-dark d-flex active" aria-current="page">
-            <div>
-              <i class="fas fa-tag" aria-hidden="true"></i>
-              Tags
-            </div>
-            <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfFollowedTags}"> </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="/me/application" class="nav-link link-dark d-flex" aria-current="page">
-            <div>
-              <i class="fas fa-user" aria-hidden="true"></i>
-              My Applications
-            </div>
-            <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfApplications}"> </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="/me/following_companies" class="nav-link link-dark d-flex" aria-current="page">
-            <div>
-              <i class="fas fa-user" aria-hidden="true"></i>
-              Following Companies
-            </div>
-            <span class="badge ms-auto bg-primary rounded-pill" th:text="${amountOfFollowedCompanies}"> </span>
-          </a>
-        </li>
-        <li class="nav-item">
-          <a href="/me/company/trash" class="nav-link link-dark d-flex" aria-current="page">
-            <div>
-              <i class="fas fa-trash" aria-hidden="true"></i>
-              Trash
-            </div>
-            <span class="badge ms-auto bg-primary rounded-pill" id="trashPostAmount" th:text="${amountOfDeletedCompanies}"></span>
-          </a>
-        </li>
-        <li class="nav-connect">
-          <ul class="connect-me list-style-none d-flex justify-content-center p-0">
-            <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
-            <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></i></a></li>
-            <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
-            <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
-          </ul>
-        </li>
-      </ul>
-    </div>
+    <div th:replace="/fragments/me_navigation::me_navigation('TAGS', ${meStatistics})"></div>
     <div class="content">
       <div class="posts px-4">
         <div class="text-center">
@@ -115,7 +51,7 @@
 <div id="userIdWrapper" th:data-user-id="${user.getUserId()}"></div>
 <div th:replace="/fragments/components/toast"></div>
 <div th:replace="/auth/login"></div>
-<script type="module" src="/js/home.js"></script>
+<script type="module" src="/js/site/home.js"></script>
 <script type="module"  src="/js/login.js"></script>
 <script type="module" src="/js/application/MyApplications.js"></script>
 </body>
