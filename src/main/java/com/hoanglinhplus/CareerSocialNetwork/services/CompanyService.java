@@ -171,7 +171,7 @@ public class CompanyService {
       if(company.getWebsite() != null){
         targetCompany.setWebsite(company.getWebsite());
       }
-      if(company.getLogo() != null){
+      if(company.getLogo() != null && !company.getLogo().isEmpty()){
         targetCompany.setLogo(company.getLogo());
       }
       if(company.getTagLine() != null){

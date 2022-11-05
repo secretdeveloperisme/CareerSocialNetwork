@@ -43,7 +43,6 @@ public class PostController {
     return postService.responseGetFollowedPosts(pageableDTO);
   }
 
-  @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @GetMapping("/get-post")
   public ResponseEntity<ResponseObjectDTO> getPost(
     @RequestParam @NotNull Long id){

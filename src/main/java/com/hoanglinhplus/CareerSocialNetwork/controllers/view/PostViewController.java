@@ -2,6 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
+import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import com.hoanglinhplus.CareerSocialNetwork.services.*;
 import com.hoanglinhplus.CareerSocialNetwork.utils.AuthenticationTokenUtil;
 import org.springframework.stereotype.Controller;
@@ -21,13 +22,15 @@ public class PostViewController {
   private final UserService userService;
   private final PostActionService postActionService;
   private final CommentService commentService;
+  private final PermissionService permissionService;
 
-  public PostViewController(PostService postService, AuthenticationTokenUtil authenticationTokenUtil, UserService userService, PostActionService postActionService, CommentService commentService) {
+  public PostViewController(PostService postService, AuthenticationTokenUtil authenticationTokenUtil, UserService userService, PostActionService postActionService, CommentService commentService, PermissionService permissionService) {
     this.postService = postService;
     this.authenticationTokenUtil = authenticationTokenUtil;
     this.userService = userService;
     this.postActionService = postActionService;
     this.commentService = commentService;
+    this.permissionService = permissionService;
   }
 
   @RequestMapping("/create")
@@ -73,5 +76,19 @@ public class PostViewController {
     model.addAttribute("isFollowed", isFollowed);
     model.addAttribute("commentsData", commentsData);
     return "post/get_post";
+  }
+  @RequestMapping("/edit/{postId}")
+  public String editPost(@PathVariable Long postId, Model model, HttpServletRequest request) {
+    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
+    Post post = postService.getPost(postId);
+    User user = null;
+    if (principal == null ) {
+      return "error/401";
+    }
+    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+    if(!permissionService.isOwnerPost(post,user))
+      return "error/401";
+    model.addAttribute("user", user);
+    return "post/edit_post";
   }
 }

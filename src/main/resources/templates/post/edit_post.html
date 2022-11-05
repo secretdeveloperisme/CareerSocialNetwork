@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>Edit Post</title>
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+  <link rel="stylesheet" th:href="@{/css/base.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link rel="stylesheet" th:href="@{/css/create_job.css}">
+  <link rel="stylesheet" th:href="@{/css/custom_quill.css}">
+</head>
+
+<body>
+  <div class="app">
+    <header class="sticky-top">
+      <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
+      <div th:if="${user}">
+        <div th:replace="~{/fragments/navigation::navbar(${user})}"></div>
+      </div>
+      <div th:unless="${user}">
+        <div th:replace="/fragments/navigation"></div>
+      </div>
+    </header>
+    <form method="post" id="updatePostForm">
+      <input name="postId" th:value="${postId}" id="postIdInput">
+      <div class="sidebar overflow-auto p-2">
+        <div class="mb-3" id="jobImageWrapper">
+          <h4>Image</h4>
+          <input type="file" name="postImage" hidden accept="image/*" id="postImage">
+          <input type="hidden" name="image" id="postImagePath">
+          <label class="d-flex flex-column text-center" for="postImage" style="width: fit-content;">
+            <img class="border-danger img-thumbnail post-image" id="displayPostImage" th:src="@{/images/icons/upload.jpg}">
+          </label>
+        </div>
+        <div class="mb-3">
+          <h4 for="title">Tags</h4>
+          <div type="text" name="tags" contenteditable="true" id="tags" class="form-control tags"
+               placeholder="separate tags by space"></div>
+        </div>
+        <div class="status ">
+          <h4>Status</h4>
+          <div class="d-flex">
+            <div class="mb-2">
+              <input type="radio" class="btn-check post-status" name="postStatus" id="status0" value="PUBLIC">
+              <label for="status0" class="btn btn-outline-success">Public</label>
+            </div>
+            <div class="ms-2">
+              <input type="radio" class="btn-check post-status" name="postStatus" value="PRIVATE" id="status1">
+              <label for="status1" class="btn btn-outline-danger">Private</label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="p-2">
+          <div class="mb-3">
+            <label for="title">
+              <h4>Title: </h4>
+            </label>
+            <input type="text" name="title" id="title"  class="form-control" required placeholder="input your title ...">
+          </div>
+          <div class="mb-3">
+            <label for="description">
+              <h4>Description: </h4>
+            </label>
+            <input type="text" name="description" id="description" class="form-control" placeholder="input your description ...">
+          </div>
+          <div class="mb-3 ">
+            <h4>Content</h4>
+            <div class="post-content bg-white">
+              <div id="toolbar" class="ql-toolbar ql-snow">
+                <span class="ql-formats">
+                  <select class="ql-font"></select>
+                  <select class="ql-size"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-bold"></button>
+                  <button class="ql-italic"></button>
+                  <button class="ql-underline"></button>
+                  <button class="ql-strike"></button>
+                </span>
+                <span class="ql-formats">
+                  <select class="ql-color"></select>
+                  <select class="ql-background"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-script" value="sub"></button>
+                  <button class="ql-script" value="super"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-header" value="1"></button>
+                  <button class="ql-header" value="2"></button>
+                  <button class="ql-blockquote"></button>
+                  <button class="ql-code-block"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-list" value="ordered"></button>
+                  <button class="ql-list" value="bullet"></button>
+                  <button class="ql-indent" value="-1"></button>
+                  <button class="ql-indent" value="+1"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-direction" value="rtl"></button>
+                  <select class="ql-align"></select>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-link"></button>
+                  <button class="ql-image"></button>
+                  <button class="ql-video"></button>
+                  <button class="ql-formula"></button>
+                </span>
+                <span class="ql-formats">
+                  <button class="ql-clean"></button>
+                </span>
+              </div>
+              <div id="editor" class="pb-3"></div>
+              <input type="hidden" name="content" id="content">
+            </div>
+            <div class="btn-upload-wrapper p-2 bg-white w-100">
+              <button class="btn btn-primary" id="btnUpload">Upload</button>
+            </div>
+          </div>
+          <div th:replace="~{/fragments/footer}"></div>
+        </div>
+     </div>
+    </form>
+  </div>
+  <ul class="nav-mobile list-style-none">
+    <li class="top-link">
+      <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+      </div>
+    </li>
+  </ul>
+  </div>
+  <div th:replace="~{/fragments/components/toast::toast}"></div>
+  <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/datalist-css/dist/datalist-css.min.js"></script>
+  <script type="module" th:src="@{/js/post/EditPost.js}"></script>
+</body>
+
+</html>

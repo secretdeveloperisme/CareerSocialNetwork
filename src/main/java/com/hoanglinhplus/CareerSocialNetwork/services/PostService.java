@@ -187,11 +187,17 @@ public class PostService {
         targetPost.setTitle(post.getTitle());
         targetPost.setSlug(post.getSlug());
       }
-      if(postUpdateDTO.getImage() != null){
+      if(postUpdateDTO.getImage() != null && !postUpdateDTO.getImage().isEmpty()){
         targetPost.setImage(post.getImage());
+      }
+      if(postUpdateDTO.getContent() != null && !postUpdateDTO.getContent().isEmpty()){
+        targetPost.setContent(post.getContent());
       }
       if(postUpdateDTO.getPostStatus() != null){
         targetPost.setPostStatus(post.getPostStatus());
+      }
+      if(postUpdateDTO.getDescription() != null){
+        targetPost.setDescription(post.getDescription());
       }
       if(postUpdateDTO.getTags()!= null){
         List<Tag> tags = tagService.createTags(postUpdateDTO.getTags().stream().map(TagDTO::getName).toList());
@@ -200,7 +206,7 @@ public class PostService {
       Post updatedPost = postRepository.save(targetPost);
       Map<String, Object> responseData = new HashMap<>();
       PostCreationDTO updatedPostDTO = PostMapper.toDTO(updatedPost);
-      responseData.put("updatedCompany", updatedPostDTO);
+      responseData.put("updatedPost", updatedPostDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "update post successfully"
         ,responseData);

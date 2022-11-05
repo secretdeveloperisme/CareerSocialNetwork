@@ -65,4 +65,8 @@ public class PermissionService {
     Long userId = myUserDetailsService.getCurrentUserId();
     return post.getCreatedUser().getUserId().equals(userId);
   }
+  public boolean isOwnerPost(Post post, User user) {
+    Long userId = user.getUserId();
+    return post.getCreatedUser().getUserId().equals(userId);
+  }
 }

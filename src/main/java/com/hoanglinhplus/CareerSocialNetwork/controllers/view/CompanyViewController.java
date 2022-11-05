@@ -52,6 +52,24 @@ public class CompanyViewController {
     return "company/create_company";
   }
 
+  @GetMapping("/edit/{companyId}")
+  public String editCompany(@PathVariable Long companyId, HttpServletRequest request, Model model){
+    Company company = companyService.getCompany(companyId);
+    List<OrganizationSize> organizationSizeList = companyService.getOrganizationSizes();
+    List<Industry> industries = companyService.getIndustries();
+    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
+    User user = null;
+    if (principal == null || !permissionService.isOwnerCompany(company)) {
+      return "error/401";
+    }
+    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+    model.addAttribute("company", company);
+    model.addAttribute("organizationSizes", organizationSizeList);
+    model.addAttribute("industries", industries);
+    model.addAttribute("user", user);
+    return "company/edit_company";
+  }
+
   @GetMapping("/{companyId}")
   public String getCompany(HttpServletRequest request, Model model, @PathVariable("companyId") Long companyId) {
     Company company = companyService.getCompany(companyId);
