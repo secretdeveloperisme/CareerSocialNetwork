@@ -69,7 +69,7 @@ public class JobService {
     Job job = getJob(jobId);
     JobCreationDTO jobCreationDTO = JobMapper.toDTO(job);
     Map<String, Object> responseData = new HashMap<>();
-    responseData.put("company", jobCreationDTO);
+    responseData.put("job", jobCreationDTO);
     return ResponseEntity.ok(new ResponseObjectDTO("get job successfully ",responseData));
   }
   public Job getJob(Long jobId){
@@ -219,11 +219,14 @@ public class JobService {
       if(jobUpdateDTO.getJobDescription() != null){
        targetJob.setJobDescription(jobUpdateDTO.getJobDescription());
       }
-      if(jobUpdateDTO.getImage() != null){
+      if(jobUpdateDTO.getImage() != null && !jobUpdateDTO.getImage().isEmpty()){
         targetJob.setImage(jobUpdateDTO.getImage());
       }
       if(jobUpdateDTO.getAmount() != NumberConstant.NO_SET){
         targetJob.setAmount(jobUpdateDTO.getAmount());
+      }
+      if(jobUpdateDTO.getLocation() != null){
+        targetJob.setLocation(jobUpdateDTO.getLocation());
       }
       if(jobUpdateDTO.getExperience() != NumberConstant.NO_SET){
         targetJob.setExperience(jobUpdateDTO.getExperience());
@@ -265,7 +268,7 @@ public class JobService {
       Job updatedJob = jobRepository.save(targetJob);
       Map<String, Object> responseData = new HashMap<>();
       JobCreationDTO updatedJobDTO = JobMapper.toDTO(updatedJob);
-      responseData.put("updatedCompany", updatedJobDTO);
+      responseData.put("updatedJob", updatedJobDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "update job successfully"
         ,responseData);

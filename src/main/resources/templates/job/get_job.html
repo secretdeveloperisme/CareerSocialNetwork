@@ -105,9 +105,13 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
+                    <th:block th:if="${job.getJobQuestion().size() == 0}">
+                      <h3 >This job does not have question !</h3>
+                    </th:block>
                     <ul class="list-group list-group-flush">
                       <li th:each="jobQuestion: ${job.getJobQuestion()}" class="list-group-item" th:text="${jobQuestion.getQuestion().getContent()}"></li>
                     </ul>
+
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -122,7 +126,7 @@
             </h1>
             <div class="">
               <h5>
-                <i class="fa-solid fa-money-bill"></i>
+                Salary:
                 <span class="badge bg-primary" th:text="'$'+${job.getSalaryMin()}"></span>
                 -
                 <span class="badge bg-warning" th:text="'$'+${job.getSalaryMax()}"></span>

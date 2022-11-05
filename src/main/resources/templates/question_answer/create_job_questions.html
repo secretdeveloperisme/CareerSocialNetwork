@@ -21,7 +21,7 @@
     <div class="container">
       <h4>
         <i class="fa-solid fa-arrow-left"></i>
-        <a th:href="'/company/'+${job.getCompany().getCompanyId()}+'/jobs'"><span>back</span></a>
+        <a class="link-primary" th:href="'/company/'+${job.getCompany().getCompanyId()}+'/jobs'"><span>back</span></a>
       </h4>
       <div class="d-flex align-items-center">
         <img class="icon-32 rounded-0" th:src="@{/images/icons/company_icon.png}" alt="company">

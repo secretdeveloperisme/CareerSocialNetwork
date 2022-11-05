@@ -1,5 +1,5 @@
 import {formatDate} from "../utils/format_date.js";
-
+import {applyEvent} from "../application/Application.js";
 async function loadJobs(jobFilter, page = 1, size = 10, isFilter = false) {
   let $postLists = $($(".post-list")[0]);
   let $btnMore = $("#btnMore");
@@ -62,7 +62,7 @@ function createJobItem(job,wrapperMode = "col-xl-12"){
             ${tags.join('\n')}
           </div>
           <h6 class="post-title">
-            <a href="/post/${job.jobId} " class="text-decoration-none text-dark" >${job.title}</a>
+            <a href="/job/${job.jobId} " class="text-decoration-none text-dark" >${job.title}</a>
           </h6>
           <div class="post-info ">
             <div class="post-author">
@@ -83,11 +83,14 @@ function createJobItem(job,wrapperMode = "col-xl-12"){
           </div>
         </div>
         <div class="post-action">
-          <button class="btn btn-success">apply</button>
+          <button class="btn btn-success btn-apply" data-job-id="${job.jobId}">apply</button>
         </div>
       </div>
     </div>
   `)
+  let $btnApply = $postItem.find(".btn-apply");
+  $btnApply.on("click", applyEvent);
+
   return $postItem;
 }
 

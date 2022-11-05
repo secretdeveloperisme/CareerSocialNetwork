@@ -76,6 +76,21 @@
 <!--                  </div>-->
                   <p class="text-center" th:text="${targetUser.getBiography()}">biography</p>
                 </div>
+                <div class="card mt-3">
+                  <div class="card-header">
+                    <h5 class="card-title">Skills</h5>
+                  </div>
+                  <div class="card-body">
+                    <div class="d-flex flex-wrap">
+                      <div class="m-1" th:each="skill: ${user.getUserSkills()}">
+                        <a class="" th:href="'/skill/'+${skill.getSkillId()}">
+                        <span class="badge bg-info p-2" th:text="${skill.getName()}">
+                        </span>
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
               </div>
               <div class="col-9">
                 <div class="card">
@@ -113,16 +128,8 @@
                     <a th:href="${targetUser.getCvUrl()}" class="btn btn-primary">Go To CV</a>
                   </div>
                 </div>
-                <div class="card mt-3">
-                  <div class="card-header">
-                    <h5 class="card-title">Skills</h5>
-                  </div>
-                  <div class="card-body">
-                    <a th:each="skill: ${user.getUserSkills()}" th:href="'/skill/'+${skill.getSkillId()}">
-                      <span class="badge bg-info p-2 mx-1" th:text="${skill.getName()}">
-                      </span>
-                    </a>
-                  </div>
+                <div class="">
+<!--                  <div th:replace="~{/fragments/posts::post(${posts})}"></div>-->
                 </div>
               </div>
             </div>

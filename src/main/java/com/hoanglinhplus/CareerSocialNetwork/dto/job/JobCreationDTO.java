@@ -29,7 +29,7 @@ public class JobCreationDTO {
   private Date createdAt;
   private Date updatedAt;
   private Date deletedAt;
-  private int experience = NumberConstant.NO_SET;
+  private float experience = NumberConstant.NO_SET;
   private List<TagDTO> tags;
   private List<JobQuestionDTO> jobQuestion;
   private List<SkillDTO> jobSkills;

@@ -46,8 +46,8 @@ public class JobController {
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @GetMapping("/get-job")
   public ResponseEntity<ResponseObjectDTO> getJob(
-    @RequestParam @NotNull Long id){
-    return jobService.responseGetJob(id);
+    @RequestParam @NotNull Long jobId){
+    return jobService.responseGetJob(jobId);
   }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)

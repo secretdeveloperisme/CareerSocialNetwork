@@ -23,7 +23,6 @@ public class JobQuestionController {
   public ResponseEntity<ResponseObjectDTO> getJobQuestions(@RequestParam Long jobId){
     return jobQuestionService.getQuestionByJobId(jobId);
   }
-
   @PostMapping
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   public ResponseEntity<ResponseObjectDTO> createJobQuestion(@RequestBody JobQuestionDTO jobQuestionDTO){

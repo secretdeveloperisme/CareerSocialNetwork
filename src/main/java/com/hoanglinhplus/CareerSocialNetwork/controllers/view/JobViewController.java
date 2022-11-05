@@ -2,10 +2,12 @@ package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
+import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import com.hoanglinhplus.CareerSocialNetwork.services.*;
 import com.hoanglinhplus.CareerSocialNetwork.utils.AuthenticationTokenUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -23,8 +25,9 @@ public class JobViewController {
   private final JobActionService jobActionService;
   private final CommentService commentService;
   private final ApplicationService applicatonService;
+  private final PermissionService permissionService;
 
-  public JobViewController(CompanyService companyService, JobService jobService, AuthenticationTokenUtil authenticationTokenUtil, UserService userService, JobActionService jobActionService, CommentService commentService, ApplicationService applicatonService) {
+  public JobViewController(CompanyService companyService, JobService jobService, AuthenticationTokenUtil authenticationTokenUtil, UserService userService, JobActionService jobActionService, CommentService commentService, ApplicationService applicatonService, PermissionService permissionService) {
     this.companyService = companyService;
     this.jobService = jobService;
     this.authenticationTokenUtil = authenticationTokenUtil;
@@ -32,6 +35,7 @@ public class JobViewController {
     this.jobActionService = jobActionService;
     this.commentService = commentService;
     this.applicatonService = applicatonService;
+    this.permissionService = permissionService;
   }
 
   @RequestMapping("/create/{companyId}")
@@ -57,6 +61,30 @@ public class JobViewController {
     model.addAttribute("workPlaces", workPlaces);
     model.addAttribute("employmentTypes", employmentTypes);
     return "job/create_job";
+  }
+  @GetMapping("/edit/{jobId}")
+  public String editJob(@PathVariable("jobId") Long jobId, Model model, HttpServletRequest request) {
+    Job job = jobService.getJob(jobId);
+    List<Skill> skills = jobService.getAllSkills();
+    List<Position> positions = jobService.getAllPositions();
+    List<WorkPlace> workPlaces = jobService.getAllWorkPlaces();
+    List<EmploymentType> employmentTypes = jobService.getAllEmploymentType();
+    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
+    User user = null;
+    if (principal != null) {
+      user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+    }
+    assert user != null;
+    if(!permissionService.isOwnerJob(user.getUserId(), job.getJobId())) {
+      return "error/401";
+    }
+    model.addAttribute("job", job);
+    model.addAttribute("user", user);
+    model.addAttribute("skills", skills);
+    model.addAttribute("positions", positions);
+    model.addAttribute("workPlaces", workPlaces);
+    model.addAttribute("employmentTypes", employmentTypes);
+    return "job/edit_job";
   }
   @RequestMapping("/{jobId}")
   public String getJob(@PathVariable("jobId") Long jobId, Model model, HttpServletRequest request) {
