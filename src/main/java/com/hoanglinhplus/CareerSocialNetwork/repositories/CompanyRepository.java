@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.repositories;
 
 import com.hoanglinhplus.CareerSocialNetwork.models.Company;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -27,10 +28,12 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
   @Query("SELECT c.companyId FROM Company c WHERE c.name = :name")
   Long findIdByCompanyName(String name);
   @Query(value = """
-    select c.company_id as company_id, c.created_at,c.user_id
-    ,c.industry_id, c.name, deleted_at, logo,organization_size_id
-    ,c.tag_line, updated_at, website
+    select c.company_id as companyId , c.created_at as createdAt ,c.user_id as userId
+    ,c.industry_id as industryId, c.name as name, deleted_at as deletedAt, logo,organization_size_id as organizationSizeId
+    ,c.tag_line as tagLine, updated_at as updatedAt, website, number_of_follows as numberOfFollows
     from companies c join popular_companies pc on c.company_id = pc.company_id;
     """, nativeQuery = true)
-  List<Company> getPopularCompanies();
+  List<PopularCompanyInfo> getPopularCompanies();
+
+
 }

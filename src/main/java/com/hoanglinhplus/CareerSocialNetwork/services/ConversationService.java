@@ -46,6 +46,12 @@ public class ConversationService {
     conversationDTO.setUser(UserCreationDTO.builder().userId(myUserDetailsService.getCurrentUserId()).build());
     Conversation conversation = ConversationMapper.toEntity(conversationDTO);
     conversation.getParticipants().add(User.builder().userId(myUserDetailsService.getCurrentUserId()).build());
+    List<User> participants = conversation.getParticipants();
+    if( participants.size() > 1 &&
+      conversationRepository.checkUsersInTheSameConversation(participants.get(0).getUserId()
+      , participants.get(1).getUserId())){
+      return ResponseEntity.ok(new ResponseObjectDTO("You have already have a Conversation ",null));
+    }
     Conversation savedConversation = conversationRepository.save(conversation);
     ConversationDTO savedConversationDTO = ConversationMapper.toDTO(savedConversation);
     Map<String, Object> responseData = new HashMap<>();

@@ -26,14 +26,14 @@ $(()=>{
     });
   })
   let $companyIdWrapper = $("#companyIdWrapper");
-  let currentPage = 0;
+  let currentPage = 1;
   const amountOfPostsPerPage = 1;
   let $btnMore = $("#btnMore");
   $btnMore.on("click", async (event)=>{
     let result =  loadJobs({
           companyId: $companyIdWrapper.data("company-id")
         }
-        , currentPage + 1, amountOfPostsPerPage);
+        , currentPage + 1, amountOfPostsPerPage, true);
     if (result != null)
       currentPage++;
   })

@@ -117,11 +117,14 @@ $(()=>{
       contentType: "application/x-www-form-urlencoded",
       success: function (response) {
         console.log(response);
-        window.location = "/"
+        toast("success", "Login", "Login Successfully")
+        setTimeout(()=>{
+          window.location = "/"
+        }, 2500)
       },
       error: function(xhr){
         const response = xhr.responseJSON
-        toast(response.status, response.status, response.message);
+        toast("failed", "Login", response.message);
       }
     });
   })
@@ -140,6 +143,7 @@ $(()=>{
       )
       return;
     let filePathUpload = uploadFile($avatarInput)
+
     if(filePathUpload != null){
       $avatarPath.val(filePathUpload);
       console.log("SignupForm: ",$signupForm.serializeArray());
@@ -150,11 +154,15 @@ $(()=>{
         data: JSON.stringify(userCreation),
         contentType: "application/json",
         success: function (response) {
+          console.log(response);
+          toast("success", "Register", response.message)
+          setTimeout(()=>{
             window.location = "/"
+          }, 2500)
         },
         error: function(xhr){
           const response = xhr.responseJSON
-          toast(response.status, response.status, response.message);
+          toast("failed", "Register", response.message)
         }
       });
     }

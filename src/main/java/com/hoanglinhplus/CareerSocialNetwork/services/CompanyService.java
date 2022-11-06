@@ -13,6 +13,7 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedExceptio
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CompanySpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -276,9 +277,8 @@ public class CompanyService {
       companyRepository.save(company);
     }
   }
-  public List<CompanyCreationDTO> getPopularCompanies(){
-    List<Company> companies = companyRepository.getPopularCompanies();
-    List<CompanyCreationDTO> poplularCompany = companies.stream().map(CompanyMapper::toDTO).toList();
+  public List<PopularCompanyInfo> getPopularCompanies(){
+    List<PopularCompanyInfo> poplularCompany = companyRepository.getPopularCompanies();
     return poplularCompany;
   }
   
@@ -340,5 +340,8 @@ public class CompanyService {
     Map<String, Object> responseData = new HashMap<>();
     responseData.put("deletedCompanies", savedCompanyDTOS);
     return ResponseEntity.ok(new ResponseObjectDTO("Restore Companies Successfully", responseData));
+  }
+  public long getAmountOfAllCompanies(){
+    return companyRepository.count();
   }
 }

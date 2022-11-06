@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @Getter @Setter
 public class FileInfo {
-  private String filename;
+  private String fileName;
   private String filePath;
   private String mimeType;
 }

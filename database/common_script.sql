@@ -150,4 +150,6 @@ on users.user_id = fu.following_id
     inner join posts p2 on fu.followed_id = p2.user_id
 where
     users.user_id = :userId and p2.deleted_at is null
-    and p2.post_status = 'PUBLIC'
+    and p2.post_status = 'PUBLIC';
+--
+

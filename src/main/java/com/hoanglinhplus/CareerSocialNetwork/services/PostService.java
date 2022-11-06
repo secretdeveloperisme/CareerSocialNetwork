@@ -18,6 +18,7 @@ import com.hoanglinhplus.CareerSocialNetwork.models.Post;
 import com.hoanglinhplus.CareerSocialNetwork.models.Post_;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularPostInfo;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.PostRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
@@ -26,7 +27,6 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchC
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
 import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
-import com.hoanglinhplus.CareerSocialNetwork.utils.SlugUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -151,6 +151,9 @@ public class PostService {
 
   public List<Post> getPopularPosts(){
     return postRepository.getPopularPosts();
+  }
+  public List<PopularPostInfo> getPopularPostsInfo(){
+    return postRepository.getPopularPostsInfo();
   }
   public ResponseEntity<ResponseDataDTO<PostCreationDTO>> responseGetPosts(PostFilterDTO postFilterDTO, PageableDTO pageableDTO){
     Page<Post> postPage = getPosts(postFilterDTO, pageableDTO);
@@ -336,4 +339,7 @@ public class PostService {
     return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Posts Successfully", postDTOS, null));
   }
 
+  public long getAmountOfAllPosts() {
+    return postRepository.count();
+  }
 }

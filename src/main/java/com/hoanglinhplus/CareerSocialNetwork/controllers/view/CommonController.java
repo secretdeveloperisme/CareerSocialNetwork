@@ -8,6 +8,8 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job;
 import com.hoanglinhplus.CareerSocialNetwork.models.Post;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJobInfo;
 import com.hoanglinhplus.CareerSocialNetwork.services.*;
 import com.hoanglinhplus.CareerSocialNetwork.utils.AuthenticationTokenUtil;
 import org.springframework.data.domain.Page;
@@ -41,7 +43,7 @@ public class CommonController {
     List<Job> jobs;
     List<Job> popularJobs = jobService.getPopularJobs();
     List<TagDTO> popTags = tagService.getPopularTags();
-    List<CompanyCreationDTO> popCompanies = companyService.getPopularCompanies();
+    List<PopularCompanyInfo> popCompanies = companyService.getPopularCompanies();
     Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
     User user = null;
     if (principal != null) {
@@ -64,7 +66,7 @@ public class CommonController {
     List<Post> posts;
     List<Post> popularPosts = postService.getPopularPosts();
     List<TagDTO> popTags = tagService.getPopularTags();
-    List<CompanyCreationDTO> popCompanies = companyService.getPopularCompanies();
+    List<PopularCompanyInfo> popCompanies = companyService.getPopularCompanies();
     Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
     User user = null;
     if (principal != null) {

@@ -134,7 +134,7 @@ $(()=>{
         },
         error: function(xhr){
           const response = xhr.responseJSON
-          showToast(response.status, response.status, response.message);
+          showToast("failed", "Create Job", "Create Job Failed!");
         }
       });
     }

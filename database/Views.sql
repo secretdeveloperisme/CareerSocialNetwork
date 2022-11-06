@@ -1,7 +1,7 @@
 /*===========================================================
   popular_companies
 ===========================================================*/
-
+drop view if exists popular_companies;
 create view popular_companies
 as
 select top_ca.company_id, coalesce(top_cf.number_of_follows, 0) as number_of_follows, top_ca.number_of_applications from (
@@ -20,6 +20,7 @@ left join (
     group by c.company_id
 ) top_cf
 on top_ca.company_id = top_cf.company_id
+where number_of_follows > 0 or number_of_applications > 0
 order by number_of_follows desc, number_of_applications desc
 limit 10;
 
@@ -50,6 +51,7 @@ left join (
     group by l.job_id
 ) top_jf
 on top_ja.job_id = top_jf.job_id
+where number_of_likes > 0 or number_of_applications > 0
 order by number_of_applications desc, number_of_likes desc
 limit 10;
 
@@ -76,3 +78,17 @@ limit 10;
 
 select * from popular_posts;
 
+
+/*===========================================================
+  amount_jobs_per_month_in_current_year
+===========================================================*/
+drop view if exists amount_jobs_per_month_in_current_year;
+create view amount_jobs_per_month_in_current_year as
+select month(jobs.created_at) AS month,
+       count(jobs.job_id)  AS amount_of_jobs
+from jobs
+where (year(jobs.created_at) = year(curdate()))
+group by month
+order by month;
+
+select * from amount_jobs_per_month_in_current_year;

@@ -56,11 +56,13 @@
             <div class="form-group">
               <input list="locationData" class="form-control" name="location" autocomplete="off" />
               <datalist id="locationData">
-                <option value="ho chi minh">Ho Chi Minh</option>
-                <option value="ha noi">Ha Noi</option>
-                <option value="can tho">Can Tho</option>
-                <option value="da nang">Da Nang</option>
-                <option value="other">other</option>
+                <option value="Ho Chi Minh">Ho Chi Minh</option>
+                <option value="Ha Noi">Ha Noi</option>
+                <option value="Can Tho">Can Tho</option>
+                <option value="Da Nang">Da Nang</option>
+                <option value="Hai Phong">Hai Phong</option>
+                <option value="Binh Duong">Binh Duong</option>
+                <option value="Other">Other</option>
               </datalist>
             </div>
           </div>
@@ -85,11 +87,11 @@
             <div class="input-group-prepend">
               <span class="input-group-text">Amount: </span>
             </div>
-            <input  type="number" name="amount" id="amount" min="0" class="form-control col-6" placeholder="input your min salary ...">
+            <input  type="number" name="amount" id="amount" min="0" class="form-control col-6" placeholder="input amount of people ...">
             <div class="input-group-prepend">
               <span class="input-group-text">Experience:</span>
             </div>
-            <input type="number" name="experience" id="experience" min="0" max="99999999" class="form-control col-6" placeholder="input your max salary ...">
+            <input type="number" name="experience" step="0.1" id="experience" min="0" max="99999999" class="form-control col-6" placeholder="input job experience">
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">

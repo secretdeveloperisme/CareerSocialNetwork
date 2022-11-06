@@ -43,6 +43,13 @@ public class JobController {
     return jobService.responseGetFollowedJobs(pageableDTO);
   }
 
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
+  @GetMapping("/get-amount-of-jobs-per-month")
+  public ResponseEntity<?> getAmountOfJobsPerMonth(
+    @Valid PageableDTO pageableDTO
+  ){
+    return jobService.getJobAmountsPerMonths();
+  }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @GetMapping("/get-job")
   public ResponseEntity<ResponseObjectDTO> getJob(

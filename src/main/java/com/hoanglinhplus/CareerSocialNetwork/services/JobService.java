@@ -15,6 +15,8 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.JobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseJobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job_;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJobInfo;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.JobAmountsPerMonth;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.JobSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -167,7 +169,11 @@ public class JobService {
           orders.add(Sort.Order.by(sortParams[0]).with(Sort.Direction.ASC));
         }
       });
+      if(pageableDTO.getSort().size() == 0){
+        orders.add(Sort.Order.by(Job_.CREATED_AT).with(Sort.Direction.DESC));
+      }
     }
+
     Page<Job> jobPage;
     Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1,pageableDTO.getSize(),Sort.by(orders));
     jobPage = jobRepository.findAll(resultSpecification, pageable);
@@ -175,6 +181,9 @@ public class JobService {
   }
   public List<Job> getPopularJobs(){
     return jobRepository.getPopularJobs();
+  }
+  public List<PopularJobInfo> getPopularJobsInfo(){
+    return jobRepository.getPopularJobInfos();
   }
   public ResponseEntity<ResponseDataDTO<JobCreationDTO>> responseGetJobs(JobFilterDTO jobFilterDTO, PageableDTO pageableDTO){
     Page<Job> jobPage = getJobs(jobFilterDTO, pageableDTO);
@@ -386,6 +395,11 @@ public class JobService {
   public List<EmploymentType> getAllEmploymentType() {
     return employmentTypeRepository.findAll();
   }
-
-
+  public long getAmountOfAllJobs() {
+    return jobRepository.count();
+  }
+  public ResponseEntity<ResponseDataDTO<JobAmountsPerMonth>> getJobAmountsPerMonths(){
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Jobs Per Month Successfully"
+      ,jobRepository.getJobAmountsPerMonth(), null ));
+  }
 }

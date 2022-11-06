@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+<head>
+  <div th:replace="/fragments/head"></div>
+  <title>DashBoard</title>
+  <link rel="stylesheet" href="/css/base.css">
+  <link rel="stylesheet" href="/css/main.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <style>
+    .bg-c-lite-green {
+      background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
+      background: linear-gradient(to right, #ee5a6f, #f29263)
+    } 
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="main px-4">
+      <th:block th:replace="fragments/admin_navigation::adminNavigation"></th:block>
+      <div class="content">
+        <div class="profile row p-0 shadow-sm ml-2 mt-2" style="border-radius: 5px; overflow: hidden;">
+          <div class="container-fluid d-flex flex-column align-items-center bg-c-lite-green col-5 p-5">
+            <img class="icon-128" th:src="${user.getAvatar()}"  alt="avatar">
+            <div th:text="${user.getUsername()}"></div>
+          </div>
+          <div class="container-fluid col-7 pl-3 pr-3">
+            <div class="font-weight-bolder">Information</div>
+            <div class="border-primary" style="border:2px solid"></div>
+            <div class="pt-2">
+              <div class="font-italic text-primary" >
+                Role
+              </div>
+                <div th:each="role : ${user.getRoles()}" class="ml-3 text-black-50" th:text="${role.getName()}"> role.name </div>
+            </div>
+            <div class="pt-2">
+              <div class="font-italic text-primary" >
+                Address
+              </div>
+              <div class="ml-3 text-black-50" th:text="${user.getAddress()}">address</div>
+            </div>
+            <div class="pt-2">
+              <div class="font-italic text-primary" >
+                Email
+              </div>
+              <div class="ml-3 text-black-50" th:text="${user.getEmail()}">
+                email
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row p-2 m-0">
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-info rounded-lg">
+              <div>
+                <h1 th:text="${adminStatistics.getAmountOfCompanies()}">amountOfCompanies</h1>
+                <h2>Companies</h2>
+              </div>
+              <div class="position-absolute" style="top: 32px; right: 10px;">
+                <i class="fas fa-building" style="font-size: 50px;"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-info rounded-lg">
+              <div class="me-3">
+                <h1 th:text="${adminStatistics.getAmountOfJobs()}"> amountOfJobs</h1>
+                <h2>Total Jobs</h2>
+              </div>
+              <div class="position-absolute " style="top: 32px; right: 10px;">
+                <i class="fas fa-briefcase" style="font-size: 50px;"></i>
+              </div>
+            </div>
+          </div>
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-info rounded-lg">
+              <div>
+              <h1 th:text="${adminStatistics.getAmountOfPosts()}">amountOfPosts</h1>
+              <h2>Total Posts</h2>
+            </div>
+            <div class="position-absolute" style="top: 32px; right: 10px;">
+              <i class="fas fa-file-alt" style="font-size: 50px;"></i>
+            </div>
+            </div>
+          </div>
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-success rounded-lg">
+              <div>
+              <h1 th:text="${adminStatistics.getAmountOfTags()}">amountOfTags</h1>
+              <h2>Tags</h2>
+            </div>
+            <div class="position-absolute" style="top: 32px; right: 10px;">
+              <i class="fas fa-tag" style="font-size: 50px;"></i>
+            </div>
+            </div>
+          </div>
+          <div class="col-xl-3 text-white">
+            <div class="position-relative container-fluid bg-warning rounded-lg">
+              <div>
+              <h1 th:text="${adminStatistics.getAmountOfUsers()}"> amountOfUsers </h1>
+              <h2>Users</h2>
+            </div>
+            <div class="position-absolute" style="top: 32px; right: 10px;">
+              <i class="fas fa-users" style="font-size: 50px;"></i>
+            </div>
+            </div>
+          </div>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">Top 5 Popular Companies</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Title</th>
+                <th scope="col">amount Of Follows</th>
+              </tr>
+            </thead>
+          <tbody >
+              <tr  th:each="popularCompanyInfo,iter : ${popularCompanyInfos}">
+                <th scope="row" th:text="${iter.index + 1}"></th>
+                <td><a class="d-flex justify-content-between align-items-center" th:href="|/company/${popularCompanyInfo.getCompanyId()}|" th:text="${popularCompanyInfo.getName()}"></a></td>
+                <td><span class="badge bg-primary" th:text="${popularCompanyInfo.getNumberOfFollows()}">numberOfFollows</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">Top 10 Popular Jobs</h1>
+          <table class="table">
+            <thead>
+              <tr>
+                <th scope="col">Index</th>
+                <th scope="col">Image</th>
+                <th scope="col">Title</th>
+                <th scope="col">Amount Of Applications</th>
+                <th scope="col">amount Of Likes</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr th:each="popularJobInfo,iter : ${popularJobInfos}">
+                <th scope="row" th:text="${iter.index+1}"></th>
+                <td><img th:src="${popularJobInfo.getImage()}" src="" class="icon-32"></td>
+                <td><a class="d-flex justify-content-between align-items-center" th:href="|/post/${popularJobInfo.getJobId()}|"
+                       th:text="${popularJobInfo.getTitle()}"></a></td>
+                <td><span class="badge bg-primary" th:text="${popularJobInfo.getNumberOfApplications()}"></span></td>
+                <td><span class="badge bg-primary" th:text="${popularJobInfo.getNumberOfLikes()}"></span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">Top 10 Popular Posts</h1>
+          <table class="table">
+            <thead>
+            <tr>
+              <th scope="col">Id</th>
+              <th scope="col">Image</th>
+              <th scope="col">Title</th>
+              <th scope="col">amount Of Likes</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="popularPostInfo, iter : ${popularPostInfos}">
+              <th scope="row" th:text="${iter.index+1}"></th>
+              <td ><img th:src="${popularPostInfo.getImage()}" src="" class="icon-32"></td>
+              <td><a class="d-flex justify-content-between align-items-center" th:href="|/post/${popularPostInfo.getSlug()}|"
+                     th:text="${popularPostInfo.getTitle()}"></a></td>
+              <td><span class="badge bg-primary" th:text="${popularPostInfo.getNumberOfLikes()}"></span></td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="container-fluid">
+          <h1 class="text-center font-weight-bolder text-primary">Thống Kê Bài Viết Theo Tháng</h1>
+          <div>
+            <canvas id="chartPostsPerMonth"></canvas>
+          </div>
+        </div>
+      </div>
+      </div>
+    </div>
+    <ul class="nav-mobile list-style-none">
+      <li class="top-link">
+        <div class="btn rounded-circle btn-danger shadow" onclick="window.scrollTo({top:0})">
+          <i class="fa fa-arrow-up" aria-hidden="true"></i>
+        </div>
+      </li>
+    </ul>
+  <div id="postsPerMonthData"></div>
+  <div th:replace="/fragments/components/toast"></div>
+  <div th:replace="/auth/login"></div>
+  <script src="/js/admin/Dashboard.js"></script>
+</body>
+</html>

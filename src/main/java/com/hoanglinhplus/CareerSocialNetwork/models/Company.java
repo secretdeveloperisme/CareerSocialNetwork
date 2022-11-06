@@ -270,4 +270,5 @@ public class Company {
     removeAllFollow_companies();
     removeAllCompanyNotifications();
   }
+
 }

@@ -123,4 +123,8 @@ public class TagService {
   public long getAmountOfTagFollow(Long userId){
     return getFollowedTags(userId).size();
   }
+
+  public long getAmountOfAllTags() {
+    return tagRepository.count();
+  }
 }

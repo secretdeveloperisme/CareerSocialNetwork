@@ -2,12 +2,10 @@
 function uploadFile($inputFile){
   const xmlHttpRequest = new XMLHttpRequest();
   xmlHttpRequest.open("POST","/api/file/upload",false);
-  xmlHttpRequest.setRequestHeader('Content-Type', 'multipart/form-data');
-  xmlHttpRequest.setRequestHeader('Accept', 'application/json');
   let form  = new FormData();
   let file = $inputFile[0].files[0];
   console.log(file)
-  form.append("files", file);
+  form.append("file", file);
   xmlHttpRequest.send(form);
   if(xmlHttpRequest.status === 200) {
     console.log(xmlHttpRequest.responseText)

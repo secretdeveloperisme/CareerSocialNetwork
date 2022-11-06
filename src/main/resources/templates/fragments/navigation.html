@@ -53,6 +53,12 @@
                                 My Info
                             </a>
                         </li>
+                        <li th:if="${user.isAdmin()}">
+                            <a class="dropdown-item" href="/admin">
+                                <i class="fa-solid fa-building-shield"></i>
+                                Admin
+                            </a>
+                        </li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" id="btnLogout">Logout</a></li>
                     </ul>

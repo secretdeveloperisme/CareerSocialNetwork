@@ -126,7 +126,7 @@
             <div class="icon-64 author__avatar"
                  th:style="'background-image: url(\''+${author.getAvatar()}+'\')'"></div>
             <a th:href="'/user/'+${user.getUsername()}">
-              <h5 class="author__name ms-3" th:text="${user.getUsername()}"></h5>
+              <h5 class="author__name ms-3" th:text="${author.getUsername()}"></h5>
             </a>
           </div>
           <button th:classappend="'btn w-100'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'"

@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.repositories;
 
 import com.hoanglinhplus.CareerSocialNetwork.models.Post;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularPostInfo;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,6 +36,14 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
     limit 5
     """, nativeQuery = true)
   List<Post> getPopularPosts();
+  @Query(value = """
+    select  posts.post_id as postId, content, created_at as createdAt, deleted_at as deletedAt, description
+    ,image, slug, title, updated_at as updatedAt, user_id as userId, post_status as postStatus
+    ,number_of_like as numberOfLikes from posts
+    inner join popular_posts pp on posts.post_id = pp.post_id
+    limit 5
+    """, nativeQuery = true)
+  List<PopularPostInfo> getPopularPostsInfo();
   @Query(value = """
     select * from
       (

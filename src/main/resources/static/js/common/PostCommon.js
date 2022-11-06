@@ -2,8 +2,8 @@ import {formatDate} from "../utils/format_date.js";
 import like from "./LikeCommon.js";
 
 async function loadPosts(postFilter, page = 1, size = 10, isFilter = false) {
-  let $postLists = $($(".post-list")[0]);
-  let $btnMore = $("#btnMore");
+  let $postLists = $("#postsList");
+  let $btnMore = $("#btnMorePost");
   $btnMore.text("Loading ....");
   let queryObject = {
     ...postFilter,

@@ -1,6 +1,6 @@
 <!--<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">-->
 <div th:fragment="posts(posts)">
-  <div class="post-list row g-3 grid-mode">
+  <div class="post-list row g-3 grid-mode" id="postsList">
 <!--/*@thymesVar id="posts" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.models.Post>"*/-->
     <div class="col-xl-12" th:each=" post: ${posts}">
       <!--/*@thymesVar id="post" type="com.hoanglinhplus.CareerSocialNetwork.models.Post"*/-->

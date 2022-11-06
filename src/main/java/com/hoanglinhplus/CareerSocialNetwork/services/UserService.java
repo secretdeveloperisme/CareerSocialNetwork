@@ -65,9 +65,14 @@ public class UserService {
     }
     throw new MyUsernameNotFoundException("username is not found", username);
   }
+  boolean isAdmin(User user){
+    return user.getRoles().stream().anyMatch(role -> role.getName().equals("ADMIN"));
+  }
   public User getUser(Long userId) {
     Optional<User> userOptional = userRepository.findById(userId);
     if (userOptional.isPresent()) {
+      User user = userOptional.get();
+      user.setAdmin(isAdmin(user));
       return userOptional.get();
     }
     throw new NotFoundException("User not found", userId.toString(), "UserID");
@@ -326,5 +331,9 @@ public class UserService {
   }
   public long getAmountOfFollowedUsers(Long userId){
     return getFollowedUsers(userId).size();
+  }
+
+  public long getAmountOfAllUsers() {
+    return userRepository.count();
   }
 }

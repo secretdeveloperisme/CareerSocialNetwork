@@ -1,14 +1,20 @@
 import getQueryFromUrl from "../utils/get_query_from_url.js";
 import {objectifyForm} from "../utils/common-utils.js";
 import {loadJobs} from "../common/JobCommon.js";
-$(()=>{
+import {loadPosts} from "../common/PostCommon.js";
+$( async ()=>{
+
   const $customDataLists = $(".custom-datalist");
   const $querySearch = $("#querySearch");
   const $btnMore = $("#btnMore");
+  const $btnMorePost = $("#btnMorePost");
   const $postsList = $(".post-list");
   const $btnTabCompany = $("#btnTabCompany");
   const $btnTabUser = $("#btnTabUser");
+  const $btnTabPost = $("#btnTabPost");
   const $userTabContent = $("#userTabContent");
+  const $jobFilterFields = $(".job-filter-field");
+  const $btnTabs = $(".btn-tab");
   const $companiesList = $(".companies");
   const $usersList = $(".users");
   const $btnTabTag = $("#btnTabTag");
@@ -18,15 +24,30 @@ $(()=>{
   const $addSkillFilterForm = $("#addSkillForm");
   const $addTagFilterForm = $("#addTagForm");
   let payLoadJobFilter = {}
+  let payLoadPostFilter = {}
   let isFilter = false;
+  let currentFilter = "JOB";
+  // load more search posts
+  let currentPageSearchJob = 1;
+  let currentPageFilterJob = 2;
 
   // load more search posts
-  let currentPageSearch = 1;
-  let currentPageFilter = 2;
+  let currentPageSearchPost = 1;
+  let currentPageFilterPost = 2;
   // display query search
   let querySearchValue = getQueryFromUrl("query", window.location.search)
+  await searchJob();
+  await searchPosts();
   $querySearch.html(querySearchValue)
-  searchJob()
+
+  $btnTabs.on("click", function (event){
+    currentFilter = $(event.target).data("active-tab");
+    if (currentFilter === "JOB")
+        $jobFilterFields.fadeIn()
+    else
+      $jobFilterFields.fadeOut();
+
+  })
   $customDataLists.children().on("click", function (){
     $($(this).parent().data("target-input")).val($(this).data("value"))
   })
@@ -38,6 +59,7 @@ $(()=>{
     })
 
   })
+
   // add Event for UI
   function createSkillItem(data){
     let $parentSpan = $(document.createElement("span"));
@@ -77,29 +99,47 @@ $(()=>{
     $(this).siblings(".list").eq(0).append($item);
   })
 
-
   async function searchJob(){
-    payLoadJobFilter = {
-      title: querySearchValue
+    if(querySearchValue !== null) {
+      payLoadJobFilter.title = querySearchValue;
     }
-    let status = await loadJobs(payLoadJobFilter, currentPageSearch, 10, true);
+    let status = await loadJobs(payLoadJobFilter, currentPageSearchJob, 10, true);
    if(status != null)
-     currentPageSearch++;
+     currentPageSearchJob++;
    $btnMore.show()
+  }
+  async function searchPosts(){
+    if(querySearchValue !== null) {
+      payLoadPostFilter.title = querySearchValue;
+    }
+    let status = await loadPosts(payLoadPostFilter, currentPageSearchPost, 10, true);
+    if(status != null)
+      currentPageSearchPost++;
+    $btnMorePost.show()
   }
 
   $btnMore.on("click", async (event)=>{
     if(isFilter){
-      let status = await loadJobs(payLoadJobFilter, currentPageFilter, 10, true);
+      let status = await loadJobs(payLoadJobFilter, currentPageFilterJob, 10, true);
       if(status != null)
-        currentPageFilter++;
+        currentPageFilterJob++;
     }else {
-      let status = await loadJobs(payLoadJobFilter, currentPageSearch, 10, true);
+      let status = await loadJobs(payLoadJobFilter, currentPageSearchJob, 10, true);
       if(status != null)
-        currentPageSearch++;
+        currentPageSearchJob++;
     }
+  })
 
-
+  $btnMorePost.on("click", async (event)=>{
+    if(isFilter){
+      let status = await loadPosts(payLoadPostFilter, currentPageFilterPost, 10, true);
+      if(status != null)
+        currentPageFilterPost++;
+    }else {
+      let status = await loadPosts(payLoadPostFilter, currentPageSearchPost, 10, true);
+      if(status != null)
+        currentPageSearchPost++;
+    }
   })
   // add event for tab user
   $btnTabUser.on("click", function (event){
@@ -152,7 +192,8 @@ $(()=>{
       }
     });
   })//
-  let page = 1;
+  let pageJob = 1;
+  let pagePost = 1;
   // filter job
   $btnFilter.on("click", async function (event) {
     let $tagFilterInputs = $("#tagFilterList").find("input");
@@ -170,12 +211,22 @@ $(()=>{
       ...requestPayload,
       skillIds,tagIds
     }
-    payLoadJobFilter = requestPayload;
-    if (requestPayload.salary === "")
-      requestPayload.salary = -1
-    $postsList.html("")
-    let status = await loadJobs(requestPayload, page,10, true)
-    $btnMore.show();
+    if(currentFilter === "JOB"){
+      payLoadJobFilter = requestPayload;
+      if (requestPayload.salary === "")
+        requestPayload.salary = -1
+      $postsList.html("")
+      let status = await loadJobs(requestPayload, pageJob,10, true)
+      $btnMore.show();
+    }
+    else if(currentFilter === "POST"){
+      payLoadPostFilter.title = requestPayload.title;
+      payLoadPostFilter.tagIds = requestPayload.tagIds;
+      console.log(payLoadPostFilter)
+      $postsList.html("")
+      let status = await loadPosts(payLoadPostFilter, pagePost,10, true)
+      $btnMorePost.show();
+    }
     isFilter = true;
   })
 

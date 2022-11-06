@@ -111,7 +111,8 @@ public class User {
   @JoinTable(name = "follow_users",joinColumns = @JoinColumn(name = "following_id", referencedColumnName = "user_id")
     , inverseJoinColumns = @JoinColumn(name = "followed_id", referencedColumnName = "user_id"))
   public List<User> followed_users;
-
+  @Transient
+  private boolean isAdmin = false;
   public void addFollow_companies(Company newCompany) {
     if (newCompany == null)
       return;
