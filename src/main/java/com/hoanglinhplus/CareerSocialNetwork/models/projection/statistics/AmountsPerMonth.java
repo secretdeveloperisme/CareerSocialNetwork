@@ -1,6 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics;
 
-public interface JobAmountsPerMonth {
+public interface AmountsPerMonth {
   int getMonth();
-  int getAmountOfJobs();
+  int getAmount();
 }

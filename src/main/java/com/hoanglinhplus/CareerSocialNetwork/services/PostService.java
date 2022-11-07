@@ -19,6 +19,7 @@ import com.hoanglinhplus.CareerSocialNetwork.models.Post_;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularPostInfo;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountsPerMonth;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.PostRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
@@ -341,5 +342,9 @@ public class PostService {
 
   public long getAmountOfAllPosts() {
     return postRepository.count();
+  }
+  public ResponseEntity<ResponseDataDTO<AmountsPerMonth>> getAmountPerMonths(){
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Posts Per Month Successfully"
+      ,postRepository.getAmountsPerMonth(), null ));
   }
 }

@@ -36,6 +36,13 @@ public class PostController {
   ){
     return postService.responseGetPosts(postFilterDTO, pageableDTO);
   }
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
+  @GetMapping("/get-amount-per-month")
+  public ResponseEntity<?> getAmountPerMonth(
+    @Valid PageableDTO pageableDTO
+  ){
+    return postService.getAmountPerMonths();
+  }
   @GetMapping("/get-followed-posts")
   public ResponseEntity<?> getFollowedPosts(
     @Valid PageableDTO pageableDTO

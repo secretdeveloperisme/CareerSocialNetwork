@@ -16,7 +16,7 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseJobMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job_;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJobInfo;
-import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.JobAmountsPerMonth;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountsPerMonth;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.JobSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -398,7 +398,7 @@ public class JobService {
   public long getAmountOfAllJobs() {
     return jobRepository.count();
   }
-  public ResponseEntity<ResponseDataDTO<JobAmountsPerMonth>> getJobAmountsPerMonths(){
+  public ResponseEntity<ResponseDataDTO<AmountsPerMonth>> getJobAmountsPerMonths(){
     return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Jobs Per Month Successfully"
       ,jobRepository.getJobAmountsPerMonth(), null ));
   }

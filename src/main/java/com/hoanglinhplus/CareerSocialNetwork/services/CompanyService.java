@@ -14,6 +14,8 @@ import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyMapper;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountsPerMonth;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountJobsOfCompany;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CompanySpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -343,5 +345,14 @@ public class CompanyService {
   }
   public long getAmountOfAllCompanies(){
     return companyRepository.count();
+  }
+
+  public ResponseEntity<ResponseDataDTO<AmountsPerMonth>> getAmountPerMonths(){
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Companies Per Month Successfully"
+      ,companyRepository.getAmountsPerMonth(), null ));
+  }
+  public ResponseEntity<ResponseDataDTO<AmountJobsOfCompany>> getPercentJobsOfCompany(){
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Percent Job Of Company Successfully"
+      ,companyRepository.getAmountJobsOfCompanies(), null ));
   }
 }

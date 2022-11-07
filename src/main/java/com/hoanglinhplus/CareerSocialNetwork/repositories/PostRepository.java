@@ -2,6 +2,7 @@ package com.hoanglinhplus.CareerSocialNetwork.repositories;
 
 import com.hoanglinhplus.CareerSocialNetwork.models.Post;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularPostInfo;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountsPerMonth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -90,4 +91,7 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
   limit :start ,:numberOfPostsPerPage
   """, nativeQuery = true)
   List<Post> getFollowedPosts(Long userId, int start, int numberOfPostsPerPage);
+  @Query(value = "SELECT month, amount_of_posts as amount" +
+    " from amount_posts_per_month_in_current_year", nativeQuery = true)
+  List<AmountsPerMonth> getAmountsPerMonth();
 }

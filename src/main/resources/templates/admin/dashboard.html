@@ -118,7 +118,11 @@
           <tbody >
               <tr  th:each="popularCompanyInfo,iter : ${popularCompanyInfos}">
                 <th scope="row" th:text="${iter.index + 1}"></th>
-                <td><a class="d-flex justify-content-between align-items-center" th:href="|/company/${popularCompanyInfo.getCompanyId()}|" th:text="${popularCompanyInfo.getName()}"></a></td>
+                <td class="d-flex">
+                  <img th:src="${popularCompanyInfo.getLogo()}" src="" class="icon-32">
+                  <a class="ms-1 d-flex justify-content-between align-items-center" th:href="|/company/${popularCompanyInfo.getCompanyId()}|" th:text="${popularCompanyInfo.getName()}">
+                  </a>
+                </td>
                 <td><span class="badge bg-primary" th:text="${popularCompanyInfo.getNumberOfFollows()}">numberOfFollows</span></td>
               </tr>
             </tbody>
@@ -140,7 +144,7 @@
               <tr th:each="popularJobInfo,iter : ${popularJobInfos}">
                 <th scope="row" th:text="${iter.index+1}"></th>
                 <td><img th:src="${popularJobInfo.getImage()}" src="" class="icon-32"></td>
-                <td><a class="d-flex justify-content-between align-items-center" th:href="|/post/${popularJobInfo.getJobId()}|"
+                <td><a class="d-flex justify-content-between align-items-center" th:href="|/job/${popularJobInfo.getJobId()}|"
                        th:text="${popularJobInfo.getTitle()}"></a></td>
                 <td><span class="badge bg-primary" th:text="${popularJobInfo.getNumberOfApplications()}"></span></td>
                 <td><span class="badge bg-primary" th:text="${popularJobInfo.getNumberOfLikes()}"></span></td>
@@ -171,9 +175,17 @@
           </table>
         </div>
         <div class="container-fluid">
-          <h1 class="text-center font-weight-bolder text-primary">Thống Kê Bài Viết Theo Tháng</h1>
+          <h1 class="text-center font-weight-bolder text-primary">Amount Of Items Per Month</h1>
           <div>
             <canvas id="chartPostsPerMonth"></canvas>
+          </div>
+        </div>
+        <div class="container-fluid d-flex justify-content-center">
+          <div style="width: 100vh">
+            <h1 class="text-center font-weight-bolder text-info">Percent Of Company Jobs</h1>
+            <div>
+              <canvas id="chartPercentOfCompaniesJobs"></canvas>
+            </div>
           </div>
         </div>
       </div>

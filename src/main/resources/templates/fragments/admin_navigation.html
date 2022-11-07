@@ -1,0 +1,64 @@
+<th:block th:fragment="adminNavigation">
+  <div class="sidebar overflow-auto pt-2 pb-5 px-2 mt-0">
+    <a href="/" class="text-decoration-none"><h1>Career Social Network</h1></a>
+    <ul class="nav nav-pills flex-column mb-auto">
+      <li class="nav-item">
+        <a href="" class="nav-link link-dark active" aria-current="page">
+          <i class="fa fa-home" aria-hidden="true"></i>
+          DashBoard
+        </a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link-dark"  href="/admin/jobs" aria-expanded="true">
+          <i class="fas fa-file-alt"></i>
+          Jobs
+        </a>
+        <ul id="jobList" class="collapse show mr-2 list-group list-group-flush">
+
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link-dark"  href="/admin/posts" aria-expanded="true">
+          <i class="fas fa-file-alt"></i>
+          Posts
+        </a>
+        <ul id="postList" class="collapse show mr-2 list-group list-group-flush">
+
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link link-dark"  href="/admin/posts" aria-expanded="true">
+          <i class="fas fa-file-alt"></i>
+          Companies
+        </a>
+        <ul id="companyList" class="collapse show mr-2 list-group list-group-flush">
+
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a href="/admin/tags" class="nav-link link-dark" >
+          <i class="fa fa-tags" aria-hidden="true"></i>
+          Tags
+        </a>
+        <ul class="collapse show list-style-none list-group list-group-flush" id="tagList" >
+        </ul>
+      </li>
+      <li class="nav-item">
+        <a href="/admin/users" class="nav-link link-dark" >
+          <i class="fas fa-user"></i>
+          Users
+        </a>
+        <ul class="collapse show list-style-none list-group list-group-flush" id="userList" >
+        </ul>
+      </li>
+      <li class="nav-connect">
+        <ul class="connect-me list-style-none d-flex justify-content-center p-0">
+          <li class="p-2"><a href=""><i class="fab fa-facebook" aria-hidden="true"></i></a></li>
+          <li class="p-2"><a href=""><i class="fab fa-github" aria-hidden="true"></i></a></li>
+          <li class="p-2"><a href=""><i class="fab fa-linkedin" aria-hidden="true"></i></a></li>
+          <li class="p-2"><a href=""><i class="fab fa-blogger" aria-hidden="true"></i></a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</th:block>

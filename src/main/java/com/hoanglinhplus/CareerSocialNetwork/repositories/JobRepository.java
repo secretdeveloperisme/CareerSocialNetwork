@@ -3,7 +3,7 @@ package com.hoanglinhplus.CareerSocialNetwork.repositories;
 import com.hoanglinhplus.CareerSocialNetwork.models.Company;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJobInfo;
-import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.JobAmountsPerMonth;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountsPerMonth;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -71,7 +71,7 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
   limit :start ,:numberOfJobsPerPage
   """, nativeQuery = true)
   List<Job> getFollowedJobs(Long userId, int start, int numberOfJobsPerPage);
-  @Query(value = "SELECT month, amount_of_jobs as amountOfJobs" +
+  @Query(value = "SELECT month, amount_of_jobs as amount" +
     " from amount_jobs_per_month_in_current_year", nativeQuery = true)
-  List<JobAmountsPerMonth> getJobAmountsPerMonth();
+  List<AmountsPerMonth> getJobAmountsPerMonth();
 }

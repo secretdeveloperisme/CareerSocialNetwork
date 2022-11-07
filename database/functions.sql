@@ -20,3 +20,18 @@ end??
 select check_user_is_the_same_conversation(1,26);
 
 drop function check_user_is_the_same_conversation;
+
+
+
+DELIMITER ??
+CREATE FUNCTION get_total_of_jobs()
+RETURNS BIGINT
+DETERMINISTIC
+BEGIN
+    declare total BIGINT default -1;
+    set total = (select count(*) from jobs);
+    return total;
+end??
+select get_total_of_jobs();
+
+drop function check_user_is_the_same_conversation;

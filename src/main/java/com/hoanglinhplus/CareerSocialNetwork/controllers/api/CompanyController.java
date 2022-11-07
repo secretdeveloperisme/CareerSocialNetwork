@@ -50,6 +50,20 @@ public class CompanyController {
     @RequestParam @NotNull Long id){
     return companyService.responseGetCompany(id);
   }
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
+  @GetMapping("/get-amount-per-month")
+  public ResponseEntity<?> getAmountPerMonth(
+    @Valid PageableDTO pageableDTO
+  ){
+    return companyService.getAmountPerMonths();
+  }
+  @PreAuthorize("hasAnyAuthority('ADMIN')")
+  @GetMapping("/get-amount-jobs")
+  public ResponseEntity<?> getAmountJobsOfCompanies(
+    @Valid PageableDTO pageableDTO
+  ){
+    return companyService.getPercentJobsOfCompany();
+  }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @PostMapping(produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> createCompany(@RequestBody @Valid CompanyCreationDTO companyCreationDTO){

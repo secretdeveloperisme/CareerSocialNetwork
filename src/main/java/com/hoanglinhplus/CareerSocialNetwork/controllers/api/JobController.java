@@ -44,7 +44,7 @@ public class JobController {
   }
 
   @PreAuthorize("hasAnyAuthority('ADMIN')")
-  @GetMapping("/get-amount-of-jobs-per-month")
+  @GetMapping("/get-amount-per-month")
   public ResponseEntity<?> getAmountOfJobsPerMonth(
     @Valid PageableDTO pageableDTO
   ){

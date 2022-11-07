@@ -2,6 +2,8 @@ package com.hoanglinhplus.CareerSocialNetwork.repositories;
 
 import com.hoanglinhplus.CareerSocialNetwork.models.Company;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountsPerMonth;
+import com.hoanglinhplus.CareerSocialNetwork.models.projection.statistics.AmountJobsOfCompany;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
@@ -35,5 +37,10 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
     """, nativeQuery = true)
   List<PopularCompanyInfo> getPopularCompanies();
 
-
+  @Query(value = "SELECT month, amount_of_companies as amount" +
+    " from amount_companies_per_month_in_current_year", nativeQuery = true)
+  List<AmountsPerMonth> getAmountsPerMonth();
+  @Query(value = "SELECT company_id as companyId, name, total as amount" +
+    " from amount_jobs_of_companies_of_total", nativeQuery = true)
+  List<AmountJobsOfCompany> getAmountJobsOfCompanies();
 }

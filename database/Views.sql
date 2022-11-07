@@ -92,3 +92,55 @@ group by month
 order by month;
 
 select * from amount_jobs_per_month_in_current_year;
+
+/*===========================================================
+  amount_jobs_per_month_in_current_year
+===========================================================*/
+drop view if exists amount_posts_per_month_in_current_year;
+create view amount_posts_per_month_in_current_year as
+select month(posts.created_at) AS month,
+       count(posts.post_id)  AS amount_of_posts
+from posts
+where (year(posts.created_at) = year(curdate()))
+group by month
+order by month;
+
+select * from amount_posts_per_month_in_current_year;
+
+/*===========================================================
+  amount_companies_per_month_in_current_year
+===========================================================*/
+drop view if exists amount_companies_per_month_in_current_year;
+create view amount_companies_per_month_in_current_year as
+select month(companies.created_at) AS month,
+       count(companies.company_id)  AS amount_of_companies
+from companies
+where (year(companies.created_at) = year(curdate()))
+group by month
+order by month;
+
+select * from amount_companies_per_month_in_current_year;
+
+
+/*===========================================================
+  amount_jobs_of_companies_of_total
+===========================================================*/
+drop view if exists amount_jobs_of_companies_of_total;
+create view amount_jobs_of_companies_of_total as
+(select c.company_id, c.name, count(j.job_id) as total
+from companies c
+inner join jobs j on c.company_id = j.company_id
+group by c.company_id
+order by  total desc
+limit 10 OFFSET 0)
+union
+(select null as company_id, 'other' as name, sum(total) as total from (
+    select c.company_id, c.name, count(j.job_id) as total
+    from companies c
+    inner join jobs j on c.company_id = j.company_id
+    group by c.company_id
+    order by  total desc
+    limit 10,9999999999
+) other);
+
+select * from amount_jobs_of_companies_of_total;
