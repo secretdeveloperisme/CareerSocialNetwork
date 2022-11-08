@@ -33,9 +33,10 @@ public class UserController {
     @RequestParam(required = false)  @Size(min = 1, max = 1, message = "gender's length must be 1 ")  String gender
     , @RequestParam(required = false) @Size(min = 1, max = 255, message = "address's length must be from 1 to 255")  String address
     ,@RequestParam(required = false) @Size(min = 1, max = 255, message = "address's length must be from 1 to 255")  String username
+    ,@RequestParam(required = false, name = "enabled") String enable
     , @Valid PageableDTO pageableDTO
   ){
-    return userService.getAllUsers(gender, address, username,  pageableDTO);
+    return userService.getAllUsers(gender, address, username, enable,  pageableDTO);
   }
 
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")

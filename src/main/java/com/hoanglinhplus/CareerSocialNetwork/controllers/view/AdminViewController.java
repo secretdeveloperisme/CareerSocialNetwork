@@ -28,6 +28,16 @@ public class AdminViewController {
   private final ApplicationService applicationService;
   private final PostService postService;
   private final AuthenticationTokenUtil authenticationTokenUtil;
+  private User user;
+  private void loadAuthenticatedUser(HttpServletRequest request){
+    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
+    if (principal == null) {
+      throw new PermissionDeniedException("You don't have permission access this site");
+    }
+    user = userService.getUser(((Integer)principal.get("userId")).longValue());
+    if(!user.isAdmin())
+      throw new PermissionDeniedException("You don't have permission access this site");
+  }
 
   public AdminViewController(CompanyService companyService, UserService userService, TagService tagService, JobService jobService, ApplicationService applicationService, PostService postService, AuthenticationTokenUtil authenticationTokenUtil) {
     this.companyService = companyService;
@@ -48,14 +58,7 @@ public class AdminViewController {
   }
   @GetMapping
   public String dashboard(HttpServletRequest request, Model model){
-    User user = null;
-    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-    if (principal == null) {
-      throw new PermissionDeniedException("You don't have permission access this site");
-    }
-    user = userService.getUser(((Integer)principal.get("userId")).longValue());
-    if(!user.isAdmin())
-      throw new PermissionDeniedException("You don't have permission access this site");
+    loadAuthenticatedUser(request);
     AdminStatistics adminStatistics = getStatistics();
     List<PopularCompanyInfo> popularCompanyInfos = companyService.getPopularCompanies();
     List<PopularJobInfo> popularJobInfos = jobService.getPopularJobsInfo();
@@ -66,6 +69,12 @@ public class AdminViewController {
     model.addAttribute("popularPostInfos", popularPostInfos);
     model.addAttribute("user", user);
     return "admin/dashboard";
+  }
+  @GetMapping("/users")
+  public String users(HttpServletRequest request, Model model){
+    loadAuthenticatedUser(request);
+    model.addAttribute("user", user);
+    return "admin/users";
   }
 //  @GetMapping("/post")
 //  public String posts(HttpServletRequest request, Model model){

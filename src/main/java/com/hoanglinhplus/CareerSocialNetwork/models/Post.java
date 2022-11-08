@@ -40,7 +40,7 @@ public class Post {
   @LastModifiedDate
   private Date updatedAt;
   private Date deletedAt;
-  @OneToMany(mappedBy = "post")
+  @OneToMany(mappedBy = "post", orphanRemoval = true)
   private List<Comment> comments;
 
   @OneToMany(mappedBy = "post",orphanRemoval = true)

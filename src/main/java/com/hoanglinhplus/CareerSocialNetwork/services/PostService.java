@@ -337,14 +337,15 @@ public class PostService {
     Long userId = myUserDetailsService.getCurrentUserId();
     List<Post> posts = getFollowedPosts(pageableDTO, userId);
     List<PostCreationDTO> postDTOS = posts.stream().map(PostMapper::toDTO).toList();
-    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Posts Successfully", postDTOS, null));
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Posts Successfully", postDTOS, null, (long) postDTOS.size()));
   }
 
   public long getAmountOfAllPosts() {
     return postRepository.count();
   }
   public ResponseEntity<ResponseDataDTO<AmountsPerMonth>> getAmountPerMonths(){
+    List<AmountsPerMonth> amountPerMonths = postRepository.getAmountsPerMonth();
     return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Posts Per Month Successfully"
-      ,postRepository.getAmountsPerMonth(), null ));
+      ,amountPerMonths, null, (long) amountPerMonths.size()));
   }
 }

@@ -12,7 +12,7 @@ public class ResponseJobMapper {
   public static ResponseDataDTO<JobCreationDTO> toDTO(Page<Job> jobPage){
     List<JobCreationDTO> jobCreationDTOS = jobPage.getContent().stream().map(JobMapper::toDTO).collect(Collectors.toList());
     ResponseDataDTO<JobCreationDTO> responseData =
-      new ResponseDataDTO<>("get all jobs successfully", jobCreationDTOS,(long) jobPage.getTotalPages());
+      new ResponseDataDTO<>("get all jobs successfully", jobCreationDTOS,(long) jobPage.getTotalPages(), jobPage.getTotalElements());
     return responseData;
   }
 }

@@ -16,7 +16,7 @@ public class ResponseTagMapper {
     ResponseDataDTO<TagDTO> responseData = new ResponseDataDTO<>(
       "get all companies successfully"
     , tagDTOS
-    ,(long)tagPage.getTotalPages());
+    ,(long)tagPage.getTotalPages(), tagPage.getTotalElements());
     return responseData;
   }
 }

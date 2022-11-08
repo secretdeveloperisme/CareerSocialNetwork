@@ -12,7 +12,7 @@ public class ResponsePostMapper {
   public static ResponseDataDTO<PostCreationDTO> toDTO(Page<Post> jobPage){
     List<PostCreationDTO> jobCreationDTOS = jobPage.getContent().stream().map(PostMapper::toDTO).collect(Collectors.toList());
     ResponseDataDTO<PostCreationDTO> responseData =
-      new ResponseDataDTO<>("get all post successfully", jobCreationDTOS,(long) jobPage.getTotalPages());
+      new ResponseDataDTO<>("get all post successfully", jobCreationDTOS,(long) jobPage.getTotalPages(), jobPage.getTotalElements());
     return responseData;
   }
 }

@@ -16,7 +16,7 @@ public class ResponseCompanyMapper {
     ResponseDataDTO<CompanyCreationDTO> responseData = new ResponseDataDTO<>(
       "get all companies successfully"
     , companyCreationDTOS
-    ,(long)companyPage.getTotalPages());
+    ,(long)companyPage.getTotalPages(),companyPage.getTotalElements());
     return responseData;
   }
 }

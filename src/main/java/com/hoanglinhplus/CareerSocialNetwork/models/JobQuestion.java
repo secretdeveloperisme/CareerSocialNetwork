@@ -17,7 +17,7 @@ public class JobQuestion {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "job_que_id")
   private Long jobQueId;
-  @OneToMany(mappedBy = "jobQuestion")
+  @OneToMany(mappedBy = "jobQuestion",  orphanRemoval = true)
   private List<Answer> answers;
   @ManyToOne
   @JoinColumn(name = "job_id", referencedColumnName = "job_id")

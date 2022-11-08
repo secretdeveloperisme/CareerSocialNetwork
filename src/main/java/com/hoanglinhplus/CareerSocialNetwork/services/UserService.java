@@ -4,6 +4,7 @@ import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.EducationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.SkillDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
@@ -147,8 +148,8 @@ public class UserService {
     educationService.deleteEducation(educationId);
     return ResponseEntity.ok(new ResponseObjectDTO("Delete User Education Successfully ", null));
   }
-  public ResponseEntity<ResponseObjectDTO> getAllUsers(String gender, String address
-    , String username, PageableDTO pageableDTO){
+  public ResponseEntity<ResponseDataDTO<UserDTO>> getAllUsers(String gender, String address
+    , String username, String isEnable,  PageableDTO pageableDTO){
     UserSpecification userSpecification = new UserSpecification();
     if(gender != null && !gender.isEmpty()){
       SearchCriteria<User, String> criteria = new SearchCriteria<>(User_.gender, gender, SearchOperator.LIKE);
@@ -160,6 +161,14 @@ public class UserService {
     }
     if(address != null && !address.isEmpty()){
       SearchCriteria<User,String>criteria = new SearchCriteria<>(User_.address, address, SearchOperator.LIKE);
+      userSpecification.getConditions().add(criteria);
+    }
+    if(isEnable != null && isEnable.equals("true")){
+      SearchCriteria<User,Boolean>criteria = new SearchCriteria<>(User_.isEnabled, true, SearchOperator.EQUAL);
+      userSpecification.getConditions().add(criteria);
+    }
+    if(isEnable != null && isEnable.equals("false")){
+      SearchCriteria<User,Boolean>criteria = new SearchCriteria<>(User_.isEnabled, false, SearchOperator.EQUAL);
       userSpecification.getConditions().add(criteria);
     }
     List<Sort.Order> orders = new ArrayList<>();
@@ -209,8 +218,9 @@ public class UserService {
     Optional<User> userOptional = userRepository.findByUsername(user.getUsername());
     if(userOptional.isPresent()){
       User targetUser = userOptional.get();
-      if (!myUserDetailsService.getCurrentUserId().equals(targetUser.getUserId()))
-        throw new PermissionDeniedException("You don't have permission to udpate user");
+      if(!permissionService.isAdmin())
+        if (!myUserDetailsService.getCurrentUserId().equals(targetUser.getUserId()))
+          throw new PermissionDeniedException("You don't have permission to update user");
       if(user.getDob() != null){
         targetUser.setDob(user.getDob());
       }
@@ -231,6 +241,9 @@ public class UserService {
       }
       if(user.getAvatar() != null){
         targetUser.setAvatar(user.getAvatar());
+      }
+      if(targetUser.isEnabled() != user.isEnabled()){
+        targetUser.setEnabled(user.isEnabled());
       }
       if(user.getBiography() != null){
         targetUser.setBiography(user.getBiography());

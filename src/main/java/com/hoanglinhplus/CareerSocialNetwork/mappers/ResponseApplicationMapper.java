@@ -17,7 +17,7 @@ public class ResponseApplicationMapper {
     ResponseDataDTO<ApplicationInfoDTO> responseData = new ResponseDataDTO<>(
       "get all applications successfully"
     , applicationInfoDTOS
-    ,(long)companyPage.getTotalPages());
+    ,(long)companyPage.getTotalPages(), companyPage.getTotalElements());
     return responseData;
   }
 }

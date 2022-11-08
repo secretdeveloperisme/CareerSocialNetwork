@@ -14,4 +14,5 @@ public class ResponseDataDTO<T> {
   private String message;
   private List<T> data;
   private Long last_page;
+  private Long totalElements;
 }

@@ -381,7 +381,7 @@ public class JobService {
     Long userId = myUserDetailsService.getCurrentUserId();
     List<Job> jobs = getFollowedJobs(pageableDTO, userId);
     List<JobCreationDTO> jobDTOS = jobs.stream().map(JobMapper::toDTO).toList();
-    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Jobs Successfully", jobDTOS, null));
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Jobs Successfully", jobDTOS,  null, (long) jobDTOS.size()));
   }
   public List<Skill> getAllSkills() {
     return skillRepository.findAll();
@@ -399,7 +399,8 @@ public class JobService {
     return jobRepository.count();
   }
   public ResponseEntity<ResponseDataDTO<AmountsPerMonth>> getJobAmountsPerMonths(){
+    List<AmountsPerMonth> amountsPerMonths = jobRepository.getJobAmountsPerMonth();
     return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Jobs Per Month Successfully"
-      ,jobRepository.getJobAmountsPerMonth(), null ));
+      ,amountsPerMonths, null, (long) amountsPerMonths.size()));
   }
 }

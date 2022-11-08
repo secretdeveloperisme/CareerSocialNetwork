@@ -46,7 +46,7 @@ public class Job {
   @JoinTable(name = "job_tags", joinColumns = @JoinColumn(name = "job_id",  referencedColumnName = "job_id")
       , inverseJoinColumns = @JoinColumn(name = "tag_id", referencedColumnName = "tag_id"))
   private List<Tag> tags;
-  @OneToMany
+  @OneToMany(mappedBy = "job",orphanRemoval = true)
   private List<Comment> comments;
   @OneToMany(mappedBy = "job", cascade = CascadeType.REMOVE)
   private List<JobQuestion> jobQuestion;

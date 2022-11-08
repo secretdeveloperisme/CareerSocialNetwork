@@ -32,11 +32,11 @@ public class Company {
   @LastModifiedDate
   private Date updatedAt;
   private Date deletedAt;
-  @OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "company", orphanRemoval = true,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Job> jobs;
-  @OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<CompanyNotification> companyNotifications;
-  @OneToMany(mappedBy = "company", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<UserCompanyRole> userCompanyRoles;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "follow_companies", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "company_id")

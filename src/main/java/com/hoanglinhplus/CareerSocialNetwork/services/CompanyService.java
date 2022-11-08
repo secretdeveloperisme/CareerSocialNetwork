@@ -348,11 +348,13 @@ public class CompanyService {
   }
 
   public ResponseEntity<ResponseDataDTO<AmountsPerMonth>> getAmountPerMonths(){
+    List<AmountsPerMonth> amountsPerMonths = companyRepository.getAmountsPerMonth();
     return ResponseEntity.ok(new ResponseDataDTO<>("Get Amount Of Companies Per Month Successfully"
-      ,companyRepository.getAmountsPerMonth(), null ));
+      ,amountsPerMonths, null ,(long) amountsPerMonths.size()));
   }
   public ResponseEntity<ResponseDataDTO<AmountJobsOfCompany>> getPercentJobsOfCompany(){
+    List<AmountJobsOfCompany> amountJobsOfCompanies = companyRepository.getAmountJobsOfCompanies();
     return ResponseEntity.ok(new ResponseDataDTO<>("Get Percent Job Of Company Successfully"
-      ,companyRepository.getAmountJobsOfCompanies(), null ));
+      ,amountJobsOfCompanies, null, (long) amountJobsOfCompanies.size()));
   }
 }

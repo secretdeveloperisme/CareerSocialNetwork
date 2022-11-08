@@ -46,7 +46,7 @@ public class User {
   private Date createdAt;
   private Date updatedAt;
   private Date deletedAt;
-  @OneToMany(mappedBy = "comments",orphanRemoval = true)
+  @OneToMany(mappedBy = "users", orphanRemoval = true)
   private List<CommentLike> commentLikes;
   @OneToMany(mappedBy = "user")
   private List<Application> applications;
@@ -74,13 +74,13 @@ public class User {
   @JoinTable(name = "bookmarks",joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
       , inverseJoinColumns = @JoinColumn(name = "job_id", referencedColumnName = "job_id"))
   private List<Job> bookmarks;
-  @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "user", orphanRemoval = true,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Comment> comments;
-  @OneToMany(mappedBy = "createdUser")
+  @OneToMany(mappedBy = "createdUser", orphanRemoval = true)
   private List<Company> createdCompanies;
-  @OneToMany(mappedBy = "user", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "user", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Conversation> conversations;
-  @OneToMany(mappedBy = "user",cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+  @OneToMany(mappedBy = "user", orphanRemoval = true,cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<Message> messages;
   @OneToMany(cascade = CascadeType.PERSIST,orphanRemoval = true)
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
@@ -99,7 +99,7 @@ public class User {
   @OneToMany(mappedBy = "user",orphanRemoval = true)
   private List<PostLike> postLikes;
 
-  @OneToMany(mappedBy = "createdUser")
+  @OneToMany(mappedBy = "createdUser", orphanRemoval = true)
   public List<Post> posts;
 
   @ManyToMany
@@ -703,4 +703,5 @@ public class User {
     removeAllUserSkills();
     removeAllBookmarks();
   }
+
 }
