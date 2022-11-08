@@ -51,8 +51,10 @@ public class JobViewController {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     }
     assert user != null;
-    if(!company.getCreatedUser().getUserId().equals(user.getUserId())) {
-      return "error/401";
+    if(!user.isAdmin()){
+      if(!company.getCreatedUser().getUserId().equals(user.getUserId())) {
+        return "error/401";
+      }
     }
     model.addAttribute("company", company);
     model.addAttribute("user", user);
@@ -75,8 +77,10 @@ public class JobViewController {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     }
     assert user != null;
-    if(!permissionService.isOwnerJob(user.getUserId(), job.getJobId())) {
-      return "error/401";
+    if(!user.isAdmin()) {
+      if (!permissionService.isOwnerJob(user.getUserId(), job.getJobId())) {
+        return "error/401";
+      }
     }
     model.addAttribute("job", job);
     model.addAttribute("user", user);

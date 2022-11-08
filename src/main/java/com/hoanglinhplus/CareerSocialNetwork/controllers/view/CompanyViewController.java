@@ -59,10 +59,15 @@ public class CompanyViewController {
     List<Industry> industries = companyService.getIndustries();
     Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
     User user = null;
-    if (principal == null || !permissionService.isOwnerCompany(company)) {
+    if (principal == null) {
       return "error/401";
     }
     user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
+    if(!user.isAdmin()){
+      if(!permissionService.isOwnerCompany(company)){
+        return "error/401";
+      }
+    }
     model.addAttribute("company", company);
     model.addAttribute("organizationSizes", organizationSizeList);
     model.addAttribute("industries", industries);
@@ -98,9 +103,10 @@ public class CompanyViewController {
     }
     user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     Company company = companyService.getCompany(companyId);
-    if(!permissionService.isOwnerCompany(company))
-      throw new PermissionDeniedException("You do not have permission to manage company");
-
+    if(!user.isAdmin()){
+      if(!permissionService.isOwnerCompany(company))
+        throw new PermissionDeniedException("You do not have permission to manage company");
+    }
     model.addAttribute("user", user);
     model.addAttribute("company", company);
     return "company/get_jobs";

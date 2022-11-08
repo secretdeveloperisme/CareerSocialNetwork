@@ -1,7 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.AdminStatistics;
-import com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.MeStatistics;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
@@ -25,7 +24,6 @@ public class AdminViewController {
   private final UserService userService;
   private final TagService tagService;
   private final JobService jobService;
-  private final ApplicationService applicationService;
   private final PostService postService;
   private final AuthenticationTokenUtil authenticationTokenUtil;
   private User user;
@@ -44,7 +42,6 @@ public class AdminViewController {
     this.userService = userService;
     this.tagService = tagService;
     this.jobService = jobService;
-    this.applicationService = applicationService;
     this.postService = postService;
     this.authenticationTokenUtil = authenticationTokenUtil;
   }
@@ -76,90 +73,22 @@ public class AdminViewController {
     model.addAttribute("user", user);
     return "admin/users";
   }
-//  @GetMapping("/post")
-//  public String posts(HttpServletRequest request, Model model){
-//    User user = null;
-//    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-//    if (principal == null) {
-//      throw new PermissionDeniedException("You don't have permission to watch posts");
-//    }
-//    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-//    MeStatistics meStatistics = getMeStatistics(user);
-//    model.addAttribute("meStatistics", meStatistics);
-//    model.addAttribute("user", user);
-//    return "me/posts";
-//  }
-//  @GetMapping("/application")
-//  public String applications(HttpServletRequest request, Model model){
-//    User user = null;
-//    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-//    if (principal == null) {
-//      throw new PermissionDeniedException("You don't have permission to watch application");
-//    }
-//    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-//    MeStatistics meStatistics = getMeStatistics(user);
-//    model.addAttribute("meStatistics", meStatistics);
-//    model.addAttribute("user", user);
-//    return "me/my_applications";
-//  }
-//  @GetMapping("/tags")
-//  public String getFollowedTags(HttpServletRequest request, Model model){
-//    User user = null;
-//    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-//    if (principal == null) {
-//      throw new PermissionDeniedException("You don't have permission to watch tag ");
-//    }
-//    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-//
-//    List<Tag> followedTags = user.getTags();
-//    MeStatistics meStatistics = getMeStatistics(user);
-//    model.addAttribute("meStatistics", meStatistics);
-//    model.addAttribute("user", user);
-//    model.addAttribute("followedTags", followedTags);
-//    return "me/tags";
-//  }
-//
-//  @GetMapping("/following_companies")
-//  public String getFollowedCompanies(HttpServletRequest request, Model model){
-//    User user = null;
-//    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-//    if (principal == null) {
-//      throw new PermissionDeniedException("You don't have permission to watch tag ");
-//    }
-//    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-//    List<Company> followedCompanies = user.getFollowCompanies();
-//    MeStatistics meStatistics = getMeStatistics(user);
-//    model.addAttribute("meStatistics", meStatistics);
-//    model.addAttribute("user", user);
-//    model.addAttribute("followedCompanies", followedCompanies);
-//    return "me/follow_companies";
-//  }
-//  @GetMapping("/following_users")
-//  public String getFollowedUsers(HttpServletRequest request, Model model){
-//    User user = null;
-//    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-//    if (principal == null) {
-//      throw new PermissionDeniedException("You don't have permission to watch tag ");
-//    }
-//    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-//    List<User> followedUsers = user.getFollowed_users();
-//    MeStatistics meStatistics = getMeStatistics(user);
-//    model.addAttribute("meStatistics", meStatistics);
-//    model.addAttribute("user", user);
-//    model.addAttribute("followedUsers", followedUsers);
-//    return "me/follow_users";
-//  }
-//  @GetMapping("/company/trash")
-//  public String companiesTrash(HttpServletRequest request, Model model){
-//    User user = null;
-//    Map<String, Object> principal = authenticationTokenUtil.getPrincipalFromToken(request);
-//    if (principal == null) {
-//      throw new PermissionDeniedException("You don't have permission to watch companies");
-//    }
-//    user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-//    MeStatistics meStatistics = getMeStatistics(user);
-//    model.addAttribute("meStatistics", meStatistics);
-//    model.addAttribute("user", user);
-//    return "me/companies_trash";
-//  }
+  @GetMapping("/jobs")
+  public String jobs(HttpServletRequest request, Model model){
+    loadAuthenticatedUser(request);
+    model.addAttribute("user", user);
+    return "admin/jobs";
+  }
+  @GetMapping("/companies")
+  public String companies(HttpServletRequest request, Model model){
+    loadAuthenticatedUser(request);
+    model.addAttribute("user", user);
+    return "admin/companies";
+  }
+  @GetMapping("/posts")
+  public String posts(HttpServletRequest request, Model model){
+    loadAuthenticatedUser(request);
+    model.addAttribute("user", user);
+    return "admin/posts";
+  }
 }

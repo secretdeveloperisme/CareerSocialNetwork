@@ -2,25 +2,6 @@ import {filterArrToParams} from "../utils/common-utils.js";
 import {formatDate} from "../utils/format_date.js";
 
 $(function () {
-  // $('#deleteUserModal').on('show.bs.modal', function (event) {
-  //   let $button = $(event.relatedTarget);
-  //   let id = $button.data('id');
-  //   let $btnDeleteUser = $('#btnDeleteUser');
-  //   $btnDeleteUser.on('click', function (event) {
-  //     $.ajax({
-  //       url: `/user/destroy`,
-  //       type: 'DELETE',
-  //       data: {
-  //        id,
-  //       },
-  //       dataType: 'json',
-  //       success: (response) => {
-  //         $button.parents().filter('tr').remove();
-  //         $('#deleteUserModal').modal('hide');
-  //       },
-  //     });
-  //   });
-  // });
   $('#deleteUserModal').on('show.bs.modal', function (event) {
     let $btnDeleteUsers = $('#btnDeleteUser');
     $btnDeleteUsers.on('click', function (event) {
