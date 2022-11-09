@@ -10,4 +10,7 @@ import lombok.*;
 public class TagDTO {
   private Long tagId;
   private String name;
+  long amountOfJobs;
+  long amountOfPosts;
+  long amountOfFollowers;
 }

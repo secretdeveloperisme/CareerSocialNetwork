@@ -29,7 +29,7 @@ public class MessageController {
     return messageService.update(messageDTO);
   }
   @DeleteMapping
-  @PreAuthorize("hasAnyAuthority('USER')")
+  @PreAuthorize("hasAnyAuthority('USER') or hasAnyAuthority('ADMIN')")
   public ResponseEntity<ResponseObjectDTO> delete(@RequestBody MessageDTO messageDTO){
     return messageService.deleteMessage(messageDTO.getMessageId());
   }

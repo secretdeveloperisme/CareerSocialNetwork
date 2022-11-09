@@ -150,7 +150,7 @@ public class MessageService {
       responseData.put("deletedId", message.getMessageId());
       return ResponseEntity.ok(new ResponseObjectDTO("Remove message successfully", responseData));
     }
-    return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ResponseObjectDTO("You do not have permission to remove this message", null));
+    throw new PermissionDeniedException("You do not have permission to remove this message");
   }
   public void deleteMessageById(Long id) {
     Message message = getMessage(id);

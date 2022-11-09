@@ -78,6 +78,15 @@ public class Tag {
       }
     }
   }
+  public void removeAllPostTags() {
+    if (jobTags != null)
+    {
+      for (Iterator<Post> iter = getIteratorPostTags(); iter.hasNext();)
+      {
+        iter.remove();
+      }
+    }
+  }
 
   public Iterator<User> getIteratorFollowTags() {
     if (followTagUsers == null)
@@ -88,6 +97,11 @@ public class Tag {
     if (jobTags == null)
       jobTags = new ArrayList<>();
     return jobTags.iterator();
+  }
+  public Iterator<Post> getIteratorPostTags() {
+    if (postTags == null)
+      postTags = new ArrayList<>();
+    return postTags.iterator();
   }
 
   public void setFollowTagUsers(Collection<User> newFollow_tags) {
@@ -128,5 +142,10 @@ public class Tag {
         oldUser.removeFollow_tags(this);
       }
     }
+  }
+  public void removeAllRelationships(){
+    removeAllJobTags();
+    removeAllPostTags();
+    removeAllFollowTagUsers();
   }
 }

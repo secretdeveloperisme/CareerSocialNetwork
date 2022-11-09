@@ -153,8 +153,10 @@ $(()=>{
 
   })
   function scrollChatHistoryToEnd(){
-   let chat = $(".chat-history")[0];
-   chat.scrollTop = chat.scrollHeight
+   setTimeout(()=>{
+     let chat = $(".chat-history")[0];
+     chat.scrollTop = chat.scrollHeight
+   },500)
   }
 
 
@@ -285,7 +287,7 @@ $(()=>{
         },
         error: function(xhr){
           const response = JSON.stringify(xhr.responseText)
-          showToast("failed", "failed", response.message);
+          showToast("failed", "Delete Message", response.message);
         }
       });
     })

@@ -53,7 +53,7 @@ public class AdminViewController {
     long amountOfPosts = postService.getAmountOfAllPosts();
     return new AdminStatistics(amountOfCompanies,amountOfJobs, amountOfUser, amountOfPosts, amountOfTags);
   }
-  @GetMapping
+  @GetMapping("/dashboard")
   public String dashboard(HttpServletRequest request, Model model){
     loadAuthenticatedUser(request);
     AdminStatistics adminStatistics = getStatistics();
@@ -90,5 +90,11 @@ public class AdminViewController {
     loadAuthenticatedUser(request);
     model.addAttribute("user", user);
     return "admin/posts";
+  }
+  @GetMapping("/tags")
+  public String tags(HttpServletRequest request, Model model){
+    loadAuthenticatedUser(request);
+    model.addAttribute("user", user);
+    return "admin/tags";
   }
 }

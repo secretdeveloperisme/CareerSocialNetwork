@@ -73,7 +73,7 @@ public class PostController {
   @PreAuthorize("hasAuthority('ADMIN')")
   @DeleteMapping(path = "/many/admin",produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> deletePosts(@RequestBody List<Long> ids) {
-    return postService.deletePosts(ids,  true, false);
+    return postService.deletePosts(ids,  true, true);
   }
   @PreAuthorize("hasAuthority('USER')")
   @DeleteMapping(path = "/many",produces = MediaType.APPLICATION_JSON_VALUE)

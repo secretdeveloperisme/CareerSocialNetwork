@@ -8,6 +8,10 @@ public class TagMapper extends ModelMapperConfig{
     return modelMapper.map(tagDTO, Tag.class);
   }
   static public TagDTO toDTO(Tag tag) {
-    return modelMapper.map(tag, TagDTO.class);
+    TagDTO tagDTO = modelMapper.map(tag, TagDTO.class);
+    tagDTO.setAmountOfJobs(tag.getJobTags().size());
+    tagDTO.setAmountOfPosts(tag.getPostTags().size());
+    tagDTO.setAmountOfFollowers(tag.getFollowTagUsers().size());
+    return tagDTO;
   }
 }

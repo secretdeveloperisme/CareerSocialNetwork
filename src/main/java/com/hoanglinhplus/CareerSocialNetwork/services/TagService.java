@@ -2,12 +2,15 @@ package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.stastistic.TagStatistics;
 import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagFilterDTO;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseTagMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.TagMapper;
+import com.hoanglinhplus.CareerSocialNetwork.models.Company;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag;
 import com.hoanglinhplus.CareerSocialNetwork.models.Tag_;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
@@ -25,9 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class TagService {
@@ -88,10 +89,11 @@ public class TagService {
       SearchCriteria<Tag, String> searchCriteria = new SearchCriteria<>(Tag_.name, tagFilterDTO.getName(), SearchOperator.LIKE);
       tagSpecification.getConditions().add(searchCriteria);
     }
-    Pageable pageable = PageRequest.of(pageableDTO.getPage(),pageableDTO.getSize(), Sort.by(Tag_.NAME).ascending());
+    Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1,pageableDTO.getSize(), Sort.by(Tag_.NAME).ascending());
     return tagRepository.findAll(tagSpecification, pageable);
 
   }
+
   public ResponseEntity<ResponseDataDTO<TagDTO>> responseGetTags(TagFilterDTO tagFilterDTO, PageableDTO pageableDTO){
     return ResponseEntity.ok(ResponseTagMapper.toDTO(getTagPage(tagFilterDTO, pageableDTO)));
   }
@@ -116,6 +118,43 @@ public class TagService {
     Tag tag = getTag(tagId);
     List<User> followedUsers = tag.getFollowTagUsers();
     return followedUsers.stream().anyMatch(user -> user.getUserId().equals(userId));
+  }
+  public ResponseEntity<ResponseObjectDTO> update(TagDTO tagDTO){
+    Tag tag = getTag(tagDTO.getTagId());
+    if(tagDTO.getName() != null && !tagDTO.getName().isEmpty()){
+      tag.setName(tagDTO.getName());
+    }
+    Tag updatedTag = tagRepository.save(tag);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("updatedTag", TagMapper.toDTO(updatedTag));
+    return ResponseEntity.ok(new ResponseObjectDTO("Update Tag Successfully", responseData));
+  }
+  @Transactional
+  public ResponseEntity<ResponseObjectDTO> destroyTags(List<Long> ids) {
+    List<Long> notExistIds = new ArrayList<>();
+    List<Long> existedIds = tagRepository.findExistedIds(ids);
+    ids.forEach(id->{
+      if(!existedIds.contains(id))
+        notExistIds.add(id);
+    });
+    if(notExistIds.size() == 0){
+      ids.forEach(this::destroyTagById);
+      Map<String, Object> responseData = new HashMap<>();
+      responseData.put("deletedIds", ids);
+      ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
+        "delete tags successfully "
+        ,responseData);
+      return ResponseEntity.ok(responseObjectDTO);
+    }
+    else{
+      InputNotValidException inputNotValidException = new InputNotValidException("some ids is not found");
+      inputNotValidException.getCauses().put("invalidIds", notExistIds);
+      throw inputNotValidException;
+    }
+  }
+  public void destroyTagById(Long id) {
+    Tag tag = getTag(id);
+    tagRepository.delete(tag);
   }
   public boolean isCurrentUserFollowed(Long tagId){
     return isUserFollowed(myUserDetailsService.getCurrentUserId(), tagId);

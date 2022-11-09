@@ -14,7 +14,7 @@ public class ResponseTagMapper {
   public static ResponseDataDTO<TagDTO> toDTO(Page<Tag> tagPage){
     List<TagDTO> tagDTOS = tagPage.getContent().stream().map(TagMapper::toDTO).collect(Collectors.toList());
     ResponseDataDTO<TagDTO> responseData = new ResponseDataDTO<>(
-      "get all companies successfully"
+      "get all tags successfully"
     , tagDTOS
     ,(long)tagPage.getTotalPages(), tagPage.getTotalElements());
     return responseData;
