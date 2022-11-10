@@ -10,7 +10,7 @@ $(function () {
   }
 
   }
-  let jobTable = new Tabulator("#companyTable", {
+  let applicationTable = new Tabulator("#companyTable", {
     columns: [
       {title:"Id", field:"job.jobId"}, //column has a fixed width of 100px;
       {title:"title", field:"job.title",headerFilter:true, headerHozAlign: "center",formatter: formatterTittle}, //column will be allocated 1/5 of the remaining space
@@ -51,6 +51,14 @@ $(function () {
 
     },
   });
+  applicationTable.on("dataLoaded", function (data){
+    if(data.length === 0){
+      applicationTable.alert("Application Is Empty");
+    }
+    else{
+      applicationTable.clearAlert();
+    }
+  })
   function formatterEmploymentType(cell){
     return `<span>${cell.getData().job.employmentType.name}</span>`
   }
@@ -90,8 +98,8 @@ $(function () {
     let id = $button.data('id');
     let $btnDeletePost = $('#btnDeletePost');
     $btnDeletePost.on('click', function (event) {
-      let selectedRows = jobTable.getSelectedRows();
-      let selectedDatas = jobTable.getSelectedData();
+      let selectedRows = applicationTable.getSelectedRows();
+      let selectedDatas = applicationTable.getSelectedData();
       let deleteIds = selectedDatas.map(selectedData=>selectedData.jobId);
       console.log(deleteIds)
       $.ajax({

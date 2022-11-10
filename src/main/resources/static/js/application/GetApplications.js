@@ -13,7 +13,7 @@ $(function () {
     }
 
   }
-  let jobTable = new Tabulator("#companyTable", {
+  let applicatonTable = new Tabulator("#companyTable", {
     columns:[
       {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
           cell.getRow().toggleSelect();
@@ -49,6 +49,14 @@ $(function () {
 
     },
   });
+  applicatonTable.on("dataLoaded", function (data){
+    if(data.length === 0){
+      applicatonTable.alert("This job has no applications");
+    }
+    else{
+      applicatonTable.clearAlert();
+    }
+  })
   function formatterJobTitle(cell) {
     return `<span><a href="/job/${cell.getData().job.jobId}">${cell.getData().job.title}</a></span>`
   }
@@ -151,8 +159,8 @@ $(function () {
     let id = $button.data('id');
     let $btnDeletePost = $('#btnDeletePost');
     $btnDeletePost.on('click', function (event) {
-      let selectedRows = jobTable.getSelectedRows();
-      let selectedDatas = jobTable.getSelectedData();
+      let selectedRows = applicatonTable.getSelectedRows();
+      let selectedDatas = applicatonTable.getSelectedData();
       let deleteIds = selectedDatas.map(selectedData=>selectedData.jobId);
       console.log(deleteIds)
       $.ajax({

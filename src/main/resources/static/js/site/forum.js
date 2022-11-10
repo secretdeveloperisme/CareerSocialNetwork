@@ -1,6 +1,6 @@
 import {loadPosts} from "../common/PostCommon.js";
 $(()=>{
-  const $btnMore = $("#btnMore");
+  const $btnMore = $("#btnMorePost");
   let currentPage = 2;
   const amountOfPostsPerPage = 10;
   $btnMore.on("click", async (event)=>{

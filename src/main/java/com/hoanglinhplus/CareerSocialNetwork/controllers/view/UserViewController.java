@@ -51,9 +51,11 @@ public class UserViewController {
     if (principal != null) {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     }
+    long amountOfFollowers = userService.getAmountOfFollowers(targetUser.getUserId());
     model.addAttribute("user", user);
     model.addAttribute("isFollowed", userService.isCurrentUserFollowed(targetUser.getUserId()));
     model.addAttribute("targetUser", targetUser);
+    model.addAttribute("amountOfFollowers", amountOfFollowers);
     return "user/get_user";
   }
 }

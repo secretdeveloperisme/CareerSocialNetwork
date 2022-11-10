@@ -50,6 +50,7 @@ public class FollowTagService {
     }
     user.setTags(followedTags);
     userRepository.save(user);
+    responseData.put("amountOfFollowers", tagService.getAmountOfFollowers(followTagDTO.getTagId()));
     return ResponseEntity.ok(new ResponseObjectDTO("Follow Tag Successfully",responseData));
   }
   public ResponseEntity<ResponseObjectDTO> haveFollowTag(Long tagId){

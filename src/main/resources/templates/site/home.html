@@ -84,49 +84,54 @@
               <i class="fas fa-th-large"></i>
             </div>
           </div>
-          <div class="post-list row g-3">
-            <!--/*@thymesVar id="jobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO>"*/-->
-            <div class="col-xl-12" th:each="job: ${jobs}">
-              <div class="post-item container-fluid d-flex shadow rounded py-2">
-                <div class="post-item-thumbnail me-3">
-                  <a th:href="'/job/'+${job.getJobId()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
-                  </a>
-                </div>
-                <div class="post-content">
-                  <div class="post-tag">
-                    <a th:each="tag: ${job.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}">
+          <th:block th:if="${jobs.size() > 0}">
+            <div class="post-list row g-3">
+              <!--/*@thymesVar id="jobs" type="java.util.List<com.hoanglinhplus.CareerSocialNetwork.dto.job.JobCreationDTO>"*/-->
+              <div class="col-xl-12" th:each="job: ${jobs}">
+                <div class="post-item container-fluid d-flex shadow rounded py-2">
+                  <div class="post-item-thumbnail me-3">
+                    <a th:href="'/job/'+${job.getJobId()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
                     </a>
                   </div>
-                  <h6 class="post-title">
-                    <a th:href="'/job/'+${job.getJobId()} " class="text-decoration-none text-dark" th:text="${job.getTitle()}">  </a>
-                  </h6>
-                  <div class="post-info ">
-                    <div class="post-author">
-                      <a th:href="'/company/'+${job.getCompany().getCompanyId()}" class="text-decoration-none text-secondary">
-                        <i class="fa-solid fa-building"></i>
-                        <span th:text="${job.getCompany().getName()}"></span>
+                  <div class="post-content">
+                    <div class="post-tag">
+                      <a th:each="tag: ${job.getTags()}" th:href="'/tag/'+${tag.getName()}" class="tag-link" th:text="'#'+${tag.getName()}">
                       </a>
                     </div>
-                    <div class="post-published">
-                      <i class="fa-solid fa-calendar-days"></i>
-                      <span th:text="${#dates.format(job.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
-                    </div>
-                    <div class="post-location">
-                      <i class="fa fa-location-dot"></i>
-                      <span th:text="${job.getLocation()}"></span>
-                      (<span th:text="${job.getWorkPlace().getPlace()}"></span>)
+                    <h6 class="post-title text-overflow-2-lines">
+                      <a th:href="'/job/'+${job.getJobId()} " class="text-decoration-none text-dark" th:text="${job.getTitle()}">  </a>
+                    </h6>
+                    <div class="post-info ">
+                      <div class="post-author">
+                        <a th:href="'/company/'+${job.getCompany().getCompanyId()}" class="text-decoration-none text-secondary d-flex align-items-center">
+                          <i class="fa-solid fa-building"></i>
+                          <span class="text-overflow-1-lines ms-1" th:text="${job.getCompany().getName()}"></span>
+                        </a>
+                      </div>
+                      <div class="post-published">
+                        <i class="fa-solid fa-calendar-days"></i>
+                        <span th:text="${#dates.format(job.getCreatedAt(),'dd/MM/yyy HH:mm')}"></span>
+                      </div>
+                      <div class="post-location">
+                        <i class="fa fa-location-dot"></i>
+                        <span th:text="${job.getLocation()}"></span>
+                        (<span th:text="${job.getWorkPlace().getPlace()}"></span>)
+                      </div>
                     </div>
                   </div>
-                </div>
-                <div class="post-action">
-                  <button class="btn btn-success btn-apply" th:data-job-id="${job.getJobId()}">Apply</button>
+                  <div class="post-action">
+                    <button class="btn btn-success btn-apply" th:data-job-id="${job.getJobId()}">Apply</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="btn-more-wrapper my-2 d-flex">
-            <button type="button" id='btnMore' th:data-type="${user}?'user':'guest'" class="btn btn-outline-primary m-auto">More</button>
-          </div>
+            <div class="btn-more-wrapper my-2 d-flex">
+              <button type="button" id='btnMore' th:data-type="${user}?'user':'guest'" class="btn btn-outline-primary m-auto">More</button>
+            </div>
+          </th:block>
+          <th:block th:if="${jobs.size() == 0}">
+            <h3 class="text-center text-danger">You have to follow tag or company to get new jobs</h3>
+          </th:block>
         </div>
         <div class="col-xl-3">
           <div class="popular-post">

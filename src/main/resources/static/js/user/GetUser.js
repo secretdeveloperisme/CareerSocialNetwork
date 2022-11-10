@@ -1,5 +1,6 @@
 $(()=>{
   const $btnFollow = $("#btnFollow");
+  const $amountOfFollowers = $("#amountOfFollowers");
   $btnFollow.on("click", event => {
     let action = $btnFollow.attr("data-action");
     let userId = $btnFollow.data("user-id");
@@ -21,7 +22,7 @@ $(()=>{
           $btnFollow.addClass("btn-primary").removeClass("btn-secondary");
           $btnFollow.text("follow");
         }
-
+        $amountOfFollowers.text(response.data.amountOfFollowers);
       }
     });
   })

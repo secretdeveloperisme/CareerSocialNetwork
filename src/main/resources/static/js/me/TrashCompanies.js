@@ -53,6 +53,14 @@ $(function () {
 
     },
   });
+  companyTable.on("dataLoaded", function (data){
+    if(data.length === 0){
+      companyTable.alert("Company Trash Is Empty");
+    }
+    else{
+      companyTable.clearAlert();
+    }
+  })
   function formatterOrganizationSize(cell){
     return `<span>${cell.getData().organizationSize.name}</span>`
   }

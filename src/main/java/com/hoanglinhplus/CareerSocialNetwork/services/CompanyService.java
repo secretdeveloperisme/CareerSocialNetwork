@@ -327,6 +327,9 @@ public class CompanyService {
   public long getAmountOfFollowedCompanies(Long userId){
     return getFollowedCompanies(userId).size();
   }
+  public long getAmountOfFollowers(Long companyId){
+    return companyRepository.getAmountOfFollowers(companyId);
+  }
   public List<Company> getFollowedCompanies(Long userId){
     Specification<Company> specification = CompanySpecification.joinFollowedUsers(userId);
     return companyRepository.findAll(specification);

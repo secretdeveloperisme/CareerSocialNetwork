@@ -49,10 +49,12 @@ public class TagViewController {
     if (principal != null) {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     }
+    long amountOfFollowers = tagService.getAmountOfFollowers(tag.getTagId());
     model.addAttribute("tag", tag);
     model.addAttribute("user", user);
     model.addAttribute("jobs", jobs);
     model.addAttribute("isFollowed", tagService.isCurrentUserFollowed(tag.getTagId()));
+    model.addAttribute("amountOfFollowers",amountOfFollowers);
     model.addAttribute("tagStatistics", tagStatistics);
     return "tag/get_tag";
   }

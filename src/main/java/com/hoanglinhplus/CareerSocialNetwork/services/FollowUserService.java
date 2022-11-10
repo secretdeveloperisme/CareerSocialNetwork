@@ -47,6 +47,7 @@ public class FollowUserService {
     }
     user.setFollowed_users(followed_users);
     userRepository.save(user);
+    responseData.put("amountOfFollowers", userService.getAmountOfFollowers(followUserDTO.getFollowed_id()));
     return ResponseEntity.ok(new ResponseObjectDTO("Follow User Successfully",responseData));
   }
   public ResponseEntity<ResponseObjectDTO> haveFollowUser(Long followedUserId){

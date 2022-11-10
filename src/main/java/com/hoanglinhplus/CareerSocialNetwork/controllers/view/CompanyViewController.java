@@ -79,6 +79,7 @@ public class CompanyViewController {
   public String getCompany(HttpServletRequest request, Model model, @PathVariable("companyId") Long companyId) {
     Company company = companyService.getCompany(companyId);
     CompanyStatistics companyStatistics = companyService.getCompanyStatistics(companyId);
+    long amountOfFollowers = companyService.getAmountOfFollowers(companyId);
     List<Job> jobs = jobService.getJobs(JobFilterDTO.builder().companyId(companyId).build(),
       new PageableDTO()
       ).getContent();
@@ -88,6 +89,7 @@ public class CompanyViewController {
       user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     }
     model.addAttribute("company", company);
+    model.addAttribute("amountOfFollowers", amountOfFollowers);
     model.addAttribute("user", user);
     model.addAttribute("jobs", jobs);
     model.addAttribute("isFollowed", companyService.isCurrentUserFollowed(companyId));

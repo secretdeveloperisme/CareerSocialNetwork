@@ -43,4 +43,11 @@ public interface CompanyRepository extends JpaRepository<Company, Long>, JpaSpec
   @Query(value = "SELECT company_id as companyId, name, total as amount" +
     " from amount_jobs_of_companies_of_total", nativeQuery = true)
   List<AmountJobsOfCompany> getAmountJobsOfCompanies();
+
+  @Query(value = """
+    select count(fc.user_id) from companies c
+    inner join follow_companies fc on c.company_id = fc.company_id
+    where c.company_id = :companyId
+  """, nativeQuery = true)
+  long getAmountOfFollowers(long companyId);
 }

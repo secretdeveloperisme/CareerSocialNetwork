@@ -52,6 +52,7 @@ public class FollowCompanyService {
     }
     user.setFollowCompanies(followCompanies);
     userRepository.save(user);
+    responseData.put("amountOfFollowers", companyService.getAmountOfFollowers(followCompanyDTO.getCompanyId()));
     return ResponseEntity.ok(new ResponseObjectDTO("Follow Company Successfully",responseData));
   }
   public ResponseEntity<ResponseObjectDTO> haveFollowCompany(Long companyId){

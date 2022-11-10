@@ -1,6 +1,7 @@
 import {loadJobs} from "../common/JobCommon.js";
 
 $(() => {
+  const $amountOfFollowers = $("#amountOfFollowers");
   const $btnFollow = $("#btnFollow");
   $btnFollow.on("click", event => {
     let action = $btnFollow.attr("data-action");
@@ -24,6 +25,7 @@ $(() => {
           $btnFollow.addClass("btn-primary").removeClass("btn-secondary");
           $btnFollow.text("follow");
         }
+        $amountOfFollowers.text(response.data.amountOfFollowers);
 
       }
     });

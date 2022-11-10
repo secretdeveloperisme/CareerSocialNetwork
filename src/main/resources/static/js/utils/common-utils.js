@@ -51,6 +51,10 @@ function filterArrToParams(filters){
   console.log(filterObj)
   return $.param(filterObj);
 }
+function getFileNameFromPath(path){
+  return path.replace(/^.*[\\\/]/, '')
+
+}
 // #back up
 // function objectifyForm(formArray) {
 //   let duplicateArray = countDuplicateArray(formArray);
@@ -89,4 +93,4 @@ function countDuplicateArray(arr){
   return counts
 }
 
-export {objectifyForm, filterArrToParams}
+export {objectifyForm, filterArrToParams, getFileNameFromPath}

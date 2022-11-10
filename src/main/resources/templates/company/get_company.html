@@ -28,10 +28,19 @@
                 <div class="icon-128" th:style="'background-image: url(\''+${company.getLogo()}+'\')'"></div>
               </div>
             </div>
-            <div class="profile-header__actions d-flex">
+            <div class="profile-header__actions  d-flex justify-content-end">
               <!--/*@thymesVar id="isFollowed" type="java.lang.Boolean"*/-->
-              <button th:classappend="'btn ms-auto'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'" id="btnFollow" th:data-action="${isFollowed}?
-              'unfollow':'follow'" th:data-company-id="${company.getCompanyId()}" th:text="${isFollowed}?'unfollow':'follow'"></button>
+              <div class="btn-group">
+                <button th:classappend="'btn ms-auto'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'" id="btnFollow" th:data-action="${isFollowed}?
+              'unfollow':'follow'" th:data-company-id="${company.getCompanyId()}" >
+                <span th:text="${isFollowed}?'unfollow':'follow'" >
+                </span>
+                </button>
+                <div  class="btn btn-info" >
+                  <span id="amountOfFollowers" th:text="${amountOfFollowers}"></span>
+                  Followers
+                </div>
+              </div>
             </div>
             <div class="profile-header__detail">
               <h1 class="text-center" th:text="${company.getName()}"></h1>

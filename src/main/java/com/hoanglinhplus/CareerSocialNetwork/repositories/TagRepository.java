@@ -22,4 +22,9 @@ public interface TagRepository extends JpaRepository<Tag, Long>, JpaSpecificatio
     "order by number_of_jobs desc " +
     "limit 10", nativeQuery = true)
   List<Tag> getPopularTags();
+  @Query(value = """
+      select count(ft.user_id) from tags t inner join follow_tags ft on t.tag_id = ft.tag_id
+      where t.tag_id = :tagId
+   """, nativeQuery = true)
+  long getAmountOfFollowers(Long tagId);
 }

@@ -73,21 +73,10 @@
                         <h6 id="targetUserName" class="m-b-0">Username</h6>
                       </div>
                     </div>
-                    <div class="col-lg-6 hidden-sm text-right d-flex justify-content-end">
-                      <input type="file" hidden id="attachmentFile" multiple>
-                      <label for="attachmentFile">
-                        <span href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-image"></i>
-                        </span>
-                      </label>
-                      <a href="javascript:void(0);" class="btn btn-outline-info"><i class="fa fa-cogs"></i></a>
-                      <a href="javascript:void(0);" class="btn btn-outline-warning"><i class="fa fa-question"></i></a>
-
-                    </div>
                   </div>
                 </div>
                 <div class="chat-history">
                   <ul class="m-b-0" id="chatHistoryWrapper">
-
                   </ul>
                 </div>
                 <div class="chat-message clearfix">
@@ -96,6 +85,13 @@
                       <i class="fas fa-paper-plane"></i>
                     </div>
                     <input type="text" class="form-control" id="inputMessage" placeholder="Enter text here...">
+                    <div class="hidden-sm text-right d-flex justify-content-end">
+                      <input type="file" hidden id="attachmentFile" multiple>
+                      <label for="attachmentFile">
+                        <span href="javascript:void(0);" class="btn btn-outline-secondary"><i class="fa fa-image"></i>
+                        </span>
+                      </label>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -113,6 +109,7 @@
     </ul>
   </div>
 </div>
+  <div th:replace="/fragments/components/modal"></div>
   <div id="userIdWrapper" th:data-user-id="${user.getUserId()}"></div>
   <div th:replace="/fragments/components/toast"></div>
   <div th:replace="/auth/login"></div>

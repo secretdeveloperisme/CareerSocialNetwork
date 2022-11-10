@@ -346,8 +346,10 @@ public class UserService {
   public long getAmountOfFollowedUsers(Long userId){
     return getFollowedUsers(userId).size();
   }
-
   public long getAmountOfAllUsers() {
     return userRepository.count();
+  }
+  public long getAmountOfFollowers(Long followedId){
+    return userRepository.getAmountOfFollowers(followedId);
   }
 }

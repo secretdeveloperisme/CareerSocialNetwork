@@ -21,6 +21,9 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
   @Query("DELETE FROM Job j WHERE j.jobId in :ids")
   void deleteJobsByIds(@Param(value = "ids") List<Long> ids);
 
+  @Query("select count(j) from Job j where j.company.companyId = ?1")
+  long countByCompanyId(Long companyId);
+
   @Query("SELECT j FROM Job j WHERE j.jobId in :ids")
   List<Company> findJobsIds(@Param(value = "ids") List<Long> ids);
 

@@ -27,7 +27,7 @@
           <h4>Job</h4>
           <div class="">
             <img id="companyLogoPreview" style="width: 128px;height: 128px" class="img-thumbnail" th:src="${job.getImage()}" alt="">
-            <h3 id="companyNamePreview" th:text="${job.getTitle()}">Job Title</h3>
+            <h5 id="companyNamePreview" th:text="${job.getTitle()}">Job Title</h5>
             <p id="companyTagLinePreview" th:text="${job.getLocation()}">Job Location</p>
             <h5 id="companyIndustryPreview" th:text="${job.getEmploymentType().getName()}">getEmploymentType</h5>
           </div>
@@ -38,7 +38,7 @@
       <div class="posts px-4">
         <div class="text-center">
           <h1 class="mb-4">Job Applications</h1>
-          <a th:href="'/company/'+${job.getCompany().getCompanyId()}" class="btn btn-primary">New Job</a>
+          <a th:href="|/company/${job.getCompany().getCompanyId()}/jobs|" class="btn btn-primary">Go Back</a>
         </div>
         <div class="mt-4 mx-1 d-flex align-items-center">
           <!--            <select class="form-select-sm mx-2" aria-label="Select Action" id="selectAction">-->

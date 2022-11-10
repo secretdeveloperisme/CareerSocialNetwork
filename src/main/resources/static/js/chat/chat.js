@@ -1,4 +1,5 @@
 import {formatDate} from "../utils/format_date.js";
+import {getFileNameFromPath} from "../utils/common-utils.js";
 
 $(()=>{
   let $conversations = $(".conversation");
@@ -93,7 +94,7 @@ $(()=>{
             let type = attachment.attachmentType;
             let attachmentHTML = ""
             if(type.startsWith("image"))
-              attachmentHTML = `<img class="img-thumbnail w-100" src="${attachment.attachmentUrl}" alt="image">`;
+              attachmentHTML = `<img class="img-thumbnail w-100 attachment-img" src="${attachment.attachmentUrl}" alt="${attachment.attachmentUrl}">`;
             else{
               attachmentHTML =`<a href="${attachment.attachmentUrl}">${attachment.attachmentUrl}</a>">`
             }
@@ -117,7 +118,7 @@ $(()=>{
                 <span class="message-data-time">${formatDate(message.createdAt)}</span>
               </div>
               
-              <div class="message d-inline-block ${isAttactmentMessage?"w-50":""} ${isMyMessage?"other-message float-right":"my-message"} ">
+              <div class="message d-inline-block ${isAttactmentMessage?"w-25":""} ${isMyMessage?"other-message float-right":"my-message"} ">
                 <div class="d-flex">
                   <div class="message-content">${!isAttactmentMessage?message.message:""}</div>
                   <div>${isMyMessage?myActionMessage:""}</div> 
@@ -135,6 +136,7 @@ $(()=>{
         $inputMessage.val("");
         addEventDeleteMessage();
         addEventEditMessage();
+        addEventShowModalImage();
       },
       error: function(xhr){
         const response = xhr.responseJSON
@@ -301,6 +303,13 @@ $(()=>{
         "action": "UPDATE",
         messageId
       })
+    })
+  }
+  function addEventShowModalImage(){
+    $(".attachment-img").on("click",function (){
+      let src = $(this).attr("src");
+      let alt = getFileNameFromPath($(this).attr("alt"))
+      showModalImage({src,alt})
     })
   }
   $btnDeleteConversations.on("click", function(){

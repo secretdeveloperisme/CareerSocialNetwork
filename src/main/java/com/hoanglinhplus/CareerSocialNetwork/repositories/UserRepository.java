@@ -30,4 +30,10 @@ public interface UserRepository extends JpaRepository<User, Long>, JpaSpecificat
   List<Long> findExistedIds(List<Long> ids);
   @Query("SELECT u.userId FROM User u WHERE u.username = :username")
   Long findIdByUsername(String username);
+
+  @Query(value = """
+    select count(following_id) from follow_users
+    where followed_id = :followedId
+  """, nativeQuery = true)
+  long getAmountOfFollowers(Long followedId);
 }

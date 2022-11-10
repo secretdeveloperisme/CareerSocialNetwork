@@ -5,7 +5,7 @@
     <div class="col-xl-12" th:each="job: ${jobs}">
       <div class="post-item container-fluid d-flex shadow rounded py-2">
         <div class="post-item-thumbnail me-3">
-          <a th:href="${job.getTitle()}" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
+          <a th:href="|/job/${job.getJobId()}|" class="text-decoration-none rounded" th:style="'background-image :url(\''+${job.getImage()}+'\')'">
           </a>
         </div>
         <div class="post-content">

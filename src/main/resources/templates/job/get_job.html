@@ -147,7 +147,7 @@
                 (<span class="" th:text="${job.getWorkPlace().getPlace()}"></span>)
               </div>
             </h5>
-            <div class="post-main-skills d-flex my-3">
+            <div class="post-main-skills d-flex my-3" th:if="${job.getJobSkills().size() > 0}">
               <h5>Skills: </h5>
               <a th:each="skill: ${job.getJobSkills()}" class="post-skill" th:href="'/skill/'+${skill.getName()}"
                  th:text="${skill.getName()}"></a>
@@ -189,9 +189,11 @@
           <div class="author-header d-flex align-items-center mb-3">
             <div class="icon-64 author__avatar"
                  th:style="'background-image: url(\''+${job.getCompany().getLogo()}+'\')'"></div>
-            <a th:href="'/company/'+${company.getCompanyId()}">
-              <h5 class="author__name ms-3" th:text="${company.getName()}"></h5>
-            </a>
+            <div>
+              <a th:href="'/company/'+${company.getCompanyId()}">
+                <h5 class="author__name ms-3 text-overflow-2-lines" th:text="${company.getName()}"></h5>
+              </a>
+            </div>
           </div>
           <button th:classappend="'btn w-100'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'"
                   id="btnFollow" th:data-action="${isFollowed}?

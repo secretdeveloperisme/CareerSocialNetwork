@@ -166,4 +166,7 @@ public class TagService {
   public long getAmountOfAllTags() {
     return tagRepository.count();
   }
+  public long getAmountOfFollowers(Long tagId){
+    return tagRepository.getAmountOfFollowers(tagId);
+  }
 }

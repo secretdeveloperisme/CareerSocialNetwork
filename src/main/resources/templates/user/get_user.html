@@ -33,6 +33,10 @@
               <div class="btn-group">
                 <button th:classappend="'btn'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'" id="btnFollow" th:data-action="${isFollowed}?
                 'unfollow':'follow'" th:data-user-id="${targetUser.getUserId()}" th:text="${isFollowed}?'unfollow':'follow'"></button>
+                <div  class="btn btn-info" >
+                  <span id="amountOfFollowers" th:text="${amountOfFollowers}"></span>
+                  Followers
+                </div>
                 <button  class="btn btn-success ms-auto btn-chat" th:data-user-id="${targetUser.getUserId()}">Chat</button>
               </div>
             </div>
