@@ -51,6 +51,8 @@ public class Company {
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User createdUser;
+  @OneToMany(mappedBy = "user", orphanRemoval = true)
+  List<CompanyUserRole> companyUserRoles;
   public List<Job> getJobs() {
     if (jobs == null)
       jobs = new ArrayList<>();

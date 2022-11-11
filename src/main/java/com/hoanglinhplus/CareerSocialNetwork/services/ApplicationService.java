@@ -10,10 +10,7 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ApplicationMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseApplicationMapper;
-import com.hoanglinhplus.CareerSocialNetwork.models.Application;
-import com.hoanglinhplus.CareerSocialNetwork.models.ApplicationId;
-import com.hoanglinhplus.CareerSocialNetwork.models.Application_;
-import com.hoanglinhplus.CareerSocialNetwork.models.User;
+import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.ApplicationRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.ApplicationSpecification;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
@@ -71,7 +68,7 @@ public class ApplicationService {
     Optional<Application> applicationOptional = applicationRepository.findById(new ApplicationId(applicationDTO.getUserId(), applicationDTO.getJobId()));
     if(applicationOptional.isEmpty())
       throw new NotFoundException("Application is not found", applicationDTO.toString(), "ID");
-    if (!permissionService.isOwnerJob(myUserDetailsService.getCurrentUserId(), applicationDTO.getJobId())){
+    if (!permissionService.isOwnerJob(User.builder().userId(myUserDetailsService.getCurrentUserId()).build(), Job.builder().jobId(applicationDTO.getJobId()).build())){
       throw new PermissionDeniedException("You do not have permission to change status application");
     }
     Application targetApplication = applicationOptional.get();

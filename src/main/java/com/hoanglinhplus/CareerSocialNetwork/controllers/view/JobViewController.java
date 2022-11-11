@@ -78,7 +78,7 @@ public class JobViewController {
     }
     assert user != null;
     if(!user.isAdmin()) {
-      if (!permissionService.isOwnerJob(user.getUserId(), job.getJobId())) {
+      if (!permissionService.isOwnerJob(user, job)) {
         return "error/401";
       }
     }

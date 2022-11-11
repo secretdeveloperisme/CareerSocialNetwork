@@ -22,6 +22,7 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.JobSpec
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
+import com.hoanglinhplus.CareerSocialNetwork.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -41,7 +42,6 @@ import java.util.stream.Collectors;
 public class JobService {
   private final UserRepository userRepository;
   private final JobRepository jobRepository;
-  private final CompanyService companyService;
   private final CompanyRepository companyRepository;
   private final MyUserDetailsService myUserDetailsService;
   private final AuthService authService;
@@ -57,7 +57,6 @@ public class JobService {
     , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository, EmploymentTypeRepository employmentTypeRepository){
     this.userRepository = userRepository;
     this.jobRepository = jobRepository;
-    this.companyService = companyService;
     this.companyRepository = companyRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.authService = authService;
@@ -381,7 +380,9 @@ public class JobService {
     Long userId = myUserDetailsService.getCurrentUserId();
     List<Job> jobs = getFollowedJobs(pageableDTO, userId);
     List<JobCreationDTO> jobDTOS = jobs.stream().map(JobMapper::toDTO).toList();
-    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Jobs Successfully", jobDTOS,  null, (long) jobDTOS.size()));
+    long totalElement =jobRepository.countFollowedJobs(userId);
+    long lastPage = PageUtil.calculateLastPage(pageableDTO.getSize(),totalElement );
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Jobs Successfully", jobDTOS,  lastPage, totalElement));
   }
   public List<Skill> getAllSkills() {
     return skillRepository.findAll();

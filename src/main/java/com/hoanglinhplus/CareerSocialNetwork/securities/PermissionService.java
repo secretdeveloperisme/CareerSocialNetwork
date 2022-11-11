@@ -11,11 +11,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class PermissionService {
-  private final JobService  jobService;
   private final MyUserDetailsService  myUserDetailsService;
   @Autowired
-  public PermissionService(JobService jobService, MyUserDetailsService myUserDetailsService) {
-    this.jobService = jobService;
+  public PermissionService(MyUserDetailsService myUserDetailsService) {
     this.myUserDetailsService = myUserDetailsService;
   }
 
@@ -35,10 +33,8 @@ public class PermissionService {
     return company.getCreatedUser().getUserId().equals(userId);
   }
 
-
-  public boolean isOwnerJob(Long userId, Long jobId) {
-    Job job = jobService.getJob(jobId);
-    return job.getCompany().getCreatedUser().getUserId().equals(userId);
+  public boolean isOwnerJob(User user, Job job) {
+    return job.getCompany().getCreatedUser().getUserId().equals(user.getUserId());
   }
   public boolean isOwnerComment (Comment comment){
     Long userId = myUserDetailsService.getCurrentUserId();
@@ -69,4 +65,5 @@ public class PermissionService {
     Long userId = user.getUserId();
     return post.getCreatedUser().getUserId().equals(userId);
   }
+
 }

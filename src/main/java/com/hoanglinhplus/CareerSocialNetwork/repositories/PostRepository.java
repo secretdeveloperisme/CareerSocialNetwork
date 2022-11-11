@@ -91,6 +91,51 @@ public interface PostRepository extends JpaRepository<Post, Long>, JpaSpecificat
   limit :start ,:numberOfPostsPerPage
   """, nativeQuery = true)
   List<Post> getFollowedPosts(Long userId, int start, int numberOfPostsPerPage);
+  @Query(value = """
+    select count(*) from
+      (
+      select distinct p.post_id
+                    , p.content
+                    , p.created_at
+                    , p.deleted_at
+                    , p.description
+                    , p.image
+                    , p.slug
+                    , p.title
+                    , p.updated_at
+                    , p.user_id
+                    , p.post_status
+      from users
+               inner join follow_tags on users.user_id = follow_tags.user_id
+               inner join tags on follow_tags.tag_id = tags.tag_id
+               inner join post_tags pt on tags.tag_id = pt.tag_id
+               inner join posts p on pt.post_id = p.post_id
+      where users.user_id = :userId
+        and p.post_status = 'PUBLIC'
+        and p.deleted_at is null
+      union
+      select distinct p2.post_id
+                    , p2.content
+                    , p2.created_at
+                    , p2.deleted_at
+                    , p2.description
+                    , p2.image
+                    , p2.slug
+                    , p2.title
+                    , p2.updated_at
+                    , p2.user_id
+                    , p2.post_status
+      from users
+          inner join follow_users fu
+      on users.user_id = fu.following_id
+          inner join posts p2 on fu.followed_id = p2.user_id
+      where
+          users.user_id = :userId and p2.deleted_at is null
+          and p2.post_status = 'PUBLIC'
+          ) uf
+  order by uf.created_at desc
+  """, nativeQuery = true)
+  long countFollowedPosts(Long userId);
   @Query(value = "SELECT month, amount_of_posts as amount" +
     " from amount_posts_per_month_in_current_year", nativeQuery = true)
   List<AmountsPerMonth> getAmountsPerMonth();

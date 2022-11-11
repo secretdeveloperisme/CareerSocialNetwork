@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
+import com.hoanglinhplus.CareerSocialNetwork.dto.company_user_role.CompanyUserRoleDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyFilterDTO;
@@ -43,9 +44,9 @@ public class CompanyService {
   private final EmploymentTypeRepository employmentTypeRepository;
   private final AuthService authService;
   private final OrganizationSizeRepository organizationSizeRepository;
-
+  private final CompanyUserRoleService companyUserRoleService;
   @Autowired
-  public CompanyService(UserRepository userRepository, CompanyRepository companyRepository, OrganizationSizeRepository organizationSizeRepository, MyUserDetailsService myUserDetailsService, IndustryRepository industryRepository, EmploymentTypeRepository employmentTypeRepository, AuthService authService, OrganizationSizeRepository organizationSizeRepository1){
+  public CompanyService(UserRepository userRepository, CompanyRepository companyRepository, OrganizationSizeRepository organizationSizeRepository, MyUserDetailsService myUserDetailsService, IndustryRepository industryRepository, EmploymentTypeRepository employmentTypeRepository, AuthService authService, OrganizationSizeRepository organizationSizeRepository1, CompanyUserRoleService companyUserRoleService){
     this.userRepository = userRepository;
     this.companyRepository = companyRepository;
     this.myUserDetailsService = myUserDetailsService;
@@ -53,6 +54,7 @@ public class CompanyService {
     this.employmentTypeRepository = employmentTypeRepository;
     this.authService = authService;
     this.organizationSizeRepository = organizationSizeRepository1;
+    this.companyUserRoleService = companyUserRoleService;
   }
   public ResponseEntity<ResponseObjectDTO> responseGetCompany(Long companyId) {
     Company company = getCompany(companyId);
@@ -142,6 +144,7 @@ public class CompanyService {
   public List<Company> getAllCompanies(){
     return companyRepository.findAll();
   }
+  @Transactional
   public ResponseEntity<ResponseObjectDTO> createCompany(CompanyCreationDTO companyCreationDTO){
     Company company = CompanyMapper.toEntity(companyCreationDTO);
     Long userId = myUserDetailsService.getCurrentUserId();
@@ -151,6 +154,8 @@ public class CompanyService {
       Company savedCompany = companyRepository.save(company);
       Map<String, Object> responseData = new HashMap<>();
       CompanyCreationDTO savedCompanyDTO = CompanyMapper.toDTO(savedCompany);
+      companyUserRoleService.addCompanyUserRole(CompanyUserRoleDTO.builder()
+        .userId(userId).companyId(savedCompanyDTO.getCompanyId()).companyRoleId(1L).build(), true);
       responseData.put("createdCompany", savedCompanyDTO);
       ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
         "create company successfully"

@@ -42,7 +42,7 @@ public class ApplicationViewController {
     }
     user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
     Job job = jobService.getJob(jobId);
-    if(!permissionService.isOwnerJob(user.getUserId(), jobId))
+    if(!permissionService.isOwnerJob(user, job))
       throw new PermissionDeniedException("You do not have permission to manage job");
 
     model.addAttribute("user", user);

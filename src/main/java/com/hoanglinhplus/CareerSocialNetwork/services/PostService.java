@@ -28,6 +28,7 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchC
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
 import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
+import com.hoanglinhplus.CareerSocialNetwork.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -351,7 +352,9 @@ public class PostService {
     Long userId = myUserDetailsService.getCurrentUserId();
     List<Post> posts = getFollowedPosts(pageableDTO, userId);
     List<PostCreationDTO> postDTOS = posts.stream().map(PostMapper::toDTO).toList();
-    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Posts Successfully", postDTOS, null, (long) postDTOS.size()));
+    long totalElement = postRepository.countFollowedPosts(userId);
+    long lastPage = PageUtil.calculateLastPage(pageableDTO.getSize(), totalElement);
+    return ResponseEntity.ok(new ResponseDataDTO<>("Get Followed Posts Successfully", postDTOS, lastPage, totalElement));
   }
 
   public long getAmountOfAllPosts() {

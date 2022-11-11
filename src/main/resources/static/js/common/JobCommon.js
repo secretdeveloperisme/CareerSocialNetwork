@@ -23,7 +23,7 @@ async function loadJobs(jobFilter, page = 1, size = 10, isFilter = false) {
     let jobs = response.data;
     let lastPage = response.last_page;
     let lengthOfPosts = jobs.length;
-    if(page > (lastPage+1)){
+    if(page > (lastPage - 1)){
       lengthOfPosts = jobs.length;
       $btnMore.hide();
     }

@@ -24,7 +24,7 @@ async function loadPosts(postFilter, page = 1, size = 10, isFilter = false) {
     let posts = response.data;
     let lastPage = response.last_page;
     let lengthOfPosts = posts.length;
-    if(page > (lastPage+1)){
+    if(page > (lastPage-1)){
       lengthOfPosts = posts.length;
       $btnMore.hide();
     }

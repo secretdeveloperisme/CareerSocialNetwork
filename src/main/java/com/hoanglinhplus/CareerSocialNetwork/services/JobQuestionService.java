@@ -7,8 +7,10 @@ import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.JobQuestionMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.QuestionMapper;
+import com.hoanglinhplus.CareerSocialNetwork.models.Job;
 import com.hoanglinhplus.CareerSocialNetwork.models.JobQuestion;
 import com.hoanglinhplus.CareerSocialNetwork.models.Question;
+import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.JobQuestionRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.QuestionRepository;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
@@ -24,24 +26,28 @@ import java.util.Optional;
 
 @Service
 public class JobQuestionService {
+  private final  UserService userService;
+  private final JobService jobService;
   private final QuestionRepository questionRepository;
   private final JobQuestionRepository jobQuestionRepository;
   private final PermissionService permissionService;
   private final MyUserDetailsService myUserDetailsService;
 
   @Autowired
-  public JobQuestionService(QuestionRepository questionRepository, JobQuestionRepository jobQuestionRepository, PermissionService permissionService, MyUserDetailsService myUserDetailsService) {
+  public JobQuestionService(UserService userService, JobService jobService, QuestionRepository questionRepository, JobQuestionRepository jobQuestionRepository, PermissionService permissionService, MyUserDetailsService myUserDetailsService) {
+    this.userService = userService;
+    this.jobService = jobService;
     this.questionRepository = questionRepository;
     this.jobQuestionRepository = jobQuestionRepository;
     this.permissionService = permissionService;
-
     this.myUserDetailsService = myUserDetailsService;
   }
 
   public ResponseEntity<ResponseObjectDTO> createQuestion(JobQuestionDTO jobQuestionDTO){
+    User currentUser = userService.getUser(myUserDetailsService.getCurrentUserId());
+    Job job = jobService.getJob(jobQuestionDTO.getJobId());
     if(!(permissionService.isAdmin()
-      || (permissionService.isUser() && permissionService.isOwnerJob(myUserDetailsService.getCurrentUserId()
-      , jobQuestionDTO.getJobId() ))))
+      || (permissionService.isUser() && permissionService.isOwnerJob(currentUser,job))))
       throw new PermissionDeniedException("you dont have permission to create job question.");
     JobQuestion jobQuestion = JobQuestionMapper.toEntity(jobQuestionDTO);
     JobQuestion savedQuestion = jobQuestionRepository.save(jobQuestion);
@@ -101,11 +107,13 @@ public class JobQuestionService {
   }
   public ResponseEntity<ResponseObjectDTO> deleteQuestion(Long questionId) {
     Question question = getQuestion(questionId);
+
     if(question.getJobQuestion() != null && question.getJobQuestion().size() > 0) {
       JobQuestion jobQuestion = question.getJobQuestion().get(0);
+      User user = userService.getUser(myUserDetailsService.getCurrentUserId());
+      Job job = jobService.getJob(jobQuestion.getJob().getJobId());
       if(!(permissionService.isAdmin()
-        || (permissionService.isUser() && permissionService.isOwnerJob(myUserDetailsService.getCurrentUserId()
-        , jobQuestion.getJob().getJobId()))))
+        || (permissionService.isUser() && permissionService.isOwnerJob(user, job))))
         throw new PermissionDeniedException("You do not have permission to delete this question.");
       jobQuestionRepository.delete(jobQuestion);
       Map<String, Object> responseData = new HashMap<>();
