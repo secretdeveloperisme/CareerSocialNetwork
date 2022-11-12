@@ -50,8 +50,7 @@ public class User {
   private List<CommentLike> commentLikes;
   @OneToMany(mappedBy = "user")
   private List<Application> applications;
-  @OneToMany(mappedBy = "user")
-  private List<UserCompanyRole> userCompanyRoles;
+
   @ManyToMany
   @JoinTable(name = "follow_companies", joinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     , inverseJoinColumns = @JoinColumn(name = "company_id", referencedColumnName = "company_id"))

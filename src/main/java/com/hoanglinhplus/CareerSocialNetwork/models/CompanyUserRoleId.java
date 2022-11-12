@@ -10,5 +10,6 @@ import java.io.Serializable;
 @EqualsAndHashCode
 public class CompanyUserRoleId implements Serializable {
   private Long companyId;
+  private Long userId;
   private Long companyRoleId;
 }

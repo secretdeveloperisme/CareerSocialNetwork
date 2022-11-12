@@ -37,7 +37,7 @@ public class Company {
   @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   private List<CompanyNotification> companyNotifications;
   @OneToMany(mappedBy = "company", orphanRemoval = true, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-  private List<UserCompanyRole> userCompanyRoles;
+  private List<CompanyUserRole> companyUserRoles;
   @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
   @JoinTable(name = "follow_companies", joinColumns = @JoinColumn(name = "company_id", referencedColumnName = "company_id")
       , inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "user_id"))
@@ -51,8 +51,6 @@ public class Company {
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User createdUser;
-  @OneToMany(mappedBy = "user", orphanRemoval = true)
-  List<CompanyUserRole> companyUserRoles;
   public List<Job> getJobs() {
     if (jobs == null)
       jobs = new ArrayList<>();

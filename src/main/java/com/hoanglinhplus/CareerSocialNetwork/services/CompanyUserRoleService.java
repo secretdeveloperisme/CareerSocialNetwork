@@ -5,12 +5,18 @@ import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company_user_role.CompanyUserRoleDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company_user_role.CompanyUserRoleFilterDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.company_user_role.UpdateCompanyUserRoleDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseDataDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.UserNameExistedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyUserRoleMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyUserRoleMapper;
+import com.hoanglinhplus.CareerSocialNetwork.models.CompanyRole;
 import com.hoanglinhplus.CareerSocialNetwork.models.CompanyUserRole;
+import com.hoanglinhplus.CareerSocialNetwork.models.CompanyUserRoleId;
 import com.hoanglinhplus.CareerSocialNetwork.models.CompanyUserRole_;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.CompanyUserRoleRepository;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.CompanyUserRoleSpecification;
@@ -25,10 +31,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import javax.transaction.Transactional;
+import java.util.*;
 
 @Service
 public class CompanyUserRoleService {
@@ -76,6 +80,12 @@ public class CompanyUserRoleService {
     Pageable pageable = PageRequest.of(pageableDTO.getPage() - 1 ,pageableDTO.getSize(),Sort.by(orders));
     return companyUserRoleRepository.findAll(companyUserRoleSpecification, pageable);
   }
+  public CompanyUserRole getCompanyUserRole(CompanyUserRoleId companyUserRoleId){
+    Optional<CompanyUserRole> companyUserRoleOptional = companyUserRoleRepository.findById(companyUserRoleId);
+    if(companyUserRoleOptional.isEmpty())
+      throw new NotFoundException("Company User Role Is Not Found",null,"ID");
+    return companyUserRoleOptional.get();
+  }
   public ResponseEntity<ResponseDataDTO<CompanyUserRoleDTO>> responseGetCompanyUserRole(Long companyId, PageableDTO pageableDTO){
     if(!checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), companyId, null)){
       throw new PermissionDeniedException("You don't have permission to watch this company user roles");
@@ -101,8 +111,37 @@ public class CompanyUserRoleService {
         throw new PermissionDeniedException("You do have permission to add role");
       }
     }
+    if(companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleId.CREATOR.getValue()))
+      if(checkRoleUserInCompany(null, companyUserRoleDTO.getCompanyId(),CompanyRoleId.CREATOR.getValue())) {
+        throw new InputNotValidException("CREATOR Role is Existed");
+      }
+    if(companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleId.HR.getValue()))
+      if(checkRoleUserInCompany(null, companyUserRoleDTO.getCompanyId(),CompanyRoleId.HR.getValue())) {
+        throw new InputNotValidException("HR Role is Existed");
+      }
     CompanyUserRole companyUserRole = CompanyUserRoleMapper.toEntity(companyUserRoleDTO);
     CompanyUserRole savedCompanyUserRole = companyUserRoleRepository.save(companyUserRole);
     return CompanyUserRoleMapper.toDTO(savedCompanyUserRole);
+  }
+  @Transactional
+  public ResponseEntity<ResponseObjectDTO> updateCompanyUserRole(UpdateCompanyUserRoleDTO updateCompanyUserRoleDTO){
+    if(!checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), updateCompanyUserRoleDTO.getCompanyId(), CompanyRoleId.CREATOR.getValue()))
+      throw new PermissionDeniedException("You don't not have permission to update this Company User Role");
+    if(updateCompanyUserRoleDTO.getNewCompanyRoleId().equals(CompanyRoleId.CREATOR.getValue())){
+      throw new PermissionDeniedException("Creator Role can not update");
+    }
+    CompanyUserRole companyUserRole = getCompanyUserRole( new CompanyUserRoleId(updateCompanyUserRoleDTO.getCompanyId()
+      , updateCompanyUserRoleDTO.getUserId(), updateCompanyUserRoleDTO.getOldCompanyRoleId()));
+    CompanyUserRole newCompanyUserRole = CompanyUserRole.builder().companyId(updateCompanyUserRoleDTO.getCompanyId())
+      .userId(updateCompanyUserRoleDTO.getUserId()).companyRoleId(updateCompanyUserRoleDTO.getNewCompanyRoleId()).build();
+      if(!updateCompanyUserRoleDTO.getNewCompanyRoleId().equals(companyUserRole.getCompanyRoleId())){
+      companyUserRoleRepository.delete(companyUserRole);
+      addCompanyUserRole(CompanyUserRoleMapper.toDTO(newCompanyUserRole),false);
+    }
+    CompanyUserRoleDTO updatedCompanyUserRoleDTO = CompanyUserRoleMapper.toDTO(newCompanyUserRole);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("updatedCompanyUserRole", updatedCompanyUserRoleDTO);
+    return ResponseEntity.ok(new ResponseObjectDTO("Update Company User Role Successfully"
+      ,responseData));
   }
 }

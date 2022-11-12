@@ -16,12 +16,14 @@ public class CompanyUserRole {
   @Id
   @Column(name = "company_id", nullable = false)
   private Long companyId;
+
+  @Id
+  @Column(name = "user_id", nullable = false)
+  private Long userId;
+
   @Id
   @Column(name = "company_role_id", nullable = false)
   private Long companyRoleId;
-
-  @Column(name = "user_id", nullable = false)
-  private Long userId;
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id", insertable = false, updatable = false)
   private User user;

@@ -1,7 +1,11 @@
-import {filterArrToParams} from "../utils/common-utils.js";
+import {filterArrToParams, objectifyForm} from "../utils/common-utils.js";
 
 $(function () {
-  let currentCompanyId =0;
+  let currentCompanyId = 0;
+  const $searchUserInput = $("#searchUserInput");
+  const $addCompanyUserRoleForm = $("#addCompanyUserRoleForm");
+  const $autocompleteSearchUser = $("#autocompleteSearchUser");
+  const $userIdInput = $("#userIdInput");
   let ajaxConfig = {
     method:"POST", //set request type to Position
     headers: {
@@ -64,7 +68,7 @@ $(function () {
           <i class="fa-solid fa-users"></i>
         </button>`);
     $btn.on("click", ()=>{
-      currentCompanyId = $(this).data("company-id");
+      currentCompanyId = cell.getData().companyId;
     })
     return $btn[0];
   }
@@ -159,17 +163,48 @@ $(function () {
   $btnSubmitAll.on("click", ()=>{
     $("#deleteCompanyModal").modal("show");
   })
-
+  let companyUserRolesTable;
   $('#companyUserRolesModal').on('show.bs.modal', function (event) {
     let companyId = $(event.relatedTarget).data("company-id");
-    let companyUserRolesTable = new Tabulator("#companyUserRolesTable", {
+    companyUserRolesTable = new Tabulator("#companyUserRolesTable", {
       columns:[
         {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
             cell.getRow().toggleSelect();
           }},
         {title:"Company", formatter: formatterCompany}, //column has a fixed width of 100px;
         {title:"User", formatter: formatterUser}, //column will be allocated 1/5 of the remaining space
-        {title:"Role", formatter: formatterCompanyUserRole}, //column will be allocated 3/5 of the remaining space
+        {title:"Role",field: "companyRole", formatter: formatterCompanyUserRole, editor:"select", editorParams:{
+            values: [
+              {
+                label: "HR",
+                value: {
+                  companyRoleId: 4,
+                  name: "HR"
+                }
+              },
+              {
+                label: "CEO",
+                value: {
+                  companyRoleId: 2,
+                  name: "CEO"
+                }
+              },
+               {
+                 label: "Director",
+                 value:{
+                  companyRoleId: 3,
+                  name: "Director"
+                }
+              },
+              {
+                label:  "STAFF",
+                value: {
+                  companyRoleId: 5,
+                  name: "Staff"
+                }
+              }
+            ]
+          }}, //column will be allocated 3/5 of the remaining space
       ],
       pagination:true,
       paginationMode:"remote", //enable remote pagination
@@ -192,5 +227,101 @@ $(function () {
 
       },
     });
+    companyUserRolesTable.on("cellEdited", function(cell){
+      console.log(cell.getOldValue(), cell.getValue())
+      if(cell.getField() === "companyRole" && cell.getOldValue()+"" !== cell.getValue()){
+        let requestPayload = {
+          companyId: cell.getData().companyId,
+          userId: cell.getData().userId,
+          oldCompanyRoleId: cell.getOldValue().companyRoleId,
+          newCompanyRoleId: cell.getValue().companyRoleId,
+        }
+        $.ajax({
+          type: "PUT",
+          url: "/api/company-user-role",
+          data: JSON.stringify(requestPayload),
+          contentType: "application/json",
+          success: function (response) {
+            showToast("success", "Update Company User Role", response.message)
+          },
+          error: function(xhr){
+            const response = xhr.responseJSON
+            showToast("failed", "Update Company User Role", response.message);
+            cell.setValue(cell.getOldValue());
+          }
+        });
+      }
+
+    });
   })
+  // add company user role
+  function userElementClickEvent(event){
+    let user = $(this).data("user");
+    $userIdInput.val(user.userId);
+    $searchUserInput.val(user.username);
+  }
+  $searchUserInput.on("focus",()=>{
+    $autocompleteSearchUser.slideDown();
+  })
+  $searchUserInput.on("blur",()=>{
+    $autocompleteSearchUser.slideUp();
+  })
+  async function autocompleteUserSearchEvent(event){
+    $autocompleteSearchUser.html("");
+    let username = $(event.target).val();
+    try{
+      let responseUsers = await $.ajax({
+        type: "GET",
+        url: "/api/user/get-all-users",
+        data: {
+          username,
+          size:5
+        }
+      });
+
+      let users = responseUsers.data;
+      let $users = users.map(user=>{
+        let $userElement = $(`
+          <div class="list-group-item list-group-item-action">
+            <img src="${user.avatar}" class="icon-32" alt="avatar">
+            <span>${user.username}</span>
+          </div>
+        `);
+        $userElement.data("user", user);
+        $userElement.on("click",userElementClickEvent);
+        return $userElement;
+      })
+      console.log($users)
+      $autocompleteSearchUser.append($users)
+    }catch (err){
+      console.log(err)
+    }
+
+  }
+  $searchUserInput.on("keyup", autocompleteUserSearchEvent)
+
+  $addCompanyUserRoleForm.submit(function (event){
+    event.preventDefault();
+    let requestPayload = objectifyForm($addCompanyUserRoleForm.serializeArray());
+    requestPayload.companyId = currentCompanyId;
+    console.log(requestPayload)
+    $.ajax({
+      type: "POST",
+      url: "/api/company-user-role",
+      data: JSON.stringify(requestPayload),
+      contentType: "application/json",
+      success: function (response) {
+        showToast("success", "Add Company User Role", response.message);
+        companyUserRolesTable.setData("/api/company-user-role/get-company-user-roles",{
+          "companyId": currentCompanyId,
+
+        })
+      },
+      error: function(xhr){
+        const response = xhr.responseJSON
+        showToast("failed", "Add Company User Role", response.message);
+      }
+    });
+  })
+
 });

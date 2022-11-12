@@ -48,7 +48,6 @@ function filterArrToParams(filters){
   filters.forEach(filter=>{
     filterObj[filter.field] = filter.value;
   })
-  console.log(filterObj)
   return $.param(filterObj);
 }
 function getFileNameFromPath(path){
