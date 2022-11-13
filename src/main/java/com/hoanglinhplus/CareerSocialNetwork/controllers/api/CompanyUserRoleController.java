@@ -11,7 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.PersistenceUnit;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/company-user-role")
@@ -43,5 +43,10 @@ public class CompanyUserRoleController {
   @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
   public ResponseEntity<ResponseObjectDTO> updateCompanyUserRole(@RequestBody UpdateCompanyUserRoleDTO updateCompanyUserRoleDTO){
     return companyUserRoleService.updateCompanyUserRole(updateCompanyUserRoleDTO);
+  }
+  @DeleteMapping("/many")
+  @PreAuthorize("hasAnyAuthority('ADMIN','USER')")
+  public ResponseEntity<ResponseObjectDTO> deleteCompanyUserRoles(@RequestBody List<CompanyUserRoleDTO> companyUserRoleDTOS){
+    return companyUserRoleService.deleteCompanyUserRoles(companyUserRoleDTOS);
   }
 }

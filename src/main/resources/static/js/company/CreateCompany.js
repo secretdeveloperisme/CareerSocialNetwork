@@ -58,7 +58,7 @@ $(()=>{
           data: JSON.stringify(objectifyForm($companyForm.serializeArray())),
           contentType: "application/json",
           success: function (response) {
-            toast($loginToast, "success","success", response.message);
+            showToast("success","success", response.message);
             console.log(response);
             setTimeout(()=>{
               window.location = "/me/company"
@@ -66,7 +66,7 @@ $(()=>{
           },
           error: function(xhr){
             const response = xhr.responseJSON
-            toast($loginToast,response.status, response.status, response.message);
+            showToast("failed", "failed","Can not create company");
           }
         });
       }

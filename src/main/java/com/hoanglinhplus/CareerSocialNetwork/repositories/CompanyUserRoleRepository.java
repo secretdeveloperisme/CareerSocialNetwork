@@ -8,4 +8,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CompanyUserRoleRepository extends JpaRepository<CompanyUserRole, CompanyUserRoleId>, JpaSpecificationExecutor<CompanyUserRole> {
+
 }

@@ -311,12 +311,18 @@ $(() => {
         if (response.data.follow === true) {
           $btnFollow.attr("data-action", "unfollow");
           $btnFollow.addClass("btn-secondary").removeClass("btn-primary");
-          $btnFollow.text("unfollow");
+          $btnFollow.html(`
+            <i class="fa-solid fa-user-minus"></i>
+            <span>unfollow</span>
+          `);
         }
         else if (response.data.follow === false) {
           $btnFollow.attr("data-action", "follow");
           $btnFollow.addClass("btn-primary").removeClass("btn-secondary");
-          $btnFollow.text("follow");
+          $btnFollow.html(`
+            <i class="fa-solid fa-user-plus"></i>
+            <span>follow</span>
+          `);
         }
 
       }

@@ -2,7 +2,7 @@ import getQueryFromUrl from "../utils/get_query_from_url.js";
 import {objectifyForm} from "../utils/common-utils.js";
 import {loadJobs} from "../common/JobCommon.js";
 import {loadPosts} from "../common/PostCommon.js";
-$( async ()=>{
+$(async ()=>{
 
   const $customDataLists = $(".custom-datalist");
   const $querySearch = $("#querySearch");
@@ -153,7 +153,7 @@ $( async ()=>{
       success: function (response) {
         $usersList.html("");
         console.log(response)
-        let tagUsers = response.data.users.map(user=>{
+        let tagUsers = response.data.map(user=>{
           return (`
             <div class="col-xl-4">
               <a href="/user/${user.username}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">

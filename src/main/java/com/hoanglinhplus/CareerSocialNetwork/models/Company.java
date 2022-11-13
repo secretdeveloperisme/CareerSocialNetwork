@@ -51,6 +51,8 @@ public class Company {
   @ManyToOne
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private User createdUser;
+  @Transient
+  User hr;
   public List<Job> getJobs() {
     if (jobs == null)
       jobs = new ArrayList<>();

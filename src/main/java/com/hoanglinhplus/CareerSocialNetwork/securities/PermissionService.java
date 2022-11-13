@@ -1,10 +1,8 @@
 package com.hoanglinhplus.CareerSocialNetwork.securities;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.CompanyRoleName;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
-import com.hoanglinhplus.CareerSocialNetwork.services.CompanyService;
-import com.hoanglinhplus.CareerSocialNetwork.services.JobService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -32,7 +30,16 @@ public class PermissionService {
     Long userId = myUserDetailsService.getCurrentUserId();
     return company.getCreatedUser().getUserId().equals(userId);
   }
-
+  public boolean isUserCreatorRoleCompany(CompanyUserRole companyUserRole){
+    if(companyUserRole == null)
+      return false;
+    return companyUserRole.getCompanyRoleId().equals(CompanyRoleName.CREATOR.getValue());
+  }
+  public boolean isUserHRRoleCompany(CompanyUserRole companyUserRole){
+    if(companyUserRole == null)
+      return false;
+    return companyUserRole.getCompanyRoleId().equals(CompanyRoleName.CREATOR.getValue());
+  }
   public boolean isOwnerJob(User user, Job job) {
     return job.getCompany().getCreatedUser().getUserId().equals(user.getUserId());
   }

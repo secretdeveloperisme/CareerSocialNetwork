@@ -250,7 +250,6 @@ $(()=>{
       }
     });
   }
-
   addUpdateEducationFormEvent();
   addDeleteEducationFormEvent();
   $btnAddEducation.on("click", addEducationEvent)

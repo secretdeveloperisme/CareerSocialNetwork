@@ -35,12 +35,14 @@ public class ApplicationService {
   private final MyUserDetailsService myUserDetailsService;
   private final PermissionService permissionService;
   private final UserService userService;
+  private final JobService jobService;
   @Autowired
-  public ApplicationService(ApplicationRepository applicationRepository, MyUserDetailsService myUserDetailsService, PermissionService permissionService, UserService userService) {
+  public ApplicationService(ApplicationRepository applicationRepository, MyUserDetailsService myUserDetailsService, PermissionService permissionService, UserService userService, JobService jobService) {
     this.applicationRepository = applicationRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.permissionService = permissionService;
     this.userService = userService;
+    this.jobService = jobService;
   }
   Page<Application> getApplicationPage(ApplicationDTO applicationDTO, PageableDTO pageableDTO) {
     ApplicationSpecification applicationSpecification = new ApplicationSpecification();
@@ -68,7 +70,9 @@ public class ApplicationService {
     Optional<Application> applicationOptional = applicationRepository.findById(new ApplicationId(applicationDTO.getUserId(), applicationDTO.getJobId()));
     if(applicationOptional.isEmpty())
       throw new NotFoundException("Application is not found", applicationDTO.toString(), "ID");
-    if (!permissionService.isOwnerJob(User.builder().userId(myUserDetailsService.getCurrentUserId()).build(), Job.builder().jobId(applicationDTO.getJobId()).build())){
+    User currentUser = userService.getUser(myUserDetailsService.getCurrentUserId());
+    Job job = jobService.getJob(applicationDTO.getJobId());
+    if (!permissionService.isOwnerJob(currentUser,job)){
       throw new PermissionDeniedException("You do not have permission to change status application");
     }
     Application targetApplication = applicationOptional.get();

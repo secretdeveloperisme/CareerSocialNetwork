@@ -74,6 +74,10 @@
                         <i class="fa-solid fa-plus"></i>
                         <span>Add User Role</span>
                       </button>
+                      <button class="btn btn-danger w-100 mt-2" data-bs-toggle="modal" data-bs-target="#deleteCompanyUserRoleModal">
+                        <i class="fa-solid fa-trash"></i>
+                        <span>Delete User Role</span>
+                      </button>
                     </div>
                     <div class="col-9">
                       <div>
@@ -92,7 +96,7 @@
                               <div class="d-flex input-group">
                                 <button class="btn btn-outline-success input-group-append" type="submit"><i class="fas fa-shield" aria-hidden="true"></i></button>
                                 <div class="d-flex input-search-group">
-                                  <select name="companyRoleId" class="form-select" id="">
+                                  <select name="companyRoleName" class="form-select" id="">
                                     <option value="1">CREATOR</option>
                                     <option value="2">CEO</option>
                                     <option value="3">Director</option>
@@ -129,6 +133,23 @@
         </div>
       </li>
     </ul>
+  </div>
+  <div class="modal fade" id="deleteCompanyUserRoleModal" tabindex="-1" aria-labelledby="deleteCompanyUserRoleModal">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <p>Do you sure want to delete ?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-danger" id="btnDeleteCompanyUserRole">Delete</button>
+        </div>
+      </div>
+    </div>
   </div>
   <div th:replace="/fragments/components/toast"></div>
   <div th:replace="/auth/login"></div>

@@ -228,8 +228,11 @@ $(function () {
       },
     });
     companyUserRolesTable.on("cellEdited", function(cell){
-      console.log(cell.getOldValue(), cell.getValue())
-      if(cell.getField() === "companyRole" && cell.getOldValue()+"" !== cell.getValue()){
+      if(cell.getField() === "companyRole"){
+        if(cell.getValue() === ""){
+          cell.restoreOldValue();
+          return;
+        }
         let requestPayload = {
           companyId: cell.getData().companyId,
           userId: cell.getData().userId,
@@ -247,7 +250,7 @@ $(function () {
           error: function(xhr){
             const response = xhr.responseJSON
             showToast("failed", "Update Company User Role", response.message);
-            cell.setValue(cell.getOldValue());
+            cell.restoreOldValue();
           }
         });
       }
@@ -323,5 +326,35 @@ $(function () {
       }
     });
   })
+  let $btnDeleteCompanyUserRole = $('#btnDeleteCompanyUserRole');
+  $btnDeleteCompanyUserRole.on('click', function (event) {
+    let selectedRows = companyUserRolesTable.getSelectedRows();
+    let selectedDatas = companyUserRolesTable.getSelectedData();
+    let companyUserRoleIds = selectedDatas.map(selectedData=>{
+      return {
+        userId: selectedData.userId,
+        companyId: selectedData.companyId,
+        companyRoleId: selectedData.companyRoleId
+      }
+    });
+    console.log(companyUserRoleIds)
+    $.ajax({
+      url: `/api/company-user-role/many`,
+      type: 'DELETE',
+      data: JSON.stringify(companyUserRoleIds),
+      contentType: 'application/json',
+      success: (response) => {
+        for(let i=0;i<selectedRows.length;i++)
+        {
+          selectedRows[i].delete();
+        }
+        $('#deleteCompanyUserRoleModal').modal('hide');
+      },
+      error: function (xhr){
+        let responseErrorObject = xhr.responseJSON
+        showToast("failed", "Delete Company User Roles",responseErrorObject.message );
+      }
+    });
+  });
 
 });

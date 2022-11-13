@@ -195,7 +195,9 @@ public class PostService {
     Optional<Post> postOptional = postRepository.findById(post.getPostId());
     if (postOptional.isPresent()) {
       Post targetPost = postOptional.get();
-      permissionService.isOwnerPost(targetPost);
+      if(!permissionService.isOwnerPost(targetPost)){
+        throw new PermissionDeniedException("You do not have permission to update this post");
+      }
       if (postUpdateDTO.getTitle() != null) {
         targetPost.setTitle(post.getTitle());
         targetPost.setSlug(post.getSlug());

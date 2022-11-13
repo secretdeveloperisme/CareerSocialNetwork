@@ -1,9 +1,9 @@
 package com.hoanglinhplus.CareerSocialNetwork.constants;
 
-public enum CompanyRoleId {
+public enum CompanyRoleName {
   CREATOR(1L), HR(4L);
   private Long value;
-  CompanyRoleId(Long value) {
+  CompanyRoleName(Long value) {
     this.value = value;
   }
   public Long getValue(){

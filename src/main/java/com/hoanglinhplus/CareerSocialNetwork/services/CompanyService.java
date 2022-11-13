@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.CompanyRoleName;
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company_user_role.CompanyUserRoleDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
@@ -63,13 +64,20 @@ public class CompanyService {
     responseData.put("company", companyCreationDTO);
     return ResponseEntity.ok(new ResponseObjectDTO("get company successfully ",responseData));
   }
+  User getUserCompanyWithRole(Company company, CompanyRoleName companyRoleName){
+    Optional<CompanyUserRole> companyUserRoleOptional = company.getCompanyUserRoles().stream().filter(companyUserRole1
+      -> companyUserRole1.getCompanyRoleId().equals(companyRoleName.getValue())).findFirst();
+    return companyUserRoleOptional.map(CompanyUserRole::getUser).orElse(null);
+  }
 
   public Company getCompany(Long companyId){
     Optional<Company> companyOptional = companyRepository.findById(companyId);
     if(companyOptional.isPresent()){
-      return companyOptional.get();
+      Company company = companyOptional.get();
+      company.setHr(getUserCompanyWithRole(company, CompanyRoleName.HR));
+      return company;
     }
-    throw new NotFoundException("companyId not found", "id", companyId.toString());
+    throw new NotFoundException("Company not found", "id", companyId.toString());
   }
   public Page<Company> getOwnCompanies(CompanyFilterDTO companyFilterDTO,PageableDTO pageableDTO){
     companyFilterDTO.setUserId(myUserDetailsService.getCurrentUserId());

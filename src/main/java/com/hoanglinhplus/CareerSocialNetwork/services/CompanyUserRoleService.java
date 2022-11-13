@@ -1,6 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
-import com.hoanglinhplus.CareerSocialNetwork.constants.CompanyRoleId;
+import com.hoanglinhplus.CareerSocialNetwork.constants.CompanyRoleName;
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.company_user_role.CompanyUserRoleDTO;
@@ -11,10 +11,8 @@ import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.InputNotValidException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
-import com.hoanglinhplus.CareerSocialNetwork.exceptions.UserNameExistedException;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.CompanyUserRoleMapper;
 import com.hoanglinhplus.CareerSocialNetwork.mappers.ResponseCompanyUserRoleMapper;
-import com.hoanglinhplus.CareerSocialNetwork.models.CompanyRole;
 import com.hoanglinhplus.CareerSocialNetwork.models.CompanyUserRole;
 import com.hoanglinhplus.CareerSocialNetwork.models.CompanyUserRoleId;
 import com.hoanglinhplus.CareerSocialNetwork.models.CompanyUserRole_;
@@ -44,6 +42,10 @@ public class CompanyUserRoleService {
     this.companyUserRoleRepository = companyUserRoleRepository;
     this.myUserDetailsService = myUserDetailsService;
     this.permissionService = permissionService;
+  }
+  public List<CompanyUserRole> getCompanyUserRoles(List<CompanyUserRoleId> companyUserRoleIds){
+    List<CompanyUserRole> companyUserRoles = companyUserRoleRepository.findAllById(companyUserRoleIds);
+    return companyUserRoles;
   }
   public Page<CompanyUserRole> getCompanyUserRolePage(CompanyUserRoleFilterDTO companyUserRoleFilterDTO, PageableDTO pageableDTO){
     CompanyUserRoleSpecification companyUserRoleSpecification = new CompanyUserRoleSpecification();
@@ -107,16 +109,16 @@ public class CompanyUserRoleService {
   }
   public CompanyUserRoleDTO addCompanyUserRole(CompanyUserRoleDTO companyUserRoleDTO, boolean isCompanyCreated){
     if(!isCompanyCreated){
-      if(!checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), companyUserRoleDTO.getCompanyId(), CompanyRoleId.CREATOR.getValue())){
+      if(!checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), companyUserRoleDTO.getCompanyId(), CompanyRoleName.CREATOR.getValue())){
         throw new PermissionDeniedException("You do have permission to add role");
       }
     }
-    if(companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleId.CREATOR.getValue()))
-      if(checkRoleUserInCompany(null, companyUserRoleDTO.getCompanyId(),CompanyRoleId.CREATOR.getValue())) {
+    if(companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleName.CREATOR.getValue()))
+      if(checkRoleUserInCompany(null, companyUserRoleDTO.getCompanyId(), CompanyRoleName.CREATOR.getValue())) {
         throw new InputNotValidException("CREATOR Role is Existed");
       }
-    if(companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleId.HR.getValue()))
-      if(checkRoleUserInCompany(null, companyUserRoleDTO.getCompanyId(),CompanyRoleId.HR.getValue())) {
+    if(companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleName.HR.getValue()))
+      if(checkRoleUserInCompany(null, companyUserRoleDTO.getCompanyId(), CompanyRoleName.HR.getValue())) {
         throw new InputNotValidException("HR Role is Existed");
       }
     CompanyUserRole companyUserRole = CompanyUserRoleMapper.toEntity(companyUserRoleDTO);
@@ -125,9 +127,9 @@ public class CompanyUserRoleService {
   }
   @Transactional
   public ResponseEntity<ResponseObjectDTO> updateCompanyUserRole(UpdateCompanyUserRoleDTO updateCompanyUserRoleDTO){
-    if(!checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), updateCompanyUserRoleDTO.getCompanyId(), CompanyRoleId.CREATOR.getValue()))
+    if(!checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), updateCompanyUserRoleDTO.getCompanyId(), CompanyRoleName.CREATOR.getValue()))
       throw new PermissionDeniedException("You don't not have permission to update this Company User Role");
-    if(updateCompanyUserRoleDTO.getNewCompanyRoleId().equals(CompanyRoleId.CREATOR.getValue())){
+    if(updateCompanyUserRoleDTO.getNewCompanyRoleId().equals(CompanyRoleName.CREATOR.getValue())){
       throw new PermissionDeniedException("Creator Role can not update");
     }
     CompanyUserRole companyUserRole = getCompanyUserRole( new CompanyUserRoleId(updateCompanyUserRoleDTO.getCompanyId()
@@ -144,4 +146,37 @@ public class CompanyUserRoleService {
     return ResponseEntity.ok(new ResponseObjectDTO("Update Company User Role Successfully"
       ,responseData));
   }
+  @Transactional
+  public ResponseEntity<ResponseObjectDTO> deleteCompanyUserRoles(List<CompanyUserRoleDTO> companyUserRoleDTOS) {
+    if(companyUserRoleDTOS.isEmpty())
+      throw new InputNotValidException("Company User Role List is empty");
+    List<CompanyUserRoleId> companyRoleIds = companyUserRoleDTOS.stream().map(companyUserRoleDTO ->
+      new CompanyUserRoleId(companyUserRoleDTO.getCompanyId(), companyUserRoleDTO.getUserId(), companyUserRoleDTO.getCompanyRoleId()))
+      .toList();
+    if(getCompanyUserRoles(companyRoleIds).size() != companyUserRoleDTOS.size()){
+      throw new NotFoundException("Some company user roles are not found", null, "ID");
+    }
+    boolean isNotCreatorRoleOfSomeCompanyUserRoles = companyUserRoleDTOS.stream()
+      .anyMatch(companyUserRoleDTO -> !checkRoleUserInCompany(myUserDetailsService.getCurrentUserId(), companyUserRoleDTO.getCompanyId(), CompanyRoleName.CREATOR.getValue()));
+    boolean hasCreatorRoleOfSomeCompanyUserRoles = companyUserRoleDTOS.stream()
+      .anyMatch(companyUserRoleDTO -> companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleName.CREATOR.getValue()));
+    if(hasCreatorRoleOfSomeCompanyUserRoles){
+      throw new PermissionDeniedException("Some Of Company User Role contain Creator role");
+    }
+    if(!permissionService.isAdmin()){
+      if(isNotCreatorRoleOfSomeCompanyUserRoles){
+        throw new PermissionDeniedException("You don't have permission to delete some company user roles");
+      }
+    }
+    List<CompanyUserRole> companyUserRoles = companyUserRoleDTOS.stream()
+      .map(CompanyUserRoleMapper::toEntity).toList();
+     companyUserRoleRepository.deleteAll(companyUserRoles);
+    Map<String, Object> responseData = new HashMap<>();
+    responseData.put("deletedCompanyUserRoles",companyUserRoleDTOS);
+    ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
+      "Delete Company User Roles successfully "
+      ,responseData);
+    return ResponseEntity.ok(responseObjectDTO);
+  }
+
 }
