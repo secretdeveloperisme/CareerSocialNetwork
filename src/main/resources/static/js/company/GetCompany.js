@@ -35,7 +35,7 @@ $(()=>{
   })
   let $companyIdWrapper = $("#companyIdWrapper");
   let currentPage = 1;
-  const amountOfPostsPerPage = 1;
+  const amountOfPostsPerPage = 10;
   let $btnMore = $("#btnMore");
   $btnMore.on("click", async (event)=>{
     let result =  loadJobs({

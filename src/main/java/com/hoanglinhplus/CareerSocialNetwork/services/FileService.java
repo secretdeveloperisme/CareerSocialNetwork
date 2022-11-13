@@ -25,6 +25,7 @@ public class FileService {
   private final MyUserDetailsService myUserDetailsService;
   private final String staticFolder = "src/main/resources/static";
   private final String uploadFolder = "images/upload";
+  private final int bufferSize = 200000;
   public FileService(MyUserDetailsService myUserDetailsService) {
     this.myUserDetailsService = myUserDetailsService;
   }
@@ -88,8 +89,8 @@ public class FileService {
 
       response.setContentType(mimeType);
       InputStream fileInputStream = new FileInputStream(file);
-      BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream);
-      BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream);
+      BufferedInputStream bufferedInputStream = new BufferedInputStream(fileInputStream, bufferSize);
+      BufferedOutputStream bufferedOutputStream = new BufferedOutputStream(outputStream, bufferSize);
       while (bufferedInputStream.available() > 0) {
         bufferedOutputStream.write(bufferedInputStream.read());
       }

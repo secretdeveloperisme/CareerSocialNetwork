@@ -26,6 +26,18 @@ function toast($toast,type, title, content){
   $toast.find(".toast-body").text(content);
   $toast.toast("show");
 }
+function setKeyLocalStorage(key, value, isObject =true){
+  if(isObject)
+    window.localStorage.setItem(key, JSON.stringify(value));
+  else
+    window.localStorage.setItem(key,value);
+}
+function getKeyLocalStorage(key, isObject=true){
+  if(isObject)
+    return JSON.parse(window.localStorage.getItem(key))
+  else
+    return window.localStorage.getItem("key");
+}
 
 $(()=>{
   let $btnChat = $(".btn-chat");
@@ -45,6 +57,8 @@ $(()=>{
       data: JSON.stringify(requestPayload),
       contentType: "application/json",
       success: function (response) {
+        let conversation = response.data.conversation;
+        setKeyLocalStorage("currentActiveConversation", conversation);
         showToast("success", "Create Conversation", response.message)
         setTimeout(function () {
           window.location = "/chat"
@@ -61,4 +75,4 @@ $(()=>{
 
 
 
-export {uploadFile, toast}
+export {uploadFile, toast, setKeyLocalStorage,getKeyLocalStorage}

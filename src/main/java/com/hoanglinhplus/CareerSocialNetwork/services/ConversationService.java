@@ -1,6 +1,7 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.chat.ConversationDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.chat.FilterConversationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.responses.ResponseObjectDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO;
 import com.hoanglinhplus.CareerSocialNetwork.exceptions.NotFoundException;
@@ -34,6 +35,38 @@ public class ConversationService {
     this.myUserDetailsService = myUserDetailsService;
     this.permissionService = permissionService;
   }
+  List<Conversation> getAllConversation(FilterConversationDTO filterConversationDTO) {
+    Long createdUserId = filterConversationDTO.getCreateUserId();
+    List<Long> participantUserIds = filterConversationDTO.getParticipantId();
+    Specification<Conversation> conversationSpecification;
+    ConversationSpecification conversationCreatorSpecification = new ConversationSpecification();
+    if (createdUserId != null) {
+      SearchCriteria<Conversation, User> searchCriteria = new SearchCriteria<>(Conversation_.user
+        , User.builder().userId(createdUserId).build(), SearchOperator.EQUAL);
+      conversationCreatorSpecification.getConditions().add(searchCriteria);
+    }
+    Specification<Conversation> conversationParticipantsSpecification = null;
+    if (participantUserIds != null && !participantUserIds.isEmpty()) {
+      conversationParticipantsSpecification = ConversationSpecification.joinParticipants(
+        participantUserIds
+      );
+    }
+    conversationSpecification = conversationCreatorSpecification.and(conversationParticipantsSpecification);
+    return conversationRepository.findAll(conversationSpecification);
+  }
+  public Conversation getConversationByTwoParticipant(Long userId0, Long userId1){
+    List<Conversation> conversations = getAllConversation(FilterConversationDTO.builder().participantId(
+      List.of(userId0, userId1)
+    ).build());
+    if(conversations.isEmpty())
+      return null;
+    Optional<Conversation> conversationOptional = conversations.stream().filter(conversation -> {
+      List<User> users = conversation.getParticipants().stream().filter(user ->
+        (user.getUserId().equals(userId0) || user.getUserId().equals(userId1))).toList();
+      return users.size() == 2;
+    }).findFirst();
+    return conversationOptional.orElse(null);
+  }
   public Conversation getConversation(Long conversationId) {
     Optional<Conversation> conversationOptional = conversationRepository.findById(conversationId);
     if (conversationOptional.isPresent()) {
@@ -46,15 +79,20 @@ public class ConversationService {
     conversationDTO.setUser(UserCreationDTO.builder().userId(myUserDetailsService.getCurrentUserId()).build());
     Conversation conversation = ConversationMapper.toEntity(conversationDTO);
     conversation.getParticipants().add(User.builder().userId(myUserDetailsService.getCurrentUserId()).build());
+    Map<String, Object> responseData = new HashMap<>();
     List<User> participants = conversation.getParticipants();
     if( participants.size() > 1 &&
       conversationRepository.checkUsersInTheSameConversation(participants.get(0).getUserId()
       , participants.get(1).getUserId())){
-      return ResponseEntity.ok(new ResponseObjectDTO("You have already have a Conversation ",null));
+      Conversation existedConversation = getConversationByTwoParticipant(conversation.getParticipants().get(0).getUserId()
+        , conversation.getParticipants().get(1).getUserId());
+      ConversationDTO existedConversationDTO = ConversationMapper.toDTO(existedConversation);
+      responseData.put("conversation", existedConversationDTO);
+      return ResponseEntity.ok(new ResponseObjectDTO("You have already have a Conversation ",responseData));
     }
     Conversation savedConversation = conversationRepository.save(conversation);
     ConversationDTO savedConversationDTO = ConversationMapper.toDTO(savedConversation);
-    Map<String, Object> responseData = new HashMap<>();
+
     responseData.put("conversation", savedConversationDTO);
     return ResponseEntity.ok(new ResponseObjectDTO("Create Conversation Successfully ",responseData));
   }
@@ -81,13 +119,13 @@ public class ConversationService {
   public List<Conversation> getConversations(){
     Long currentUserId = myUserDetailsService.getCurrentUserId();
     Specification<Conversation> conversationSpecification = ConversationSpecification
-      .joinParticipants(User.builder().userId(currentUserId).build());
+      .joinParticipant(User.builder().userId(currentUserId).build());
     List<Conversation> userConversations = conversationRepository.findAll(conversationSpecification);
     return userConversations;
   }
   public List<Conversation> getUserConversation(Long userId){
     Specification<Conversation> conversationSpecification = ConversationSpecification
-      .joinParticipants(User.builder().userId(userId).build());
+      .joinParticipant(User.builder().userId(userId).build());
     List<Conversation> userConversations = conversationRepository.findAll(conversationSpecification);
     return userConversations;
   }
@@ -100,7 +138,7 @@ public class ConversationService {
   }
 
   public boolean isUserInConversation(User user, Conversation conversation){
-    Specification<Conversation> conversationSpecAll = ConversationSpecification.joinParticipants(user);
+    Specification<Conversation> conversationSpecAll = ConversationSpecification.joinParticipant(user);
     SearchCriteria<Conversation, Long> searchIdCriteria = new SearchCriteria<>(
       Conversation_.conversationId, conversation.getConversationId(), SearchOperator.EQUAL);
     ConversationSpecification conversationSpecId = new ConversationSpecification();

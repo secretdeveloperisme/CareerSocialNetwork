@@ -28,7 +28,7 @@
               Home
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" th:if="${user}">
             <a href="/chat" class="nav-link link-dark" aria-current="page">
               <i class="fa-solid fa-message"></i>
               Messages

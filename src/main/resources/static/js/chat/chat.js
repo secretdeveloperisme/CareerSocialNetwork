@@ -1,20 +1,58 @@
 import {formatDate} from "../utils/format_date.js";
 import {getFileNameFromPath} from "../utils/common-utils.js";
+import {getKeyLocalStorage, setKeyLocalStorage} from "../common/common.js";
 
-$(()=>{
+
+$(async ()=>{
   let $conversations = $(".conversation");
   let $btnSend  = $("#btnSend");
   let $inputMessage =$("#inputMessage")
   let $targetUserAvatar = $("#targetUserAvatar");
   let $targetUserName = $("#targetUserName")
   let $chatHistoryWrapper = $("#chatHistoryWrapper");
+  let $chatHistory = $(".chat-history");
   let $userIdWrapper = $("#userIdWrapper");
   let userId = $userIdWrapper.data("user-id")
   let $attachmentFile = $("#attachmentFile");
   let stompClient = null;
   let currentConversationId = null;
   let $btnDeleteConversations = $(".btn-delete-conversation");
-  connect()
+  let currentPageConversations = {}
+
+  connect();
+  init();
+
+  function addEventWheelForConversation(){
+    $chatHistory.on("wheel",async function (event){
+      if($chatHistory.scrollTop() === 0){
+        let $messageElements = await createMessageElements(currentConversationId, ++currentPageConversations[currentConversationId], 10);
+        if($messageElements.length === 0)
+          $chatHistory.off("wheel");
+        $chatHistoryWrapper.prepend($messageElements.reverse())
+      }
+    })
+  }
+  addEventWheelForConversation();
+  window.addEventListener("beforeunload", function (event){
+    setKeyLocalStorage("currentActiveConversation", {conversationId: currentConversationId})
+  })
+  function init(){
+    let currentConversation = getKeyLocalStorage("currentActiveConversation");
+    if(currentConversation == null){
+      return;
+    }
+    $conversations.each((index, element)=>{
+      currentPageConversations[parseInt($(element).data("conversation-id"))] = 1;
+      if(parseInt($(element).data("conversation-id"))=== currentConversation.conversationId){
+        $(element).addClass("active");
+        setTargetUserConversation({
+          username:$(element).find(".username").text()
+          ,avatarPath: $(element).find(".avatar").attr("src")})
+      }
+    })
+    loadMessage(currentConversation.conversationId);
+    currentConversationId = currentConversation.conversationId;
+  }
   function notificationMessage(targetConversationId) {
     $conversations.each(function(index, element){
       let conversationId = $(element).data("conversation-id");
@@ -76,6 +114,73 @@ $(()=>{
     stompClient.send("/chat/send-message/"+conversationId, {}
         , JSON.stringify(messagePayload));
   }
+
+  async function createMessageElements(conversationId, page, size){
+    try{
+      let response = await $.ajax({
+        type: "GET",
+        data:{
+          conversationId,
+          page, size
+        },
+        url: "/api/chat/message/get-message-by-conversation",
+        contentType: "application/json",
+      });
+      let messages = response.data.messages;
+      let messageElements = messages.map(message=>{
+      let isMyMessage = message.userId == userId;
+      let isAttactmentMessage = message.attachments.length > 0
+      let attachmentWrapper = ""
+      message.attachments.forEach(attachment=>{
+        console.log(attachment)
+        let type = attachment.attachmentType;
+        let attachmentHTML = ""
+        if(type.startsWith("image"))
+          attachmentHTML = `<img class="img-thumbnail w-100 attachment-img" src="${attachment.attachmentUrl}" alt="${attachment.attachmentUrl}">`;
+        else{
+          attachmentHTML =`<a href="${attachment.attachmentUrl}">${getFileNameFromPath(attachment.attachmentUrl)}</a>">`
+        }
+        attachmentWrapper += `<li class="list-style-none">${attachmentHTML}</li>`;
+      })
+      let myActionMessage =`
+          <span class="dropdown ms-auto d-inline-block">
+            <button class="btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false"><i class="fas fa-ellipsis-h"></i>
+            </button>
+            <div class="dropdown-menu" style="">
+              <ul>
+              <li class="dropdown-item btn-edit-message" data-message-id="${message.messageId}">Edit</li>
+              <li class="dropdown-item btn-delete-message" data-message-id="${message.messageId}">Delete</li>
+              </ul>
+            </div>
+          </span>
+        `
+      let $messageElement = $(`
+          <li class="clearfix chat-item" id="message${message.messageId}" data-message-id="${message.messageId}">
+            <div class="message-data d-flex ${isMyMessage?"justify-content-end":""}">
+              <span class="message-data-time">${formatDate(message.createdAt)}</span>
+            </div>
+            
+            <div class="message d-inline-block ${isAttactmentMessage?"w-25":""} ${isMyMessage?"other-message float-right":"my-message"} ">
+              <div class="d-flex">
+                <div class="message-content">${!isAttactmentMessage?message.message:""}</div>
+                <div>${isMyMessage?myActionMessage:""}</div> 
+              </div>
+              <ul>${attachmentWrapper}</ul>
+            </div>
+          </li>
+        `);
+      addEventDeleteMessageElement($messageElement);
+      addEventEditMessageElement($messageElement);
+      addEventShowModalImageElement($messageElement);
+      return $messageElement;
+      })
+      return messageElements;
+    }catch (e){
+      showToast("failed", "Load Messages", "Create Message Elements Failed");
+      return null;
+    }
+  }
+
   function loadMessage(conversationId){
     $.ajax({
       type: "GET",
@@ -84,7 +189,6 @@ $(()=>{
       success: function (response) {
         $chatHistoryWrapper.html("")
         let messages = response.data.messages;
-
         messages.forEach(message=>{
           let isMyMessage = message.userId == userId;
           let isAttactmentMessage = message.attachments.length > 0
@@ -96,7 +200,7 @@ $(()=>{
             if(type.startsWith("image"))
               attachmentHTML = `<img class="img-thumbnail w-100 attachment-img" src="${attachment.attachmentUrl}" alt="${attachment.attachmentUrl}">`;
             else{
-              attachmentHTML =`<a href="${attachment.attachmentUrl}">${attachment.attachmentUrl}</a>">`
+              attachmentHTML =`<a href="${attachment.attachmentUrl}">${getFileNameFromPath(attachment.attachmentUrl)}</a>">`
             }
             attachmentWrapper += `<li class="list-style-none">${attachmentHTML}</li>`;
           })
@@ -144,15 +248,22 @@ $(()=>{
       }
     });
   }
+  function setTargetUserConversation({username, avatarPath}){
+    $targetUserAvatar.attr("src",avatarPath);
+    $targetUserName.text(username);
+  }
   $conversations.on("click", function (){
     let conversationId = $(this).data("conversation-id");
+    $conversations.removeClass("active");
+    $(this).addClass("active");
     currentConversationId = conversationId;
-    console.log(currentConversationId);
-    $targetUserAvatar.attr("src", $(this).find(".avatar").attr("src"));
-    $targetUserName.text($(this).find(".username").text());
+    setTargetUserConversation({
+      username:$(this).find(".username").text()
+      ,avatarPath: $(this).find(".avatar").attr("src")})
     $(this).find(".notification").addClass("invisible").find(".number-of-messages").text(0);
     loadMessage(conversationId)
-
+    currentPageConversations[currentConversationId] = 1;
+    addEventWheelForConversation();
   })
   function scrollChatHistoryToEnd(){
    setTimeout(()=>{
@@ -307,6 +418,51 @@ $(()=>{
   }
   function addEventShowModalImage(){
     $(".attachment-img").on("click",function (){
+      let src = $(this).attr("src");
+      let alt = getFileNameFromPath($(this).attr("alt"))
+      showModalImage({src,alt})
+    })
+  }
+
+
+
+  function addEventDeleteMessageElement($parent){
+    $parent.find(".btn-delete-message").on("click", function(){
+      let messageId = $(this).data("message-id");
+      $.ajax({
+        type: "DELETE",
+        url: "/api/chat/message",
+        data: JSON.stringify({messageId}),
+        contentType: "application/json",
+        success: function (response) {
+          let messageTransfer = {
+            message : {
+              messageId
+            },
+            messageAction: "DELETE"
+          }
+          sendMessageSocket(currentConversationId, messageTransfer);
+        },
+        error: function(xhr){
+          const response = JSON.stringify(xhr.responseText)
+          showToast("failed", "Delete Message", response.message);
+        }
+      });
+    })
+  }
+  function addEventEditMessageElement($parent){
+    $parent.find(".btn-edit-message").on("click", function(){
+      let messageId = $(this).data("message-id");
+      let $targetMessage = $(`#message${messageId}`)
+      $inputMessage.val($targetMessage.find(".message-content").text())
+      $btnSend.data("actionObject", {
+        "action": "UPDATE",
+        messageId
+      })
+    })
+  }
+  function addEventShowModalImageElement($parent){
+    $parent.find(".attachment-img").on("click",function (){
       let src = $(this).attr("src");
       let alt = getFileNameFromPath($(this).attr("alt"))
       showModalImage({src,alt})
