@@ -2,30 +2,29 @@ import {filterArrToParams} from "../utils/common-utils.js";
 import {formatDate} from "../utils/format_date.js";
 
 $(function () {
-  $('#deleteUserModal').on('show.bs.modal', function (event) {
-    let $btnDeleteUsers = $('#btnDeleteUser');
-    $btnDeleteUsers.on('click', function (event) {
-      let selectedRows = usersTable.getSelectedRows();
-      let selectedDatas = usersTable.getSelectedData();
-      let deleteIds = selectedDatas.map(selectedData=>selectedData.userId);
-      console.log(deleteIds)
-      $.ajax({
-        url: `/api/user/many`,
-        type: 'DELETE',
-        data: JSON.stringify(deleteIds),
-        contentType: 'application/json',
-        success: (response) => {
-          for(let i=0;i<selectedRows.length;i++)
-          {
-            console.log(selectedRows[i])
-            selectedRows[i].delete();
-          }
-          $('#deleteUserModal').modal('hide');
-
+  let $btnDeleteUsers = $('#btnDeleteUser');
+  $btnDeleteUsers.on('click', function (event) {
+    let selectedRows = usersTable.getSelectedRows();
+    let selectedDatas = usersTable.getSelectedData();
+    let deleteIds = selectedDatas.map(selectedData=>selectedData.userId);
+    console.log(deleteIds)
+    $.ajax({
+      url: `/api/user/many`,
+      type: 'DELETE',
+      data: JSON.stringify(deleteIds),
+      contentType: 'application/json',
+      success: (response) => {
+        for(let i=0;i<selectedRows.length;i++)
+        {
+          console.log(selectedRows[i])
+          selectedRows[i].delete();
         }
-      });
+        $('#deleteModal').modal('hide');
+
+      }
     });
   });
+
   let usersTable = new Tabulator("#usersTable", {
     columns:[
       {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){

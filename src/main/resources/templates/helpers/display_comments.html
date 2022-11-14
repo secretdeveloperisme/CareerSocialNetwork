@@ -36,8 +36,8 @@
                 <span th:text="${comment.getNumberOfLikes()}"></span> Likes
               </button>
               <button class="btn comment-reply-btn" th:data-comment-id="${comment.getCommentId()}"
-                      th:data-job-id="${comment.getJobId()} "><i
-                  class="far fa-comment"></i> Reply
+                      th:data-job-id="${comment.getJobId()}" th:data-post-id="${comment.getPostId()}">
+                <i class="far fa-comment"></i> Reply
               </button>
             </div>
           </div>

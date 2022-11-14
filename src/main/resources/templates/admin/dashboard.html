@@ -10,7 +10,7 @@
     .bg-c-lite-green {
       background: -webkit-gradient(linear, left top, right top, from(#f29263), to(#ee5a6f));
       background: linear-gradient(to right, #ee5a6f, #f29263)
-    } 
+    }
   </style>
 </head>
 <body>
@@ -48,58 +48,58 @@
             </div>
           </div>
         </div>
-        <div class="row p-2 m-0">
-          <div class="col-xl-3 text-white">
-            <div class="position-relative container-fluid bg-info rounded-lg">
+        <div class="row p-2 m-0 ">
+          <div class="col-xl-3 text-white rounded">
+            <div class="position-relative container-fluid bg-info rounded">
               <div>
                 <h1 th:text="${adminStatistics.getAmountOfCompanies()}">amountOfCompanies</h1>
-                <h2>Companies</h2>
+                <h2 >Companies</h2>
               </div>
-              <div class="position-absolute" style="top: 32px; right: 10px;">
+              <div class="position-absolute" style="top: 10px; right: 10px;">
                 <i class="fas fa-building" style="font-size: 50px;"></i>
               </div>
             </div>
           </div>
           <div class="col-xl-3 text-white">
-            <div class="position-relative container-fluid bg-info rounded-lg">
+            <div class="position-relative container-fluid bg-info rounded">
               <div class="me-3">
                 <h1 th:text="${adminStatistics.getAmountOfJobs()}"> amountOfJobs</h1>
-                <h2>Total Jobs</h2>
+                <h2>Jobs</h2>
               </div>
-              <div class="position-absolute " style="top: 32px; right: 10px;">
+              <div class="position-absolute " style="top: 10px; right: 10px;">
                 <i class="fas fa-briefcase" style="font-size: 50px;"></i>
               </div>
             </div>
           </div>
           <div class="col-xl-3 text-white">
-            <div class="position-relative container-fluid bg-info rounded-lg">
+            <div class="position-relative container-fluid bg-info rounded">
               <div>
               <h1 th:text="${adminStatistics.getAmountOfPosts()}">amountOfPosts</h1>
-              <h2>Total Posts</h2>
+              <h2>Posts</h2>
             </div>
-            <div class="position-absolute" style="top: 32px; right: 10px;">
+            <div class="position-absolute" style="top: 10px; right: 10px;">
               <i class="fas fa-file-alt" style="font-size: 50px;"></i>
             </div>
             </div>
           </div>
           <div class="col-xl-3 text-white">
-            <div class="position-relative container-fluid bg-success rounded-lg">
+            <div class="position-relative container-fluid bg-success rounded">
               <div>
               <h1 th:text="${adminStatistics.getAmountOfTags()}">amountOfTags</h1>
               <h2>Tags</h2>
             </div>
-            <div class="position-absolute" style="top: 32px; right: 10px;">
+            <div class="position-absolute" style="top: 10px; right: 10px;">
               <i class="fas fa-tag" style="font-size: 50px;"></i>
             </div>
             </div>
           </div>
           <div class="col-xl-3 text-white">
-            <div class="position-relative container-fluid bg-warning rounded-lg">
+            <div class="position-relative container-fluid bg-warning rounded">
               <div>
               <h1 th:text="${adminStatistics.getAmountOfUsers()}"> amountOfUsers </h1>
               <h2>Users</h2>
             </div>
-            <div class="position-absolute" style="top: 32px; right: 10px;">
+            <div class="position-absolute" style="top: 10px; right: 10px;">
               <i class="fas fa-users" style="font-size: 50px;"></i>
             </div>
             </div>

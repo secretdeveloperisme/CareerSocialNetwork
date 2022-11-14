@@ -85,10 +85,15 @@
               <i class="fas fa-th-large"></i>
             </div>
           </div>
-         <div th:replace="~{/fragments/posts::posts(${posts})}"></div>
-          <div class="btn-more-wrapper my-2 d-flex">
-            <button type="button" id='btnMorePost' th:data-type="${user}?'user':'guest'" class="btn btn-outline-primary m-auto">More</button>
-          </div>
+          <th:block th:if="${posts.size()}">
+             <div th:replace="~{/fragments/posts::posts(${posts})}"></div>
+              <div class="btn-more-wrapper my-2 d-flex">
+                <button type="button" id='btnMorePost' th:data-type="${user}?'user':'guest'" class="btn btn-outline-primary m-auto">More</button>
+              </div>
+          </th:block>
+          <th:block th:if="${posts.size() == 0}">
+            <h3 class="text-center text-danger">You have to follow tags or users to get new posts</h3>
+          </th:block>
         </div>
         <div class="col-xl-3">
           <div class="popular-post">

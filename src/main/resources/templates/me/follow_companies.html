@@ -31,7 +31,7 @@
           <div class="col-xl-4" th:each="company : ${followedCompanies}">
             <a th:href="'/company/'+${company.getCompanyId()}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
               <div class="icon-64" th:style="'background-image: url(\''+${company.getLogo()}+'\');'"></div>
-              <h3 th:text="${company.getName()}"></h3>
+              <h3 class="text-overflow-1-lines" th:text="${company.getName()}"></h3>
             </a>
           </div>
         </div>

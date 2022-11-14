@@ -149,7 +149,7 @@ $(function () {
         data: JSON.stringify(deleteIds),
         contentType: 'application/json',
         success: (response) => {
-          for(var i=0;i<selectedRows.length;i++)
+          for(let i=0;i<selectedRows.length;i++)
           {
             console.log(selectedRows[i])
             selectedRows[i].delete();

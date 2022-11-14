@@ -48,12 +48,17 @@
               </div>
             </div>
           </div>
-          <div class="col-9">
-            <div th:replace="~{/fragments/jobs::jobs(${jobs})}"></div>
-          </div>
-          <div class="btn-more-wrapper my-2 d-flex">
-            <button type="button" id='btnMore' data-type='"user?"user":"guest"' class="btn btn-outline-primary m-auto">More</button>
-          </div>
+          <th:block th:if="${jobs.size() > 0}">
+            <div class="col-9">
+              <div th:replace="~{/fragments/jobs::jobs(${jobs})}"></div>
+            </div>
+            <div class="btn-more-wrapper my-2 d-flex">
+              <button type="button" id='btnMore' data-type='"user?"user":"guest"' class="btn btn-outline-primary m-auto">More</button>
+            </div>
+          </th:block>
+          <th:block th:if="${jobs.size() == 0}">
+            <h3 class="text-center text-danger">The tag don't have jobs</h3>
+          </th:block>
         </div>
       </div>
     </div>
