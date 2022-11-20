@@ -85,7 +85,7 @@ public class CompanyUserRoleService {
   public CompanyUserRole getCompanyUserRole(CompanyUserRoleId companyUserRoleId){
     Optional<CompanyUserRole> companyUserRoleOptional = companyUserRoleRepository.findById(companyUserRoleId);
     if(companyUserRoleOptional.isEmpty())
-      throw new NotFoundException("Company User Role Is Not Found",null,"ID");
+      throw new NotFoundException("Company user role is not found",null,"ID");
     return companyUserRoleOptional.get();
   }
   public ResponseEntity<ResponseDataDTO<CompanyUserRoleDTO>> responseGetCompanyUserRole(Long companyId, PageableDTO pageableDTO){
@@ -161,7 +161,7 @@ public class CompanyUserRoleService {
     boolean hasCreatorRoleOfSomeCompanyUserRoles = companyUserRoleDTOS.stream()
       .anyMatch(companyUserRoleDTO -> companyUserRoleDTO.getCompanyRoleId().equals(CompanyRoleName.CREATOR.getValue()));
     if(hasCreatorRoleOfSomeCompanyUserRoles){
-      throw new PermissionDeniedException("Some Of Company User Role contain Creator role");
+      throw new PermissionDeniedException("Some of company user role contain creator role");
     }
     if(!permissionService.isAdmin()){
       if(isNotCreatorRoleOfSomeCompanyUserRoles){
@@ -174,7 +174,7 @@ public class CompanyUserRoleService {
     Map<String, Object> responseData = new HashMap<>();
     responseData.put("deletedCompanyUserRoles",companyUserRoleDTOS);
     ResponseObjectDTO responseObjectDTO = new ResponseObjectDTO(
-      "Delete Company User Roles successfully "
+      "Delete company user roles successfully "
       ,responseData);
     return ResponseEntity.ok(responseObjectDTO);
   }

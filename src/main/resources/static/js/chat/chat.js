@@ -74,7 +74,7 @@ $(async ()=>{
   }
 
   function connect() {
-    let socket = new SockJS('/chat-socket');
+    let socket = new SockJS('/app-socket');
     stompClient = Stomp.over(socket);
     stompClient.connect({}, function (frame) {
       $conversations.each(function (index, conversation){
@@ -111,7 +111,7 @@ $(async ()=>{
 
   function sendMessageSocket(conversationId, messagePayload) {
     console.log(messagePayload);
-    stompClient.send("/chat/send-message/"+conversationId, {}
+    stompClient.send("/app/send-message/"+conversationId, {}
         , JSON.stringify(messagePayload));
   }
 

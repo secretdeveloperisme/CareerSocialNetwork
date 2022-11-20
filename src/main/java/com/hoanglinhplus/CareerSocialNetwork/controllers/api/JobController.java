@@ -76,10 +76,10 @@ public class JobController {
   public ResponseEntity<ResponseObjectDTO> deleteJobs(@RequestBody List<Long> ids) {
     return jobService.deleteJobs(ids, null, true, false);
   }
-  @PreAuthorize("hasAuthority('USER')")
+  @PreAuthorize("hasAnyAuthority('USER', 'ADMIN')")
   @DeleteMapping(path = "/many/{companyId}",produces = MediaType.APPLICATION_JSON_VALUE)
   public ResponseEntity<ResponseObjectDTO> deleteCompanyJobs(@RequestBody List<Long> ids,@PathVariable("companyId") Long companyId) {
-    return jobService.deleteJobs(ids, companyId, true, false);
+    return jobService.deleteJobs(ids, companyId, false, false);
   }
 
 }

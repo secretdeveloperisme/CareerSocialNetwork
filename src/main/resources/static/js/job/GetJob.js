@@ -19,6 +19,9 @@ $(() => {
   const $modalCheckDeleteComment = $("#checkDeleteComment");
   const $totalOfComments = $("#totalOfComments");
   const $progressBar = $("#progressBar");
+  const $jobIdWrapper = $("#jobIdWrapper");
+  const jobId = $jobIdWrapper.data("job-id");
+  let stompClient = null;
   let container = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -65,6 +68,44 @@ $(() => {
   function updateTotalOfComments(amount){
     $totalOfComments.text(Number.parseInt($totalOfComments.text()) + amount)
   }
+  connect();
+
+  let handleCommentSocket = {
+    CREATE: function (comment){
+      let $comment = createComment(comment);
+      $comments.prepend($comment);
+    },
+    UPDATE: function (comment){
+      let $target = $(`#comment${comment.commentId}`);
+      $target.find(".comment-content").eq(0)
+          .html(`<div class="ql-editor">${comment.content}<div>`);
+    },
+    DELETE: function (comment){
+      let $target = $(`#comment${comment.commentId}`);
+      $target.slideUp(); $target.remove();
+    },
+    REPLY: function (comment){
+      let $target = $(`#comment${comment.parentCommentId}`);
+      let $commentInner = $target.find(".comment-inner").eq(0);
+      let $comment = createComment(comment);
+      $commentInner.append($comment);
+    },
+  }
+  function connect() {
+    let socket = new SockJS('/app-socket');
+    stompClient = Stomp.over(socket);
+    stompClient.connect({}, function (frame) {
+      stompClient.subscribe('/topic/comment/'+jobId, function (payload) {
+        let commentTranfer = JSON.parse(payload.body);
+        let action = commentTranfer.action;
+        let comment = commentTranfer.comment;
+        handleCommentSocket[action+""](comment);
+      })
+
+    });
+    console.log(stompClient)
+  }
+
   // comment reply events
   function replyComment() {
     let $target = $(this);
@@ -81,7 +122,6 @@ $(() => {
       $(this).parents(".comment-action").slideDown();
       $formReply.slideUp().remove();
     })
-    console.log($(this).parents());
     $(this).parents(".comment-detail").append($formReply);
     $formReply.append($editorReply).append($btnActionGroup);
     let quillReply = new Quill($editorReply[0], quillOptions);
@@ -98,75 +138,11 @@ $(() => {
         contentType: "application/json",
         success: (response) => {
           $bntDismiss.click();
-          let $commentInner = $target.parents(".comment-inner").eq(0);
-          console.log($commentInner);
-          $commentInner.append(`
-            <div class="comment mt-2" data-comment-node="0">
-              <div class="d-flex comment-wrapper--deep-0">
-                <div class="icon-32 me-2"
-                  style="background-image: url('${response.data.comment.user.avatar}');"></div>
-                <div class="w-100 comment-inner">
-                <div class="comment-detail p-3 border border-bold w-100 mb-2">
-                  <div class="comment-header d-flex">
-                    <h5 class="comment__author-name me-2">
-                      ${response.data.comment.user.username}
-                    </h5>
-                    <div class="comment-createdAt">
-                      ${formatDate(response.data.comment.createdAt)}
-                    </div>
-                    <div class="comment-action dropdown ms-auto">
-                      <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
-                      <div class="dropdown-menu">
-                        <li class="dropdown-item btn-edit-comment" id="edit-comment-id-${response.data.comment.commentId}" data-comment-id="${response.data.comment.commentId}">Edit</li>
-                        <li class="dropdown-item btn-delete-comment" id="delete-comment-id-${response.data.comment.commentId}" data-comment-id="${response.data.comment.commentId}">Delete</li>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="comment-content ql-snow">
-                    <div class="ql-editor" style="white-space: normal">
-                      ${response.data.comment.content}
-                    </div>
-                  </div>
-                  <div class="comment-action">
-                    <button class="btn comment-like-btn" data-comment-id="${response.data.comment.commentId}" id="like-comment-id-${response.data.comment.commentId}"><i class="far fa-heart"></i> <span>0</span> Likes</button>
-                    <button class="btn comment-reply-btn" id="reply-comment-id-${response.data.comment.commentId}" data-job-id="${response.data.comment.jobId}" data-comment-id="${response.data.comment.commentId}"><i class="far fa-comment"></i> Reply</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          `);
-          let $btnEditComment = $(`#edit-comment-id-${response.data.comment.commentId}`);
-          let $btnDeleteComment = $(`#delete-comment-id-${response.data.comment.commentId}`);
-          $btnEditComment.on("click", editComment);
-          $btnDeleteComment.on("click", deleteComment);
-          let $btnLikeComment = $(`#like-comment-id-${response.data.comment.commentId}`);
-          let $amountOfCommentLikes = $btnLikeComment.find("span");
-          $btnLikeComment.on("click", event => {
-            let commentId = $btnLikeComment.data("comment-id");
-            let typeLike = $btnLikeComment.hasClass("active") ? "UNLIKE" : "LIKE";
-            $.ajax({
-              url: "/api/comment/like",
-              type: "POST",
-              data: JSON.stringify({
-                typeLike,
-                commentId
-              }),
-              contentType: "application/json",
-              success: (response) => {
-                console.log(response);
-                if (typeLike === "LIKE") {
-                  $btnLikeComment.addClass("active");
-                }
-                else {
-                  $btnLikeComment.removeClass("active");
-                }
-                $amountOfCommentLikes.text(response.data.statistics.numberOfLikes);
-              }
-            })
-          })
-          let $btnReplyComment = $(`#reply-comment-id-${response.data.comment.commentId}`);
-          $btnReplyComment.on("click", replyComment);
-          updateTotalOfComments(1);
+          let commentTransfer = {
+            action: "REPLY",
+            comment: response.data.comment
+          }
+          stompClient.send("/app/comment-socket/"+jobId,{}, JSON.stringify(commentTransfer))
         }
       });
     })
@@ -194,10 +170,12 @@ $(() => {
         }),
         contentType: "application/json",
         success: function (response) {
-
-         $editEditor.closest(".comment-content")
-         .html(`<div class="ql-editor">${editQuill.root.innerHTML}<div>`);
-
+          let commentTransfer = {
+            action: "UPDATE",
+            comment: response.data.comment
+          }
+          $btnDismissEdit.click()
+          stompClient.send("/app/comment-socket/"+jobId,{}, JSON.stringify(commentTransfer))
         }
       });
     })
@@ -212,8 +190,12 @@ $(() => {
         type: "DELETE",
         url: "/api/comment/"+commentId,
         success: function (response) {
+          let commentTransfer = {
+            action: "DELETE",
+            comment: {commentId}
+          }
+          stompClient.send("/app/comment-socket/"+jobId,{}, JSON.stringify(commentTransfer))
           $modalCheckDeleteComment.modal("hide");
-          $btnDeleteComment.closest(".comment").slideUp();
           updateTotalOfComments(-1);
         }
       });
@@ -355,6 +337,75 @@ $(() => {
     })
   })
   // create comment event
+  function createComment(comment){
+    let $comment = $(`
+        <div class="comment mt-2" id="comment${comment.commentId}" data-comment-node="0">
+            <div class="d-flex comment-wrapper--deep-0">
+              <div class="icon-32 me-2"
+                style="background-image: url('${comment.user.avatar}');"></div>
+              <div class="w-100 comment-inner">
+              <div class="comment-detail p-3 border border-bold w-100 mb-2">
+                <div class="comment-header d-flex">
+                  <h5 class="comment__author-name me-2">
+                    ${comment.user.username}
+                  </h5>
+                  <div class="comment-createdAt">
+                    ${formatDate(comment.createdAt)}
+                  </div>
+                  <div class="comment-action dropdown ms-auto">
+                    <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
+                    <div class="dropdown-menu">
+                      <li class="dropdown-item btn-edit-comment" id="edit-comment-id-${comment.commentId}" data-comment-id="${comment.commentId}">Edit</li>
+                      <li class="dropdown-item btn-delete-comment" id="delete-comment-id-${comment.commentId}" data-comment-id="${comment.commentId}">Delete</li>
+                    </div>
+                  </div>
+                </div>
+                <div class="comment-content ql-snow">
+                  <div class="ql-editor" style="white-space: normal">
+                    ${comment.content}
+                  </div>
+                </div>
+                <div class="comment-action">
+                  <button class="btn comment-like-btn" data-comment-id="${comment.commentId}" id="like-comment-id-${comment.commentId}"><i class="far fa-heart"></i> <span>0</span> Likes</button>
+                  <button class="btn comment-reply-btn" id="reply-comment-id-${comment.commentId}" data-job-id="${comment.jobId}" data-comment-id="${comment.commentId}"><i class="far fa-comment"></i> Reply</button>
+                </div>
+              </div>
+            </div>
+          </div>
+    `);
+    let $btnEditComment = $comment.find(`#edit-comment-id-${comment.commentId}`);
+    let $btnDeleteComment = $comment.find(`#delete-comment-id-${comment.commentId}`);
+    $btnEditComment.on("click", editComment);
+    $btnDeleteComment.on("click", deleteComment);
+    let $btnLikeComment = $comment.find(`#like-comment-id-${comment.commentId}`);
+    let $amountOfCommentLikes = $btnLikeComment.find("span");
+    $btnLikeComment.on("click", event => {
+      let commentId = $btnLikeComment.data("comment-id");
+      let typeLike = $btnLikeComment.hasClass("active") ? "UNLIKE" : "LIKE";
+      $.ajax({
+        url: "/api/comment/like",
+        type: "POST",
+        data: JSON.stringify({commentId, typeLike}),
+        contentType: "application/json",
+        success: (response) => {
+          let statistics = response.data.statistics;
+          console.log(response);
+          if (typeLike === "LIKE") {
+            $btnLikeComment.addClass("active");
+          }
+          else {
+            $btnLikeComment.removeClass("active");
+          }
+          $amountOfCommentLikes.text(statistics.numberOfLikes);
+        }
+      })
+    })
+    let $btnReplyComment = $comment.find(`#reply-comment-id-${comment.commentId}`);
+    $btnReplyComment.on("click", replyComment);
+    updateTotalOfComments(1);
+    return $comment;
+  }
+
   $btnComment.on("click", event => {
     let jobId = $btnComment.data("job-id");
     let content = commentEditor.root.innerHTML;
@@ -365,75 +416,20 @@ $(() => {
       contentType: "application/json",
       success: function (response) {
         commentEditor.setContents("");
-        $comments.prepend(`
-          <div class="comment mt-2" data-comment-node="0">
-            <div class="d-flex comment-wrapper--deep-0">
-              <div class="icon-32 me-2"
-                style="background-image: url('${response.data.comment.user.avatar}');"></div>
-              <div class="w-100 comment-inner">
-              <div class="comment-detail p-3 border border-bold w-100 mb-2">
-                <div class="comment-header d-flex">
-                  <h5 class="comment__author-name me-2">
-                    ${response.data.comment.user.username}
-                  </h5>
-                  <div class="comment-createdAt">
-                    ${formatDate(response.data.comment.createdAt)}
-                  </div>
-                  <div class="comment-action dropdown ms-auto">
-                    <button class="btn btn-link" type="button" data-bs-toggle="dropdown"><i class="fas fa-ellipsis-h"></i></button>
-                    <div class="dropdown-menu">
-                      <li class="dropdown-item btn-edit-comment" id="edit-comment-id-${response.data.comment.commentId}" data-comment-id="${response.data.comment.commentId}">Edit</li>
-                      <li class="dropdown-item btn-delete-comment" id="delete-comment-id-${response.data.comment.commentId}" data-comment-id="${response.data.comment.commentId}">Delete</li>
-                    </div>
-                  </div>
-                </div>
-                <div class="comment-content ql-snow">
-                  <div class="ql-editor" style="white-space: normal">
-                    ${response.data.comment.content}
-                  </div>
-                </div>
-                <div class="comment-action">
-                  <button class="btn comment-like-btn" data-comment-id="${response.data.comment.commentId}" id="like-comment-id-${response.data.comment.commentId}"><i class="far fa-heart"></i> <span>0</span> Likes</button>
-                  <button class="btn comment-reply-btn" id="reply-comment-id-${response.data.comment.commentId}" data-job-id="${response.data.comment.jobId}" data-comment-id="${response.data.comment.commentId}"><i class="far fa-comment"></i> Reply</button>
-                </div>
-              </div>
-            </div>
-          </div>
-        `);
-        let $btnEditComment = $(`#edit-comment-id-${response.data.comment.commentId}`);
-        let $btnDeleteComment = $(`#delete-comment-id-${response.data.comment.commentId}`);
-        $btnEditComment.on("click", editComment);
-        $btnDeleteComment.on("click", deleteComment);
-        let $btnLikeComment = $(`#like-comment-id-${response.data.comment.commentId}`);
-        let $amountOfCommentLikes = $btnLikeComment.find("span");
-        $btnLikeComment.on("click", event => {
-          let commentId = $btnLikeComment.data("comment-id");
-          let typeLike = $btnLikeComment.hasClass("active") ? "UNLIKE" : "LIKE";
-          $.ajax({
-            url: "/api/comment/like",
-            type: "POST",
-            data: JSON.stringify({commentId, typeLike}),
-            contentType: "application/json",
-            success: (response) => {
-              console.log(response);
-                if (typeLike === "LIKE") {
-                  $btnLikeComment.addClass("active");
-                }
-                else {
-                  $btnLikeComment.removeClass("active");
-                }
-                $amountOfCommentLikes.text(response.data.statistics.numberOfLikes);
-            }
-          })
-        })
-        let $btnReplyComment = $(`#reply-comment-id-${response.data.comment.commentId}`);
-        $btnReplyComment.on("click", replyComment);
-        updateTotalOfComments(1);
+        let commentTransfer = {
+          action: "CREATE",
+          comment: response.data.comment
+        }
+        stompClient.send("/app/comment-socket/"+jobId,{}, JSON.stringify(commentTransfer))
       }
-      });
+    });
   })
-  // add event for edit comment
-  $btnEditComments.on("click", editComment)
-  // add event for delete comment
-  $btnDeleteComments.on("click",deleteComment);
+
+  function addEventForComment(){
+    // add event for edit comment
+    $btnEditComments.on("click", editComment)
+    // add event for delete comment
+    $btnDeleteComments.on("click",deleteComment);
+  }
+  addEventForComment();
 })

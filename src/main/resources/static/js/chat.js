@@ -13,7 +13,7 @@ $(()=>{
   }
 
   function connect() {
-    let socket = new SockJS('/chat-socket');
+    let socket = new SockJS('/app-socket');
     console.log("socket:    ",socket)
     stompClient = Stomp.over(socket);
     console.log(stompClient)
@@ -40,7 +40,7 @@ $(()=>{
   function sendMessage() {
     let message = JSON.parse($("#message0").val());
     console.log(message);
-    stompClient.send("/chat/send-message/"+$("#conversationId0").val(), {}
+    stompClient.send("/app/send-message/"+$("#conversationId0").val(), {}
         , JSON.stringify(message));
   }
 

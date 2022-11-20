@@ -3,7 +3,7 @@
   <div th:fragment="displayComments(comments,user)">
     <!--/*@thymesVar id="comment" type="com.hoanglinhplus.CareerSocialNetwork.dto.comment.CommentDTO"*/-->
     <!--/*@thymesVar id="user" type="com.hoanglinhplus.CareerSocialNetwork.dto.user.UserCreationDTO"*/-->
-    <div th:each="comment : ${comments}" class="comment mt-2" data-comment-node="0">
+    <div th:each="comment : ${comments}" class="comment mt-2" th:id="|comment${comment.getCommentId()}|" data-comment-node="0">
       <div class="d-flex comment-wrapper--deep-= deep++ ">
         <div class="icon-32 me-2"
              th:style="'background-image: url(\''+${comment.getUser().getAvatar()}+'\');'"></div>
