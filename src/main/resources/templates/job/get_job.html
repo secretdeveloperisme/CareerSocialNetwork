@@ -111,7 +111,6 @@
                     <ul class="list-group list-group-flush" id="questionList">
 <!--                      <li th:each="jobQuestion: ${job.getJobQuestion()}" class="list-group-item" th:text="${jobQuestion.getQuestion().getContent()}"></li>-->
                     </ul>
-
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -160,7 +159,7 @@
             </div>
 
             <div class="ql-snow">
-              <div class="post-content ql-editor" th:utext="${job.getJobDescription()}">
+              <div class="post-content ql-editor p-0" id="jobDescription">
               </div>
             </div>
           </div>

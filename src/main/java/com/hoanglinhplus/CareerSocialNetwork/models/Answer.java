@@ -23,7 +23,7 @@ public class Answer {
    @Id
    @Column(name = "user_id")
    private Long userId;
-   @Column(nullable = false, length = 1000)
+   @Column(nullable = false, length = 3000)
    public String answer;
    @CreatedDate
    public Date createdAt;

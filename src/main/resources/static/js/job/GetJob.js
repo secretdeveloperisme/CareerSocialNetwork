@@ -23,6 +23,8 @@ $(() => {
   const jobId = $jobIdWrapper.data("job-id");
   const $questionList = $("#questionList");
   let stompClient = null;
+  const $jobDescription = $("#jobDescription");
+  const jobDescriptionQuill = new Quill($jobDescription[0], {readOnly: true})
   let container = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
     ['blockquote', 'code-block'],
@@ -56,8 +58,9 @@ $(() => {
     readOnly: false,
     theme: "snow",
   }
+
   let commentEditor = new Quill("#commentEditor", quillOptions)
-  // add progress bar 
+  // add progress bar
   function updateProgress (){
     let currentPosition = document.body.scrollTop || document.documentElement.scrollTop;
     let height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -106,7 +109,22 @@ $(() => {
     console.log(stompClient)
   }
 
-  loadQuestion()
+  loadQuestion();
+  loadJob();
+  async function loadJob(){
+    try{
+      let response = await $.ajax({
+        type: "GET",
+        url: "/api/job/get-job",
+        data: {jobId},
+        contentType: "application/json",
+      });
+      let job = response.data.job
+      jobDescriptionQuill.setContents(JSON.parse(job.jobDescription));
+    }catch (e){
+      console.error(e);
+    }
+  }
   async function loadQuestion(){
     try{
       let response = await $.ajax({

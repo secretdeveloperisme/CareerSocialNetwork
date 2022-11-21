@@ -63,7 +63,7 @@ public class JobController {
   }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")
   @PutMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-  public ResponseEntity<ResponseObjectDTO> updateCompany(@RequestBody @Valid JobCreationDTO jobCreationDTO){
+  public ResponseEntity<ResponseObjectDTO> updateJob(@RequestBody @Valid JobCreationDTO jobCreationDTO){
     return jobService.updateJob(jobCreationDTO);
   }
   @PreAuthorize("hasAuthority('ADMIN') or hasAuthority('USER')")

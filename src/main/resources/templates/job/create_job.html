@@ -43,7 +43,7 @@
           <div class="categories collpasing show" id="categories">
             <!--/*@thymesVar id="skills" type="com.hoanglinhplus.CareerSocialNetwork.models.Skill"*/-->
             <div th:each="skill : ${skills}" class="mb-2">
-              <input type="checkbox" class="form-check-input" name="skill.skillId" th:id="'skill'+${skill.getSkillId()} " th:value="${skill.getSkillId()} ">
+              <input type="checkbox" class="form-check-input" name="jobSkills.skillId" th:id="'skill'+${skill.getSkillId()} " th:value="${skill.getSkillId()} ">
               <label th:for="'skill'+${skill.getSkillId()}" class="form-check-label" th:text="${skill.getName()}"> </label>
             </div>
           </div>

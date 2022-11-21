@@ -118,12 +118,17 @@ $(()=>{
       let res = JSON.parse(xhrPostImage.responseText);
       console.log(res);
       $imagePath.val(res.data.fileInfo[0].filePath);
-      $content.val(editor.root.innerHTML);
+      $content.val(JSON.stringify(editor.getContents()));
       console.log(objectifyForm($createJobForm.serializeArray()))
       let dataObject = objectifyForm($createJobForm.serializeArray());
       if(dataObject.tags.length === undefined && dataObject.tags.name !== undefined){
         dataObject.tags = [{
           name: dataObject.tags.name
+        }]
+      }
+      if(dataObject.jobSkills.length === undefined && dataObject.jobSkills.skillId !== undefined){
+        dataObject.jobSkills = [{
+          skillId: dataObject.jobSkills.skillId
         }]
       }
       $.ajax({

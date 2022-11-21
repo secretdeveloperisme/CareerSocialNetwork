@@ -45,8 +45,10 @@ public class JobQuestionAnswerViewController {
       throw new PermissionDeniedException("You don't have permission to create job question");
     }
     user = userService.getUser(((Integer)principal.get("userId")).longValue()) ;
-    if(!permissionService.isOwnerJob(user,job)){
-      throw new PermissionDeniedException("You don't have permission to create job question");
+    if(!user.isAdmin()){
+      if(!permissionService.isOwnerJob(user,job)){
+        throw new PermissionDeniedException("You don't have permission to create job question");
+      }
     }
     model.addAttribute("user", user);
     model.addAttribute("job", job);

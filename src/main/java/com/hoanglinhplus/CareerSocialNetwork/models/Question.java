@@ -18,7 +18,7 @@ public class Question {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "question_id")
   private Long questionId;
-  @Column(nullable = false, length = 1000)
+  @Column(nullable = false, length = 3000)
   private String content;
   @OneToMany(mappedBy = "question", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, orphanRemoval = true)
   public List<JobQuestion> jobQuestion;

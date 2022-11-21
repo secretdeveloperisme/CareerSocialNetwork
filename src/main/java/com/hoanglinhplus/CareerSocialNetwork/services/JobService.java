@@ -22,6 +22,7 @@ import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.JobSpec
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchCriteria;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.specifications.SearchOperator;
 import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
+import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import com.hoanglinhplus.CareerSocialNetwork.utils.PageUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -50,11 +51,12 @@ public class JobService {
   private final WorkPlaceRepository workPlaceRepository;
   private final PositionRepository positionRepository;
   private final EmploymentTypeRepository employmentTypeRepository;
+  private final PermissionService permissionService;
 
   @Autowired
   public JobService(UserRepository userRepository, JobRepository jobRepository
     , CompanyService companyService, CompanyRepository companyRepository
-    , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository, EmploymentTypeRepository employmentTypeRepository){
+    , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository, EmploymentTypeRepository employmentTypeRepository, PermissionService permissionService){
     this.userRepository = userRepository;
     this.jobRepository = jobRepository;
     this.companyRepository = companyRepository;
@@ -65,6 +67,7 @@ public class JobService {
     this.workPlaceRepository = workPlaceRepository;
     this.positionRepository = positionRepository;
     this.employmentTypeRepository = employmentTypeRepository;
+    this.permissionService = permissionService;
   }
   public ResponseEntity<ResponseObjectDTO> responseGetJob(Long jobId){
     Job job = getJob(jobId);
@@ -220,7 +223,8 @@ public class JobService {
     Optional<Job> jobOptional = jobRepository.findById(job.getJobId());
     if(jobOptional.isPresent()){
       Job targetJob = jobOptional.get();
-      authService.checkPermission(targetJob.getCompany().getCreatedUser().getUserId());
+      if(!permissionService.isAdmin())
+        authService.checkPermission(targetJob.getCompany().getCreatedUser().getUserId());
       if(jobUpdateDTO.getTitle() != null){
         targetJob.setTitle(jobUpdateDTO.getTitle());
       }

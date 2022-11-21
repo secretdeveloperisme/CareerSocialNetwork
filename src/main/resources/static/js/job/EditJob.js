@@ -18,36 +18,12 @@ $(()=>{
   const $content = $("#content");
   const $editor = $("#editor")
   const $skillItems = $(".skill-item");
-
-
   const $jobImageWrapper = $("#jobImageWrapper");
   const $jobImage = $("#postImage");
   const $editJobForm =  $("#editJobForm");
   const $imagePath = $("#imagePath");
+  const $jobDescription = $("#content");
 
-
-  $.ajax({
-    type: "GET",
-    url: "/api/job/get-job",
-    data: {jobId: $jobIdWrapper.val()},
-    success: function (response) {
-      let jobSkills = response.data.job.jobSkills;
-      let jobTags = response.data.job.tags;
-      console.log(jobSkills)
-      if(jobSkills.length > 0)
-        $skillItems.each(function (index, element){
-          if(jobSkills.some((jobSkill)=>jobSkill.skillId == $(element).val())){
-            $(element).attr("checked", true)
-          }
-        })
-        $tags.text(jobTags.map(tag=>tag.name).join("\n"));
-        renderTags();
-      },
-    error: function(xhr){
-      const response = xhr.responseJSON
-      showToast("failed", "failed", response.message);
-    }
-  });
 
 
   function imageHandler() {
@@ -91,6 +67,34 @@ $(()=>{
     theme: "snow",
   }
   let editor = new Quill("#editor", quillOptions)
+
+  $.ajax({
+    type: "GET",
+    url: "/api/job/get-job",
+    data: {jobId: $jobIdWrapper.val()},
+    success: function (response) {
+      let  jobDescription = response.data.job.jobDescription;
+      let jobSkills = response.data.job.jobSkills;
+      let jobTags = response.data.job.tags;
+      editor.setContents(JSON.parse(jobDescription));
+      if(jobSkills.length > 0)
+        $skillItems.each(function (index, element){
+          if(jobSkills.some((jobSkill)=>jobSkill.skillId == $(element).val())){
+            $(element).attr("checked", true)
+          }
+        })
+        $tags.text(jobTags.map(tag=>tag.name).join("\n"));
+        renderTags();
+
+      },
+    error: function(xhr){
+      const response = xhr.responseJSON
+      showToast("failed", "failed", response.message);
+    }
+  });
+
+
+
   // add event listener
   $jobImage.on("change", function(event){
     let avatarReader = new FileReader();
@@ -166,9 +170,19 @@ $(()=>{
 
       }
     }
-    $content.val(editor.root.innerHTML);
+    $content.val(JSON.stringify(editor.getContents()));
     let dataObject = objectifyForm($editJobForm.serializeArray());
-    console.log(dataObject)
+
+    if(dataObject.tags.length === undefined && dataObject.tags.name !== undefined){
+      dataObject.tags = [{
+        name: dataObject.tags.name
+      }]
+    }
+    if(dataObject.jobSkills.length === undefined && dataObject.jobSkills.skillId !== undefined){
+      dataObject.jobSkills = [{
+        skillId: dataObject.jobSkills.skillId
+      }]
+    }
     $.ajax({
       type: "PUT",
       url: "/api/job",
