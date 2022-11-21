@@ -21,6 +21,7 @@ $(() => {
   const $progressBar = $("#progressBar");
   const $jobIdWrapper = $("#jobIdWrapper");
   const jobId = $jobIdWrapper.data("job-id");
+  const $questionList = $("#questionList");
   let stompClient = null;
   let container = [
     ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -69,7 +70,6 @@ $(() => {
     $totalOfComments.text(Number.parseInt($totalOfComments.text()) + amount)
   }
   connect();
-
   let handleCommentSocket = {
     CREATE: function (comment){
       let $comment = createComment(comment);
@@ -106,6 +106,36 @@ $(() => {
     console.log(stompClient)
   }
 
+  loadQuestion()
+  async function loadQuestion(){
+    try{
+      let response = await $.ajax({
+        type: "GET",
+        url: "/api/job-question/get-job-questions",
+        data: {jobId},
+        contentType: "application/json",
+      });
+      let jobQuestions = response.data.questions;
+      for (let i = 0; i < jobQuestions.length; i++) {
+        let questionItem = createJobQuestionItem(jobQuestions[i]);
+        console.log(questionItem)
+        $questionList.append($(questionItem));
+      }
+    }catch (e){
+      console.error(e);
+    }
+  }
+  function createJobQuestionItem(question){
+    let li = document.createElement("li");
+    li.setAttribute("class", "list-group-item d-flex justify-content-between align-items-center");
+    let spanContent = document.createElement("span");
+    spanContent.setAttribute("class", "ql-container ql-snow d-block border-0");
+    let quillQuestionContent = new Quill(spanContent,{readOnly:true});
+    quillQuestionContent.setContents(JSON.parse(question.content));
+    li.appendChild(spanContent);
+    li.setAttribute("id", "questionList"+question.questionId)
+    return li;
+  }
   // comment reply events
   function replyComment() {
     let $target = $(this);

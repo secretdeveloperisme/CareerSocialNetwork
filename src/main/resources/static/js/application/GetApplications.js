@@ -3,10 +3,11 @@ import {filterArrToParams} from "../utils/common-utils.js";
 
 
 $(function () {
-  let $jobIdWrapper = $("#jobIdWrapper");
-  let jobId = $jobIdWrapper.data("job-id");
-  let $modalShowAnswers = $("#modalShowAnswers");
-  let ajaxConfig = {
+  const $jobIdWrapper = $("#jobIdWrapper");
+  const jobId = $jobIdWrapper.data("job-id");
+  const $modalShowAnswers = $("#modalShowAnswers");
+  const $answerQuestionsList = $("#answerQuestionList");
+  const ajaxConfig = {
     method:"POST", //set request type to Position
     headers: {
       "Content-type": 'application/json; charset=utf-8', //set specific content type
@@ -84,24 +85,13 @@ $(function () {
         url: `/api/answer/get-question-answer-job?userId=${userId}&jobId=${jobId}`,
         contentType: "application/json",
         success: function (response) {
-          $modalShowAnswers.find(".modal-body").html("");
-          response.forEach(answerQuestion=> {
-            let answerQuestionHTML =
-            `<div class="card mb-1">
-              <div class="card-header">
-                <label th:for="'inputAnswer'+${answerQuestion.jobQueId}"><h5>${answerQuestion.content}</label>
-              </div>
-              <div class="card-body">
-                <input type="hidden" th:name="answerQuestionGroup${answerQuestion.jobQueId}jobQueId" value="${answerQuestion.jobQueId}">
-                <div class="form-control">
-                       ${answerQuestion.answer!=null?answerQuestion.answer:"No Answer"}
-                 </div>
-              </div>
-            </div>`
-            $modalShowAnswers.find(".modal-body").html((index, currentContent)=>{
-              return currentContent+answerQuestionHTML;
-            })
-          })
+          $answerQuestionsList.html("")
+          let answerQuestions = response;
+          for (let i = 0; i < answerQuestions.length; i++) {
+            let $answerQuestionItem = createJobQuestionItem(answerQuestions[i]);
+            console.log($answerQuestionsList)
+            $answerQuestionsList.append($answerQuestionItem);
+          }
           $modalShowAnswers.modal("show");
           console.log(response)
         },
@@ -112,6 +102,35 @@ $(function () {
       });
     })
     return $btn[0];
+  }
+  function createJobQuestionItem(answerQuestion){
+    let $li = $(document.createElement("li"));
+    $li.attr("class", "card list-group-item d-flex p-0 ");
+    let $cardHeader = $(`
+       <div class="card-header">
+          <label th:for="inputAnswer${answerQuestion.jobQueId}">
+            <div class="question-content ql-editor ql-snow border-0" th:text="${answerQuestion.content}"></div>
+          </label>
+       </div>
+    `);
+    let $questionContent = $cardHeader.find(".question-content");
+    let quillQuestionContent = new Quill($questionContent[0],{readOnly:true});
+    quillQuestionContent.setContents(JSON.parse(answerQuestion.content));
+    let $cardBody = $(`
+      <div class="card-body">
+        <input type="hidden" name="answerQuestionGroup${answerQuestion.jobQueId}.jobQueId" value="${answerQuestion.jobQueId}">
+        <input type="hidden" class="question-answer-hidden" name="answerQuestionGroup${answerQuestion.jobQueId}.answer" value="${answerQuestion.answer}">
+        <div class="question-answer question-content ql-editor ql-snow border-0"  id="inputAnswer${answerQuestion.jobQueId}"
+               class="form-control" th:value="${answerQuestion.answer}">
+        <div>
+      </div>
+    `)
+    let $questionAnswer = $cardBody.find(".question-answer");
+    let quillQuestionAnswer = new Quill($questionAnswer[0],{readOnly:true});
+    quillQuestionAnswer.setContents(JSON.parse(answerQuestion.answer));
+    $li.attr("id","questionItem"+answerQuestion.jobQueId)
+    $li.append($cardHeader).append($cardBody);
+    return $li;
   }
   function formatterChangeStatus(cell){
     let $btn = $(`<button class="btn btn-success"><i class="fa-solid fa-pen-to-square"></i></button>`);

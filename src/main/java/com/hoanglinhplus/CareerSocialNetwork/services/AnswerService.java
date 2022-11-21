@@ -118,4 +118,8 @@ public class AnswerService {
     }
     throw new PermissionDeniedException("You do not have permission to delete this answer.");
   }
+
+  public ResponseEntity<List<AnswerQuestionInfo>> responseGetAnswerQuestions(Long jobId) {
+    return responseGetAnswerQuestions(myUserDetailsService.getCurrentUserId(), jobId);
+  }
 }

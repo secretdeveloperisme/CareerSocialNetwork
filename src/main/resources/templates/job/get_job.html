@@ -98,7 +98,7 @@
             </div>
             <div class="modal fade" id="questionsModal" tabindex="-1" aria-labelledby="questionsModalLabel"
                  aria-hidden="true">
-              <div class="modal-dialog">
+              <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                   <div class="modal-header">
                     <h5 class="modal-title" id="questionsModalLabel">Job Questions</h5>
@@ -108,8 +108,8 @@
                     <th:block th:if="${job.getJobQuestion().size() == 0}">
                       <h3 >This job does not have question !</h3>
                     </th:block>
-                    <ul class="list-group list-group-flush">
-                      <li th:each="jobQuestion: ${job.getJobQuestion()}" class="list-group-item" th:text="${jobQuestion.getQuestion().getContent()}"></li>
+                    <ul class="list-group list-group-flush" id="questionList">
+<!--                      <li th:each="jobQuestion: ${job.getJobQuestion()}" class="list-group-item" th:text="${jobQuestion.getQuestion().getContent()}"></li>-->
                     </ul>
 
                   </div>

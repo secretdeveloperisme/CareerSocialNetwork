@@ -121,6 +121,11 @@ $(()=>{
       $content.val(editor.root.innerHTML);
       console.log(objectifyForm($createJobForm.serializeArray()))
       let dataObject = objectifyForm($createJobForm.serializeArray());
+      if(dataObject.tags.length === undefined && dataObject.tags.name !== undefined){
+        dataObject.tags = [{
+          name: dataObject.tags.name
+        }]
+      }
       $.ajax({
         type: "POST",
         url: "/api/job",

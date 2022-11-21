@@ -5,6 +5,7 @@
   <title>CreateCompany</title>
   <link rel="stylesheet" th:href="@{/css/base.css}">
   <link rel="stylesheet" th:href="@{/css/main.css}">
+  <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
 </head>
 <body style="background-color: #f3f2ef">
 <header class="sticky-top">
@@ -35,11 +36,11 @@
     <div class="row gx-5">
       <div class="col-lg-6 p-3 bg-white mt-3 rounded">
         <ul class="list-group" id="questionList">
-          <li class="list-group-item d-flex justify-content-between align-items-center questionList"
-              th:each="jobQuestion : ${jobQuestions} " th:id="'questionList'+${jobQuestion.getQuestion().getQuestionId()}">
-            <span th:text="${jobQuestion.getQuestion().getContent()}"></span>
-            <button class="btn badge bg-danger rounded-pill" th:data-question-id="${jobQuestion.getQuestion().getQuestionId()}"><i class="fas fa-multiply"></i></button>
-          </li>
+<!--          <li class="list-group-item d-flex justify-content-between align-items-center questionList"-->
+<!--              th:each="jobQuestion : ${jobQuestions} " th:id="'questionList'+${jobQuestion.getQuestion().getQuestionId()}">-->
+<!--            <span th:text="${jobQuestion.getQuestion().getContent()}"></span>-->
+<!--            <button class="btn badge bg-danger rounded-pill" th:data-question-id="${jobQuestion.getQuestion().getQuestionId()}"><i class="fas fa-multiply"></i></button>-->
+<!--          </li>-->
         </ul>
         <button class="btn btn-primary mt-3" id="btnAddQuestion"  data-bs-toggle="modal" data-bs-target="#questionModal">+ Add Question</button>
       </div>
@@ -79,7 +80,7 @@
   </div>
   <div class="modal fade" id="questionModal" tabindex="-1" aria-labelledby="questionsModalLabel"
        aria-hidden="true">
-    <div class="modal-dialog">
+    <div class="modal-dialog modal-lg">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="questionsModalLabel">Job Questions</h5>
@@ -90,7 +91,8 @@
             <form id="jobQuestionForm">
               <input type="hidden" name="jobId" th:value="${job.getJobId()}">
               <label for="questionInput" class="form-label">Question</label>
-              <input type="text" name="question.content" class="form-control" id="questionInput" placeholder="Add your job question ">
+              <div id="questionEditor"></div>
+              <input type="hidden" name="question.content" class="form-control" id="questionInput" placeholder="Add your job question ">
             </form>
           </div>
         </div>
@@ -102,8 +104,10 @@
     </div>
   </div>
 </div>
+<div id="jobIdWrapper" th:data-job-id="${jobId}"></div>
 <div th:replace="~{/fragments/components/toast}"></div>
 <div th:replace="/auth/login"></div>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
 <script type="module" th:src="@{/js/site/home.js}"></script>
 <script type="module" src="/js/login.js"></script>
 <script type="module" src="/js/common/common.js"></script>

@@ -34,6 +34,10 @@ public class AnswerController {
   public ResponseEntity<List<AnswerQuestionInfo>> responseGetAnswerQuestions(Long userId, Long jobId){
     return answerService.responseGetAnswerQuestions(userId, jobId);
   }
+  @GetMapping("/get-question-answer-job-current-user")
+  public ResponseEntity<List<AnswerQuestionInfo>> responseGetAnswerQuestions(Long jobId){
+    return answerService.responseGetAnswerQuestions(jobId);
+  }
   @GetMapping("/get-answers")
   public ResponseEntity<ResponseObjectDTO> getAnswers(AnswerFilterDTO answerFilterDTO){
     return answerService.getAnswers(answerFilterDTO);
