@@ -88,12 +88,21 @@
           </label>
           <input type="text" name="title" th:value="${job.title}" id="title" class="form-control" required placeholder="input your title ...">
         </div>
-        <div class="input-group mb-3">
-          <div class="input-group-prepend">
-            <span class="input-group-text" >Salary Min and Max: </span>
+        <div class="d-flex">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" >Salary Min and Max: </span>
+            </div>
+            <input  type="number" name="salaryMin" th:value="${job.getSalaryMin()}" id="salaryMin" min="0" class="form-control col-6" placeholder="input your min salary ...">
+            <input type="number" name="salaryMax"  th:value="${job.getSalaryMax()}" id="salaryMax" max="99999999" class="form-control col-6" placeholder="input your max salary ...">
           </div>
-          <input  type="number" name="salaryMin" th:value="${job.getSalaryMin()}" id="salaryMin" min="0" class="form-control col-6" placeholder="input your min salary ...">
-          <input type="number" name="salaryMax"  th:value="${job.getSalaryMax()}" id="salaryMax" max="99999999" class="form-control col-6" placeholder="input your max salary ...">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" >Start And End Date </span>
+            </div>
+            <input  type="date" name="startDate" th:value="${#dates.format(job.getStartDate(), 'yyyy-MM-dd')}" id="startDate" class="form-control col-6" placeholder="input job start date ...">
+            <input type="date" name="endDate" th:value="${#dates.format(job.getEndDate(), 'yyyy-MM-dd')}" id="endDate" class="form-control col-6" placeholder="input job end date ...">
+          </div>
         </div>
         <div class="input-group mb-3">
           <div class="input-group-prepend">

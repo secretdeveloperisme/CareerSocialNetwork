@@ -29,7 +29,7 @@ public class CompanyController {
   CompanyController(CompanyService companyService){
     this.companyService = companyService;
   }
-  @PreAuthorize("hasAuthority('USER') or hasAuthority('ADMIN')")
+
   @GetMapping("/get-all-companies")
   public  ResponseEntity<ResponseDataDTO<CompanyCreationDTO>> getAllCompanies(
     @Valid CompanyFilterDTO companyFilterDTO, @Valid PageableDTO pageableDTO

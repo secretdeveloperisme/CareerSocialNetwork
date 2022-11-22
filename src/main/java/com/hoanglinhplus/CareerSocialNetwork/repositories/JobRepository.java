@@ -70,6 +70,7 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
           inner join jobs j2 on fc.company_id = j2.company_id
           where users.user_id = :userId  and j2.deleted_at is null
           ) uf
+  where end_date > current_date
   order by uf.created_at desc
   limit :start ,:numberOfJobsPerPage
   """, nativeQuery = true)
@@ -97,6 +98,7 @@ public interface JobRepository extends JpaRepository<Job, Long>, JpaSpecificatio
           inner join jobs j2 on fc.company_id = j2.company_id
           where users.user_id = :userId  and j2.deleted_at is null
           ) uf
+  where end_date > current_date
   order by uf.created_at desc
   """, nativeQuery = true)
   long countFollowedJobs(Long userId);

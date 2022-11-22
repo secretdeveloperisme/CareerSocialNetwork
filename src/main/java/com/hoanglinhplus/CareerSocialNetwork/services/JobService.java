@@ -97,6 +97,7 @@ public class JobService {
     Long positionId = jobFilterDTO.getPositionId();
     Long workPlaceId = jobFilterDTO.getWorkPlaceId();
     Boolean isDeleted = jobFilterDTO.getIsDeleted();
+    Boolean isExpired = jobFilterDTO.getIsExpired();
     if( title != null && !title.isEmpty()){
       SearchCriteria<Job, String> criteria = new SearchCriteria<>(Job_.title, title, SearchOperator.LIKE);
       jobSpecification.getConditions().add(criteria);
@@ -143,6 +144,15 @@ public class JobService {
       deletedCriteria = new SearchCriteria<>(Job_.deletedAt, null, SearchOperator.NULL);
     }
     jobSpecification.getConditions().add(deletedCriteria);
+    SearchCriteria<Job, Date> isExpiredCriteria = null;
+    if(isExpired != null){
+      if(isExpired) {
+        isExpiredCriteria = new SearchCriteria<>(Job_.endDate, new Date(), SearchOperator.LESS_THAN);
+      }else
+        isExpiredCriteria = new SearchCriteria<>(Job_.endDate, new Date(), SearchOperator.GREATER_THAN);
+      jobSpecification.getConditions().add(isExpiredCriteria);
+    }
+
     Specification<Job> resultSpecification = jobSpecification;
     if(tagIds != null){
        Specification<Job> tagSpecification = JobSpecification.joinTags(tagIds);

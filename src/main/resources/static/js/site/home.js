@@ -26,7 +26,7 @@ $(()=>{
   let currentPage = 2;
   const amountOfPostsPerPage = 10;
   $btnMore.on("click", async (event)=>{
-   let result =  loadJobs({}, currentPage, amountOfPostsPerPage);
+   let result =  loadJobs({isExpired:false}, currentPage, amountOfPostsPerPage);
    if (result != null)
      currentPage++;
   })

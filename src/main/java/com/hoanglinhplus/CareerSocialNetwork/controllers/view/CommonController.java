@@ -1,15 +1,13 @@
 package com.hoanglinhplus.CareerSocialNetwork.controllers.view;
 
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
+import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.post.PostFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.dto.tag.TagDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.company.CompanyCreationDTO;
-import com.hoanglinhplus.CareerSocialNetwork.dto.job.JobFilterDTO;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job;
 import com.hoanglinhplus.CareerSocialNetwork.models.Post;
 import com.hoanglinhplus.CareerSocialNetwork.models.User;
 import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularCompanyInfo;
-import com.hoanglinhplus.CareerSocialNetwork.models.projection.PopularJobInfo;
 import com.hoanglinhplus.CareerSocialNetwork.services.*;
 import com.hoanglinhplus.CareerSocialNetwork.utils.AuthenticationTokenUtil;
 import org.springframework.data.domain.Page;
@@ -51,7 +49,9 @@ public class CommonController {
       jobs = jobService.getFollowedJobs(new PageableDTO(), user.getUserId());
     }
     else {
-      Page<Job> jobPage = jobService.getJobs(new JobFilterDTO(), new PageableDTO());
+      JobFilterDTO jobFilterDTO = new JobFilterDTO();
+      jobFilterDTO.setIsExpired(false);
+      Page<Job> jobPage = jobService.getJobs(jobFilterDTO, new PageableDTO());
       jobs = jobPage.getContent();
     }
     model.addAttribute("jobs", jobs);

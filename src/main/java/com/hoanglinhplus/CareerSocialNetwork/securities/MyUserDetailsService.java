@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.securities;
 
+import com.hoanglinhplus.CareerSocialNetwork.exceptions.PermissionDeniedException;
 import com.hoanglinhplus.CareerSocialNetwork.repositories.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,6 +35,8 @@ public class MyUserDetailsService implements UserDetailsService {
     Optional<com.hoanglinhplus.CareerSocialNetwork.models.User> userOptional = userRepository.findByUsername(username);
     if (userOptional.isPresent()) {
       user = userOptional.get();
+      if(!user.isEnabled())
+        throw new PermissionDeniedException("Your account is locked");
       List<GrantedAuthority> roles = user.getRoles().stream()
         .map(role -> new SimpleGrantedAuthority(role.getName()))
         .collect(Collectors.toList());

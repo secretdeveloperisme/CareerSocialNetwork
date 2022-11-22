@@ -16,6 +16,9 @@ import com.hoanglinhplus.CareerSocialNetwork.securities.MyUserDetailsService;
 import com.hoanglinhplus.CareerSocialNetwork.securities.PermissionService;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
@@ -106,7 +109,8 @@ public class CommentService {
       SearchCriteria<Comment, Post> criteria = new SearchCriteria<>(Comment_.post,Post.builder().postId(postId).build(), SearchOperator.EQUAL );
       commentSpecification.getConditions().add(criteria);
     }
-    List<Comment> allComments = commentRepository.findAll(commentSpecification);
+    Sort sort = Sort.by(Sort.Direction.DESC, Comment_.CREATED_AT);
+    List<Comment> allComments = commentRepository.findAll(commentSpecification,sort);
     List<CommentDTO> allCommentDTOS = allComments.stream().map(comment ->{
       CommentDTO commentDTO = CommentMapper.toDTO(comment);
       commentDTO.setNumberOfLikes((long) comment.getCommentLikes().size());

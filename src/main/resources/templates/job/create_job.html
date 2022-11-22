@@ -76,12 +76,21 @@
             </label>
             <input type="text" name="title" id="title" class="form-control" required placeholder="input your title ...">
           </div>
-          <div class="input-group mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" >Salary Min and Max: </span>
+          <div class="d-flex">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" >Salary Min and Max: </span>
+              </div>
+              <input  type="number" name="salaryMin" id="salaryMin" min="0" class="form-control col-6" placeholder="min salary ...">
+              <input type="number" name="salaryMax" id="salaryMax" max="99999999" class="form-control col-6" placeholder="max salary ...">
             </div>
-            <input  type="number" name="salaryMin" id="salaryMin" min="0" class="form-control col-6" placeholder="input your min salary ...">
-            <input type="number" name="salaryMax" id="salaryMax" max="99999999" class="form-control col-6" placeholder="input your max salary ...">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" >Start And End Date </span>
+              </div>
+              <input  type="date" name="startDate" id="startDate" class="form-control col-6" placeholder="input job start date ...">
+              <input type="date" name="endDate" id="endDate" class="form-control col-6" placeholder="input job end date ...">
+            </div>
           </div>
           <div class="input-group mb-3">
             <div class="input-group-prepend">

@@ -26,4 +26,5 @@ public class JobFilterDTO {
   private Long positionId;
   private Long workPlaceId;
   private Boolean isDeleted;
+  private Boolean isExpired;
 }

@@ -41,7 +41,7 @@
                                                                 aria-hidden="true"></i></button>
           <div id="amountOfDislike" th:text="${numberOfReactions.get('numberOfUnlikes')}"></div>
         </li>
-        <li class="text-center">
+        <li class="text-center" th:if="${user}">
           <button class="btn rounded-circle" th:classappend="${isBookmarked}?'active':''"
                   id="btnBookmark" th:data-job-id="${job.getJobId()}"><i class="far fa-bookmark"
                                                                   aria-hidden="true"></i></button>
@@ -194,8 +194,8 @@
               </a>
             </div>
           </div>
-          <div class="btn-group w-100">
-          <button th:classappend="'btn'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'"
+          <div class="btn-group w-100" th:if="${user}">
+          <button  th:classappend="'btn'" th:class="${isFollowed} == true?'btn-secondary':'btn-primary'"
                   id="btnFollow" th:data-action="${isFollowed}?
               'unfollow':'follow'" th:data-company-id="${company.getCompanyId()}"
                   >

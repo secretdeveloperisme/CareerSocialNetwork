@@ -181,7 +181,7 @@ $(async ()=>{
         let companiesList = response.data.map(company=>{
           return (`
             <div class="col-xl-4">
-              <a href="/company/${company.name}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
+              <a href="/company/${company.companyId}" class=" d-flex flex-column align-items-center bg-white py-2 shadow rounded">
                 <div class="icon-64" style="background-image: url('${company.logo}');"></div>
                 <h3>${company.name}</h3>
               </a>

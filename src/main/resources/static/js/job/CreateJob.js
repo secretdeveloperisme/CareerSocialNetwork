@@ -1,4 +1,5 @@
 import {objectifyForm} from "../utils/common-utils.js";
+import {formatDateSQL} from "../utils/format_date.js";
 
 $(()=>{
   const $jobImageWrapper = $("#jobImageWrapper");
@@ -8,6 +9,18 @@ $(()=>{
   const $createJobForm =  $("#createJobForm");
   const $imagePath = $("#imagePath");
   const $content = $("#content");
+  const $startDate = $("#startDate");
+  const $endDate = $("#endDate");
+
+
+  init();
+  function init(){
+    let currentDate = new Date();
+    $startDate.val(formatDateSQL(currentDate));
+    currentDate.setDate(currentDate.getDate()+7);
+    let endDate = currentDate;
+    $endDate.val(formatDateSQL(endDate));
+  }
   function imageHandler() {
     let input = document.createElement('input');
     input.setAttribute('type', 'file');

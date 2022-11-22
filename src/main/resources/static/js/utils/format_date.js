@@ -9,4 +9,12 @@ function formatDate(timestamp, onlyDate = false){
   let formatTimeStr = `${hour < 10 ? '0' + hour : hour}:${minutes < 10 ? '0' + minutes : minutes}`;
   return onlyDate?formatDateStr:formatDateStr+", "+formatTimeStr;
 }
-export {formatDate}
+
+function formatDateSQL(date){
+  let month = date.getMonth() + 1;
+  let dateOfMonth = date.getDate();
+  let year = date.getFullYear()
+  let formatDateStr = `${year}-${month < 10?'0'+month:month}-${dateOfMonth<10?'0'+dateOfMonth:dateOfMonth}`;
+  return formatDateStr;
+}
+export {formatDate,formatDateSQL}

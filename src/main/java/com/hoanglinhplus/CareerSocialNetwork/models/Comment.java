@@ -2,7 +2,9 @@ package com.hoanglinhplus.CareerSocialNetwork.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.springframework.context.event.EventListener;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 import java.util.*;
@@ -14,6 +16,7 @@ import java.util.*;
 @Setter
 @Entity
 @Table(name = "comments")
+@EntityListeners(AuditingEntityListener.class)
 public class Comment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)

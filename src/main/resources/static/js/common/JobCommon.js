@@ -66,7 +66,7 @@ function createJobItem(job,wrapperMode = "col-xl-12"){
           </h6>
           <div class="post-info ">
             <div class="post-author">
-              <a href="/company/${job.company.name}" class="text-decoration-none text-secondary">
+              <a href="/company/${job.company.companyId}" class="text-decoration-none text-secondary">
                 <i class="fa-solid fa-building"></i>
                 <span>${job.company.name}</span>
               </a>
