@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.Cookie;
@@ -78,6 +79,7 @@ public class AuthService {
     refreshToken.setHttpOnly(true);
     refreshToken.setMaxAge(0);
     response.addCookie(refreshToken);
+    SecurityContextHolder.getContext().setAuthentication(null);
     return ResponseEntity.ok(new ResponseObjectDTO("Logout successfully !", null));
   }
 }

@@ -57,9 +57,9 @@
                   <input th:value="${#dates.format(user.getDob(), 'yyyy-MM-dd')}" type="date" name="dob" required class="dob" id="dob">
                 </div>
                 <div class="col-12">
-                  <label for="cvURL" class="form-label">CV URL</label>
-                  <input th:value="${user.getCvUrl()}" type="text" id="cvURL" name="cv" class="form-control"
-                         placeholder="input your phone number....">
+                  <a class="btn btn-info my-2" th:href="${user.getCvUrl()}" id="myCvURL">MY CV</a>
+                  <input type="file" id="cvFileUpdate" class="form-control">
+                  <input  type="hidden" id="cvURLUpdate" name="cvUrl" class="form-control">
                 </div>
               </div>
               <div class="col-6">

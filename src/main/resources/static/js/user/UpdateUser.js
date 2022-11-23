@@ -1,4 +1,5 @@
 import {objectifyForm} from "../utils/common-utils.js";
+import {uploadFile} from "../common/common.js";
 
 $(()=>{
   const $updateForm = $("#updateInfoForm");
@@ -17,6 +18,9 @@ $(()=>{
   const $educationUpdateForm = $(".education-update-form");
   const $btnAddEducation = $("#btnAddEducation");
   const $educationList = $("#educationList");
+  const $cvFile = $("#cvFileUpdate");
+  const $cvPath = $("#cvURLUpdate");
+  const $myCVUrl = $("#myCvURL");
 
   // add save event
   function toast(type, title, content){
@@ -32,6 +36,11 @@ $(()=>{
   }
   $updateForm.on("submit", function(event){
     event.preventDefault();
+    if($cvFile[0].files.length > 0){
+      let cvPathUpload = uploadFile($cvFile);
+      $cvPath.val(cvPathUpload);
+      $myCVUrl.attr("href", cvPathUpload);
+    }
     const xhrAvatar = new XMLHttpRequest();
     xhrAvatar.open("POST","/api/file/upload",false);
     let form  = new FormData();

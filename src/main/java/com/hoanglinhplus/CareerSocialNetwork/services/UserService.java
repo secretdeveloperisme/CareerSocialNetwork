@@ -252,6 +252,9 @@ public class UserService {
       if(user.getUserSkills() != null ){
         targetUser.setUserSkills(skillRepository.findAllById(userUpdateDTO.getUserSkillIds()));
       }
+      if(user.getCvUrl() != null ){
+        targetUser.setCvUrl(user.getCvUrl());
+      }
       if(user.getEducations() != null ){
         educationService.updateEducation(user.getEducations());
       }

@@ -17,6 +17,8 @@ $(()=>{
   // show avatar output
   const $avatarInput = $("#avatar");
   const $avatarOutput = $("#displayAvatar");
+  const $cvFile = $("#cvFile");
+  const $cvPath = $("#cvURL");
   // valid password and email sign up 
   const $retypePassword = $("#retypePassword");
   const $signupEmail= $("#email");
@@ -143,9 +145,10 @@ $(()=>{
       )
       return;
     let filePathUpload = uploadFile($avatarInput)
-
-    if(filePathUpload != null){
+    let cvPathUpload = uploadFile($cvFile);
+    if(filePathUpload != null && cvPathUpload != null){
       $avatarPath.val(filePathUpload);
+      $cvPath.val(cvPathUpload);
       console.log("SignupForm: ",$signupForm.serializeArray());
       let userCreation = objectifyForm($signupForm.serializeArray())
       $.ajax({

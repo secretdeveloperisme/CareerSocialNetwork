@@ -36,7 +36,7 @@ public class FileService {
     List<FileInfo> uploadedFiles = new ArrayList<>();
     FileOutputStream fileOutputStream;
     try {
-      String nameDirectory = userId == null ? "guest": userId.toString();
+      String nameDirectory = (userId == null ? "guest": userId.toString());
       Path createdDirPath = createDirectory(currentDirectory, nameDirectory);
       for (MultipartFile file : files) {
         String fileName = generateUniqueFileName(generateUniqueFileName(file.getOriginalFilename()));
