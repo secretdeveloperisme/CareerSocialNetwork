@@ -23,7 +23,7 @@
 
 .ql-toolbar {
   position: sticky;
-  top: 90px;
+  top: 75px;
   background: gainsboro;
   color: white;
   z-index: 3;

@@ -1,4 +1,5 @@
 import {objectifyForm} from "../utils/common-utils.js";
+import {addResizeAndDragForElement} from "../common/CustomInteract.js";
 
 $(()=>{
   // declare fields of the job
@@ -46,6 +47,8 @@ $(()=>{
                 'image',
                 imagePath,
             );
+            $(".ql-editor img").off()
+            addResizeAndDragForElement(".ql-editor img", editor);
           }
         };
         xhr.send(form);

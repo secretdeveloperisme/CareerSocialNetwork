@@ -1,5 +1,6 @@
 import {objectifyForm} from "../utils/common-utils.js";
 import {formatDateSQL} from "../utils/format_date.js";
+import {addResizeAndDragForElement} from "../common/CustomInteract.js";
 
 $(()=>{
   const $jobImageWrapper = $("#jobImageWrapper");
@@ -41,7 +42,10 @@ $(()=>{
               'image',
               imagePath,
             );
+            $(".ql-editor img").off()
+            addResizeAndDragForElement(".ql-editor img", editor);
           }
+
         };
         xhr.send(form);
       }
