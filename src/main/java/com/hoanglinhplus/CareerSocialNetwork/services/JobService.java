@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.services;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.ApplicationStatus;
 import com.hoanglinhplus.CareerSocialNetwork.constants.NumberConstant;
 import com.hoanglinhplus.CareerSocialNetwork.constants.PageConstant;
 import com.hoanglinhplus.CareerSocialNetwork.dto.PageableDTO;
@@ -55,7 +56,7 @@ public class JobService {
 
   @Autowired
   public JobService(UserRepository userRepository, JobRepository jobRepository
-    , CompanyService companyService, CompanyRepository companyRepository
+    , CompanyRepository companyRepository
     , MyUserDetailsService myUserDetailsService, AuthService authService, TagService tagService, SkillRepository skillRepository, WorkPlaceRepository workPlaceRepository, PositionRepository positionRepository, EmploymentTypeRepository employmentTypeRepository, PermissionService permissionService){
     this.userRepository = userRepository;
     this.jobRepository = jobRepository;
@@ -357,12 +358,16 @@ public class JobService {
       throw inputNotValidException;
     }
   }
-  public long getAmountOfPosts(Long companyId){
+  public long getAmountOfJobs(Long companyId){
     JobSpecification jobSpecification = new JobSpecification();
     SearchCriteria<Job,Company> searchCriteria =
       new SearchCriteria<>(Job_.company, Company.builder().companyId(companyId).build(), SearchOperator.EQUAL);
     jobSpecification.getConditions().add(searchCriteria);
     return jobRepository.count(jobSpecification);
+  }
+  public long getAmountOfJobByApplication(Long userId, ApplicationStatus applicationStatus){
+    Specification<Job> specification = JobSpecification.joinApplications(userId, applicationStatus);
+    return jobRepository.count(specification);
   }
   public void deleteJob(Job job) {
     job.removeAllRelationShip();

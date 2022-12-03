@@ -124,7 +124,8 @@ $(function () {
           showToast("success", "Set Enable User", response.message)
         },
         error: function(xhr){
-          const response = xhr.responseJSON
+          cell.restoreOldValue();
+          const response = xhr.responseJSON;
           showToast("failed", "Set Enable User", response.message);
         }
       });

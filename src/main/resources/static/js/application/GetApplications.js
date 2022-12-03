@@ -14,7 +14,7 @@ $(function () {
     }
 
   }
-  let applicatonTable = new Tabulator("#companyTable", {
+  let applicationTable = new Tabulator("#companyTable", {
     columns:[
       {formatter:"rowSelection", titleFormatter:"rowSelection", hozAlign:"center", headerSort:false, cellClick:function(e, cell){
           cell.getRow().toggleSelect();
@@ -50,12 +50,12 @@ $(function () {
 
     },
   });
-  applicatonTable.on("dataLoaded", function (data){
+  applicationTable.on("dataLoaded", function (data){
     if(data.length === 0){
-      applicatonTable.alert("This job has no applications");
+      applicationTable.alert("This job has no applications");
     }
     else{
-      applicatonTable.clearAlert();
+      applicationTable.clearAlert();
     }
   })
   function formatterJobTitle(cell) {
@@ -75,6 +75,7 @@ $(function () {
   function formatterUsername(cell){
     return `<span><a href="/user/${cell.getData().user.userId}">${cell.getData().user.username}</a></span>`
   }
+
   function formatterViewAnswers(cell){
     let $btn = $(`<button class="btn btn-warning"><i class="fa-solid fa-reply"></i></button>`);
     $btn.on("click", ()=>{
@@ -134,7 +135,6 @@ $(function () {
   }
   function formatterChangeStatus(cell){
     let $btn = $(`<button class="btn btn-success"><i class="fa-solid fa-pen-to-square"></i></button>`);
-
     $btn.on("click", ()=>{
       let userId = cell.getData().user.userId;
       let jobId = cell.getData().job.jobId;
@@ -142,18 +142,18 @@ $(function () {
       let applicationPayload = {
         userId, jobId, status
       }
-      console.log(applicationPayload)
       $.ajax({
         type: "PUT",
         url: "/api/application",
         data: JSON.stringify(applicationPayload),
         contentType: "application/json",
         success: function (response) {
-          showToast("success", "Success", response.message)
+          showToast("success", "Update Application Status", response.message)
         },
         error: function(xhr){
+          cell.getRow().getCell("status").restoreOldValue();
           const response = xhr.responseJSON
-          showToast(response.status, response.status, response.message);
+          showToast("failed", "Update Application Status", response.message);
         }
       });
     })
@@ -178,8 +178,8 @@ $(function () {
     let id = $button.data('id');
     let $btnDeletePost = $('#btnDeletePost');
     $btnDeletePost.on('click', function (event) {
-      let selectedRows = applicatonTable.getSelectedRows();
-      let selectedDatas = applicatonTable.getSelectedData();
+      let selectedRows = applicationTable.getSelectedRows();
+      let selectedDatas = applicationTable.getSelectedData();
       let deleteIds = selectedDatas.map(selectedData=>selectedData.jobId);
       console.log(deleteIds)
       $.ajax({

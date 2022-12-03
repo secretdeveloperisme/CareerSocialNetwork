@@ -75,6 +75,8 @@ public class ApplicationService {
     if (!permissionService.isOwnerJob(currentUser,job)){
       throw new PermissionDeniedException("You do not have permission to change status application");
     }
+    if(applicationDTO.getStatus() == ApplicationStatus.COMPLETED && job.getAmount() == 0)
+      throw new PermissionDeniedException("This job was full amount of applications");
     Application targetApplication = applicationOptional.get();
     targetApplication.setStatus(applicationDTO.getStatus());
     applicationRepository.save(targetApplication);
@@ -96,6 +98,10 @@ public class ApplicationService {
   }
   public Map<String, Object> apply(ApplicationDTO applicationDTO){
     Long currentUserId = myUserDetailsService.getCurrentUserId();
+    Job job = jobService.getJob(applicationDTO.getJobId());
+    if(job.getAmount() <= 0){
+      throw new PermissionDeniedException("This job was full amount of applications");
+    }
     applicationDTO.setUserId(currentUserId);
     applicationDTO.setStatus(ApplicationStatus.PENDING);
     Application application = ApplicationMapper.toEntity(applicationDTO);

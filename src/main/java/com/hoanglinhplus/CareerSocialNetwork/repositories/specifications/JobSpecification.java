@@ -1,5 +1,6 @@
 package com.hoanglinhplus.CareerSocialNetwork.repositories.specifications;
 
+import com.hoanglinhplus.CareerSocialNetwork.constants.ApplicationStatus;
 import com.hoanglinhplus.CareerSocialNetwork.models.*;
 import com.hoanglinhplus.CareerSocialNetwork.models.Job_;
 import com.hoanglinhplus.CareerSocialNetwork.models.Skill_;
@@ -31,6 +32,16 @@ public class JobSpecification extends EntitySpecification<Job>{
       Join<Job, EmploymentType> join = root.join(Job_.employmentType, JoinType.LEFT);
       query.distinct(true);
       return join.get(EmploymentType_.employmentTypeId).in(employmentTypeIds);
+    };
+  }
+  public static  Specification<Job> joinApplications(Long userId, ApplicationStatus applicationStatus){
+    return (root, query, criteriaBuilder) -> {
+      ListJoin<Job, Application> join = root.join(Job_.applications, JoinType.INNER);
+      if(userId != null){
+        return criteriaBuilder.equal(join.get(Application_.userId), userId);
+      }else if(applicationStatus != null)
+        return criteriaBuilder.equal(join.get(Application_.status), applicationStatus);
+      return null;
     };
   }
 }
