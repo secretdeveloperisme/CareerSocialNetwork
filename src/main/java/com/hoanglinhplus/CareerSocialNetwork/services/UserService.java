@@ -243,8 +243,8 @@ public class UserService {
       if(user.getAvatar() != null){
         targetUser.setAvatar(user.getAvatar());
       }
-      if(targetUser.isEnabled() != user.isEnabled()){
-        targetUser.setEnabled(user.isEnabled());
+      if(user.getIsEnabled() != null && targetUser.getIsEnabled() != user.getIsEnabled()){
+        targetUser.setIsEnabled(user.getIsEnabled());
       }
       if(user.getBiography() != null){
         targetUser.setBiography(user.getBiography());

@@ -12,6 +12,15 @@ $(()=>{
       }
     });
   })
+  $searchInput.on("focus",()=>{
+    $autocompleteSearchPosts.css("display","block");
+  })
+  $searchInput.on("blur",()=>{
+    setTimeout(()=>{
+      $autocompleteSearchPosts.css("display","none");
+    },500)
+
+  })
   async function autocompleteEvent(event){
     $autocompleteSearchPosts.html("");
     let query = $(event.target).val();

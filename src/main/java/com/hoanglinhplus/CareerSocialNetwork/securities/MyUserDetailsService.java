@@ -35,7 +35,7 @@ public class MyUserDetailsService implements UserDetailsService {
     Optional<com.hoanglinhplus.CareerSocialNetwork.models.User> userOptional = userRepository.findByUsername(username);
     if (userOptional.isPresent()) {
       user = userOptional.get();
-      if(!user.isEnabled())
+      if(!user.getIsEnabled())
         throw new PermissionDeniedException("Your account is locked");
       List<GrantedAuthority> roles = user.getRoles().stream()
         .map(role -> new SimpleGrantedAuthority(role.getName()))

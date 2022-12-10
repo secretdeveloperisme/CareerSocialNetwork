@@ -1,5 +1,5 @@
 <div th:fragment="toast">
-  <div class="position-fixed top-0 start-50 translate-middle-x p-3" style="z-index: 2000">
+  <div class="position-fixed top-0 start-50 translate-middle-x p-3">
     <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
       <div class="toast-header">
         <i class="toast-icon fas fa-check text-primary" ></i>
@@ -14,6 +14,7 @@
   <script>
     let $toast = $("#toast")
     function showToast(type, title, content){
+      $toast.parent().css("zIndex", "2000");
       if(type === "success"){
         $toast.find(".toast-icon").attr("class","toast-icon fas fa-check text-primary")
       }
@@ -23,6 +24,9 @@
       $toast.find(".toast-title").text(title);
       $toast.find(".toast-body").text(content);
       $toast.toast("show");
+      setTimeout(()=>{
+        $toast.parent().css("z-index", "-1");
+      },7000);
     }
   </script>
 </div>

@@ -20,16 +20,14 @@ $(function () {
         }
       },
       {title:"location", field:"job.location", width:"150"},
-      {title:"amount", field:"job.amount"},
-      // {title:"experience", field:"experience"},
       {title: "employment type", field: "employmentTypeId",formatter: formatterEmploymentType,headerFilter:true},
-      // {title: "company", field: "companyId",formatter: formatterCompany,headerFilter:true},
       {title: "position", field: "positionId",formatter: formatterPosition,headerFilter:"list",headerFilterParams:{
         values:{"1":"Engineer","2": "Senior Engineer","3":"Team Lead","4" :"Project Manager", "":""}}
       },
       {title: "work place", field: "workPlaceId",formatter: formatterWorkPlace,headerFilter:true},
       // {title: "Edit", formatter: formatterUpdateJob},
       {title:"Status", field:"status", width:"150",formatter: formatterStatus},
+      {title:"Answer", field:"answer", formatter: formatterAnswer},
     ],
     pagination:true,
     paginationMode:"remote", //enable remote pagination
@@ -78,6 +76,10 @@ $(function () {
     let status = cell.getData().status;
     let style = status === "PENDING"?"bg-info":status==="APPROVED"?'bg-warning':'bg-success';
     return `<span class="badge ${style}">${status}</span>`
+  }
+  function formatterAnswer(cell) {
+    let jobId = cell.getData().job.jobId;
+    return `<a class="btn btn-primary" href="/question-answer/answer/create/${jobId}"><i class="fas fa-reply"></i></a>`
   }
   let $cbxAll = $("#formCheckboxAll");
   let $chxPosts = $(".checkbox-post");

@@ -41,7 +41,7 @@ public class UserUpdateDTO {
   private String cvUrl;
   private Date dob;
   private String externalLoginType;
-  private boolean isEnabled;
+  private Boolean isEnabled;
   private String externalLoginId;
   private Date createdAt;
   private Date updatedAt;

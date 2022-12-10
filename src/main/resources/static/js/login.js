@@ -125,8 +125,7 @@ $(()=>{
         }, 2500)
       },
       error: function(xhr){
-        const response = xhr.responseJSON
-        toast("failed", "Login", response.message);
+        toast("failed", "Login", "Username Or Password is not correct");
       }
     });
   })
@@ -179,6 +178,7 @@ $(()=>{
   })
   // display login response  from server
   function toast(type, title, content){
+    $loginToast.parent().css("zIndex", "2000");
     if(type === "success"){
       $loginToast.find(".toast-icon").attr("class","toast-icon fas fa-check text-primary")
     }
@@ -188,5 +188,8 @@ $(()=>{
     $loginToast.find(".toast-title").text(title);
     $loginToast.find(".toast-body").text(content);
     $loginToast.toast("show");
+    setTimeout(()=>{
+      $loginToast.parent().css("z-index", "-1");
+    },7000)
   }
 })

@@ -41,7 +41,7 @@ public class User {
   private Date dob;
   @Enumerated(EnumType.STRING)
   private ExternalLoginType externalLoginType;
-  private boolean isEnabled;
+  private Boolean isEnabled;
   private String externalLoginId;
   private Date createdAt;
   private Date updatedAt;

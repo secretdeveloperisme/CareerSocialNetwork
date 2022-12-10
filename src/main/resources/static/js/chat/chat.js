@@ -333,7 +333,6 @@ $(async ()=>{
         data: JSON.stringify(requestPayload),
         contentType: "application/json",
         success: function (response) {
-          showToast("success", "Create Message", response.message)
           let messageTransfer = {
             message : requestPayload,
             messageAction: "CREATE"
